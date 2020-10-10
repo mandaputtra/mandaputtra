@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mantain consistent .mp4 video compression with FFmpeg</title>
+  <meta name="og:title" content="Mantain consistent .mp4 video compression with FFmpeg">
+
+  <meta name="description" content="Make your compression with bitrate smooth">
+  <meta name="og:description" content="Make your compression with bitrate smooth">
+  <link rel="stylesheet" href="/css/reset.css">
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="stylesheet" href="/css/prism-base16-monokai.dark.css">
+  <link rel="alternate" href="/feed/feed.xml" type="application/atom+xml" title="mandaputtra::fullstuck_developer">
+  <link rel="shortcut icon" href="https://cdn.glitch.com/238f8585-6bd5-40c4-a0ff-2b87d4acea6c%2Ftil-16.png?v=1561397433743" type="image/x-icon">
+  <link rel="icon" href="https://cdn.glitch.com/238f8585-6bd5-40c4-a0ff-2b87d4acea6c%2Ftil-16.png?v=1561397433743" type="image/x-icon">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Mukta&display=swap">
+  <meta name="twitter:image" content="https://avatars1.githubusercontent.com/u/23342943?s=460&amp;u=3a5d64c4c86dfbe552ed689e2f968105dff2553a&amp;v=4">
+  <meta name="twitter:card" content="summary">
+  <meta name="og:image:width" content="256">
+  <meta name="og:image:height" content="256">
+  <meta name="og:image" content="https://avatars1.githubusercontent.com/u/23342943?s=460&amp;u=3a5d64c4c86dfbe552ed689e2f968105dff2553a&amp;v=4">
+  <meta name="twitter:image:alt" content="Full stuck developer">
+</head>
+
+<body>
+  <main>
+    <header class="header-wrapper">
+      <h1>
+        <a href="/">
+          (〃￣ω￣〃ゞ
+        </a>
+      </h1>
+      <ul><li>
+          <a href="/stuff/">Stuff</a>
+        </li><li>
+          <a href="/about/">Me</a>
+        </li></ul>
+    </header>
+
+    <section>
+      <div>
+        
+
+<article>
+  <header>
+    
+      <p class="date">31 Dec 2019</p>
+    
+    <h1>Mantain consistent .mp4 video compression with FFmpeg</h1>
+    
+      
+      
+      
+    
+      
+      
+      
+        <a class="postlist-tag" href="
+        /tags/javascript/
+      ">javascript</a>
+      
+    
+      
+      
+      
+        <a class="postlist-tag" href="
+        /tags/ffmpeg/
+      ">ffmpeg</a>
+      
+    
+  </header>
+  <div>
+    <div>
+      <p>So you maybe already know <a href="https://www.ffmpeg.org/"><code>ffmpeg</code></a> the popular library for video compression, stream, and they had many though you can check that on their website.</p>
+<p>Recently I found nice article about <a href="https://dev.to/benjaminblack/use-ffmpeg-to-compress-and-convert-videos-458l">compressing using FFmpeg</a></p>
+<p>on that article this guy using bitrate to compress the <code>.mp4</code> file. But to compress files that had size 1Mb to 10Mb that script makes it bigger ~ not make the video smaller.</p>
+<p>I had some project that requires video compression back then I do that with scaling (cause it's faster than bitrate compression) found on this <a href="https://unix.stackexchange.com/a/447521/362526">StackOverflow answer</a>:</p>
+<p>My old project usually uses it, but now I had a use case when I can't scale the video to maintain its original size, so after found that guy answer I just want to share some script here.</p>
+<pre class="language-js"><code class="language-js"><span class="highlight-line"><span class="token comment">/* eslint-disable no-new */</span></span><br><span class="highlight-line"><span class="token keyword">const</span> ffmpeg <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span><span class="token string">"fluent-ffmpeg"</span><span class="token punctuation">)</span><span class="token punctuation">;</span></span><br><span class="highlight-line"><span class="token keyword">const</span> ffmpegPath <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span><span class="token string">"ffmpeg-static"</span><span class="token punctuation">)</span><span class="token punctuation">.</span>path<span class="token punctuation">;</span></span><br><span class="highlight-line"><span class="token keyword">const</span> ffprobePath <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span><span class="token string">"ffprobe-static"</span><span class="token punctuation">)</span><span class="token punctuation">.</span>path<span class="token punctuation">;</span></span><br><span class="highlight-line"><span class="token keyword">const</span> path <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span><span class="token string">"path"</span><span class="token punctuation">)</span><span class="token punctuation">;</span></span><br><span class="highlight-line"><span class="token keyword">const</span> uuid <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span><span class="token string">"uuid/v3"</span><span class="token punctuation">)</span><span class="token punctuation">;</span></span><br><span class="highlight-line"></span><br><span class="highlight-line"><span class="token comment">// video path</span></span><br><span class="highlight-line"><span class="token keyword">const</span> videoPath <span class="token operator">=</span> path<span class="token punctuation">.</span><span class="token function">join</span><span class="token punctuation">(</span>__dirname<span class="token punctuation">,</span> <span class="token string">"video"</span><span class="token punctuation">,</span> <span class="token string">"output.mp4"</span><span class="token punctuation">)</span><span class="token punctuation">;</span></span><br><span class="highlight-line"><span class="token comment">// set ffmpeg path</span></span><br><span class="highlight-line">ffmpeg<span class="token punctuation">.</span><span class="token function">setFfmpegPath</span><span class="token punctuation">(</span>ffmpegPath<span class="token punctuation">)</span><span class="token punctuation">;</span></span><br><span class="highlight-line">ffmpeg<span class="token punctuation">.</span><span class="token function">setFfprobePath</span><span class="token punctuation">(</span>ffprobePath<span class="token punctuation">)</span><span class="token punctuation">;</span></span><br><span class="highlight-line"></span><br><span class="token comment">/**<br><span class="highlight-line"> * Extract Metadata from a video</span><br><span class="highlight-line"> * @param {String} path</span><br> */</span><br><span class="highlight-line"><span class="token keyword">function</span> <span class="token function">metadata</span><span class="token punctuation">(</span><span class="token parameter">path</span><span class="token punctuation">)</span> <span class="token punctuation">{</span></span><br><span class="highlight-line">  <span class="token keyword">return</span> <span class="token keyword">new</span> <span class="token class-name">Promise</span><span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token parameter">resolve<span class="token punctuation">,</span> reject</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">{</span></span><br><span class="highlight-line">    ffmpeg<span class="token punctuation">.</span><span class="token function">ffprobe</span><span class="token punctuation">(</span>path<span class="token punctuation">,</span> <span class="token punctuation">(</span><span class="token parameter">err<span class="token punctuation">,</span> metadata</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">{</span></span><br><span class="highlight-line">      <span class="token keyword">if</span> <span class="token punctuation">(</span>err<span class="token punctuation">)</span> <span class="token punctuation">{</span></span><br><span class="highlight-line">        <span class="token function">reject</span><span class="token punctuation">(</span>err<span class="token punctuation">)</span><span class="token punctuation">;</span></span><br><span class="highlight-line">      <span class="token punctuation">}</span></span><br><span class="highlight-line">      <span class="token function">resolve</span><span class="token punctuation">(</span>metadata<span class="token punctuation">)</span><span class="token punctuation">;</span></span><br><span class="highlight-line">    <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span></span><br><span class="highlight-line">  <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span></span><br><span class="highlight-line"><span class="token punctuation">}</span></span><br><span class="highlight-line"></span><br><span class="token comment">/**<br><span class="highlight-line"> * FFmpeg commaand to compress video</span><br><span class="highlight-line"> * @param {String} input</span><br><span class="highlight-line"> * Path to input file</span><br><span class="highlight-line"> * @param {String} output</span><br><span class="highlight-line"> * Path to output file</span><br><span class="highlight-line"> * @param {Number} bitrate</span><br><span class="highlight-line"> * The bitrate you specify to compress video in bytes</span><br> */</span><br><span class="highlight-line"><span class="token keyword">function</span> <span class="token function">command</span><span class="token punctuation">(</span><span class="token parameter">input<span class="token punctuation">,</span> output<span class="token punctuation">,</span> bitrate</span><span class="token punctuation">)</span> <span class="token punctuation">{</span></span><br><span class="highlight-line">  <span class="token keyword">return</span> <span class="token keyword">new</span> <span class="token class-name">Promise</span><span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token parameter">resolve<span class="token punctuation">,</span> reject</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">{</span></span><br><span class="highlight-line">    <span class="token function">ffmpeg</span><span class="token punctuation">(</span>input<span class="token punctuation">)</span></span><br><span class="highlight-line">      <span class="token punctuation">.</span><span class="token function">outputOptions</span><span class="token punctuation">(</span><span class="token punctuation">[</span></span><br><span class="highlight-line">        <span class="token string">"-c:v libx264"</span><span class="token punctuation">,</span></span><br><span class="highlight-line">        <span class="token template-string"><span class="token template-punctuation string">`</span><span class="token string">-b:v </span><span class="token interpolation"><span class="token interpolation-punctuation punctuation">${</span>bitrate<span class="token interpolation-punctuation punctuation">}</span></span><span class="token string">k</span><span class="token template-punctuation string">`</span></span><span class="token punctuation">,</span></span><br><span class="highlight-line">        <span class="token string">"-c:a aac"</span><span class="token punctuation">,</span></span><br><span class="highlight-line">        <span class="token string">"-b:a 58k"</span><span class="token punctuation">,</span></span><br><span class="highlight-line">      <span class="token punctuation">]</span><span class="token punctuation">)</span></span><br><span class="highlight-line">      <span class="token punctuation">.</span><span class="token function">output</span><span class="token punctuation">(</span>output<span class="token punctuation">)</span></span><br><span class="highlight-line">      <span class="token punctuation">.</span><span class="token function">on</span><span class="token punctuation">(</span><span class="token string">"start"</span><span class="token punctuation">,</span> <span class="token punctuation">(</span><span class="token parameter">command</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">{</span></span><br><span class="highlight-line">        console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token string">"TCL: command -> command"</span><span class="token punctuation">,</span> command<span class="token punctuation">)</span><span class="token punctuation">;</span></span><br><span class="highlight-line">      <span class="token punctuation">}</span><span class="token punctuation">)</span></span><br><span class="highlight-line">      <span class="token punctuation">.</span><span class="token function">on</span><span class="token punctuation">(</span><span class="token string">"error"</span><span class="token punctuation">,</span> <span class="token punctuation">(</span><span class="token parameter">error</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token function">reject</span><span class="token punctuation">(</span>error<span class="token punctuation">)</span><span class="token punctuation">)</span></span><br><span class="highlight-line">      <span class="token punctuation">.</span><span class="token function">on</span><span class="token punctuation">(</span><span class="token string">"end"</span><span class="token punctuation">,</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token function">resolve</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span></span><br><span class="highlight-line">      <span class="token punctuation">.</span><span class="token function">run</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span></span><br><span class="highlight-line">  <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span></span><br><span class="highlight-line"><span class="token punctuation">}</span></span><br><span class="highlight-line"></span><br><span class="token comment">/**<br><span class="highlight-line"> * Choose the right bitrate for video based on Size</span><br><span class="highlight-line"> * @param {Number} bytes</span><br> */</span><br><span class="highlight-line"><span class="token keyword">function</span> <span class="token function">whatBitrate</span><span class="token punctuation">(</span><span class="token parameter">bytes</span><span class="token punctuation">)</span> <span class="token punctuation">{</span></span><br><span class="highlight-line">  <span class="token keyword">const</span> <span class="token constant">ONE_MB</span> <span class="token operator">=</span> <span class="token number">1000000</span><span class="token punctuation">;</span></span><br><span class="highlight-line">  <span class="token keyword">const</span> <span class="token constant">BIT</span> <span class="token operator">=</span> <span class="token number">28</span><span class="token punctuation">;</span> <span class="token comment">// i found that 28 are good point fell free to change it as you feel right</span></span><br><span class="highlight-line">  <span class="token keyword">const</span> diff <span class="token operator">=</span> Math<span class="token punctuation">.</span><span class="token function">floor</span><span class="token punctuation">(</span>bytes <span class="token operator">/</span> <span class="token constant">ONE_MB</span><span class="token punctuation">)</span><span class="token punctuation">;</span></span><br><span class="highlight-line">  <span class="token keyword">if</span> <span class="token punctuation">(</span>diff <span class="token operator">&lt;</span> <span class="token number">5</span><span class="token punctuation">)</span> <span class="token punctuation">{</span></span><br><span class="highlight-line">    <span class="token keyword">return</span> <span class="token number">128</span><span class="token punctuation">;</span></span><br><span class="highlight-line">  <span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token punctuation">{</span></span><br><span class="highlight-line">    <span class="token keyword">return</span> Math<span class="token punctuation">.</span><span class="token function">floor</span><span class="token punctuation">(</span>diff <span class="token operator">*</span> <span class="token constant">BIT</span> <span class="token operator">*</span> <span class="token number">1.1</span><span class="token punctuation">)</span><span class="token punctuation">;</span></span><br><span class="highlight-line">  <span class="token punctuation">}</span></span><br><span class="highlight-line"><span class="token punctuation">}</span></span><br><span class="highlight-line"></span><br><span class="highlight-line"><span class="token comment">// this compress video based on bitrate</span></span><br><span class="highlight-line"><span class="token keyword">async</span> <span class="token keyword">function</span> <span class="token function">compress</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span></span><br><span class="highlight-line">  <span class="token keyword">const</span> name <span class="token operator">=</span> <span class="token function">uuid</span><span class="token punctuation">(</span>videoPath<span class="token punctuation">,</span> <span class="token string">"1b671a64-40d5-491e-99b0-da01ff1f3341"</span><span class="token punctuation">)</span><span class="token punctuation">;</span></span><br><span class="highlight-line">  <span class="token keyword">const</span> outputPath <span class="token operator">=</span> path<span class="token punctuation">.</span><span class="token function">join</span><span class="token punctuation">(</span>__dirname<span class="token punctuation">,</span> <span class="token string">"video"</span><span class="token punctuation">,</span> <span class="token template-string"><span class="token template-punctuation string">`</span><span class="token interpolation"><span class="token interpolation-punctuation punctuation">${</span>name<span class="token interpolation-punctuation punctuation">}</span></span><span class="token string">.mp4</span><span class="token template-punctuation string">`</span></span><span class="token punctuation">)</span><span class="token punctuation">;</span></span><br><span class="highlight-line">  <span class="token keyword">const</span> inputMetadata <span class="token operator">=</span> <span class="token keyword">await</span> <span class="token function">metadata</span><span class="token punctuation">(</span>videoPath<span class="token punctuation">)</span><span class="token punctuation">;</span></span><br><span class="highlight-line">  <span class="token keyword">const</span> bitrate <span class="token operator">=</span> <span class="token function">whatBitrate</span><span class="token punctuation">(</span>inputMetadata<span class="token punctuation">.</span>format<span class="token punctuation">.</span>size<span class="token punctuation">)</span><span class="token punctuation">;</span></span><br><span class="highlight-line">  <span class="token keyword">await</span> <span class="token function">command</span><span class="token punctuation">(</span>videoPath<span class="token punctuation">,</span> outputPath<span class="token punctuation">,</span> bitrate<span class="token punctuation">)</span><span class="token punctuation">;</span></span><br><span class="highlight-line">  <span class="token keyword">const</span> outputMetadata <span class="token operator">=</span> <span class="token keyword">await</span> <span class="token function">metadata</span><span class="token punctuation">(</span>outputPath<span class="token punctuation">)</span><span class="token punctuation">;</span></span><br><span class="highlight-line"></span><br><span class="highlight-line">  <span class="token keyword">return</span> <span class="token punctuation">{</span></span><br><span class="highlight-line">    old_size<span class="token operator">:</span> inputMetadata<span class="token punctuation">.</span>format<span class="token punctuation">.</span>size<span class="token punctuation">,</span></span><br><span class="highlight-line">    new_size<span class="token operator">:</span> outputMetadata<span class="token punctuation">.</span>format<span class="token punctuation">.</span>size<span class="token punctuation">,</span></span><br><span class="highlight-line">  <span class="token punctuation">}</span><span class="token punctuation">;</span></span><br><span class="highlight-line"><span class="token punctuation">}</span></span><br><span class="highlight-line"></span><br><span class="highlight-line"><span class="token function">compress</span><span class="token punctuation">(</span><span class="token punctuation">)</span></span><br><span class="highlight-line">  <span class="token punctuation">.</span><span class="token function">then</span><span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token parameter">data</span><span class="token punctuation">)</span> <span class="token operator">=></span> console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span>data<span class="token punctuation">)</span><span class="token punctuation">)</span></span><br><span class="highlight-line">  <span class="token punctuation">.</span><span class="token function">catch</span><span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token parameter">err</span><span class="token punctuation">)</span> <span class="token operator">=></span> console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span>err<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span></span></code></pre>
+<p>the <code>28</code> and <code>1.1</code> are the one that works for me, you can change it, I know that my app would not handle more than 1GB so here is the list</p>
+<table>
+<thead>
+<tr>
+<th>Original</th>
+<th>Compressed</th>
+<th>Bitrate</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>2.1Mb</td>
+<td>1.4Mb</td>
+<td>128k</td>
+</tr>
+<tr>
+<td>10.2Mb</td>
+<td>5.6Mb</td>
+<td>308k</td>
+</tr>
+<tr>
+<td>51Mb</td>
+<td>31Mb</td>
+<td>1570k</td>
+</tr>
+</tbody>
+</table>
+<p>The audio is fine though.</p>
+
+    </div>
+  </div>
+</article>
+<p><a href="/">← Home</a></p>
+
+      </div>
+    </section>
+
+    <footer class="footer-wrapper">
+      <div>
+        <ul>
+          
+            <li>
+              <a href="https://github.com/mandaputtra"> Github </a> </li>
+          
+            <li>
+              <a href="mandaputtra"> Twitter </a> </li>
+          
+        </ul>
+      </div>
+    </footer>
+
+  </main>
+</body>
+
+</html>

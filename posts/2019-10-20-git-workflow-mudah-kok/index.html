@@ -1,0 +1,171 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Git workflow mudah kok!</title>
+  <meta name="og:title" content="Git workflow mudah kok!">
+
+  <meta name="description" content="Implementasi Mudah Websocket dengan Node.js">
+  <meta name="og:description" content="Implementasi Mudah Websocket dengan Node.js">
+  <link rel="stylesheet" href="/css/reset.css">
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="stylesheet" href="/css/prism-base16-monokai.dark.css">
+  <link rel="alternate" href="/feed/feed.xml" type="application/atom+xml" title="mandaputtra::fullstuck_developer">
+  <link rel="shortcut icon" href="https://cdn.glitch.com/238f8585-6bd5-40c4-a0ff-2b87d4acea6c%2Ftil-16.png?v=1561397433743" type="image/x-icon">
+  <link rel="icon" href="https://cdn.glitch.com/238f8585-6bd5-40c4-a0ff-2b87d4acea6c%2Ftil-16.png?v=1561397433743" type="image/x-icon">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Mukta&display=swap">
+  <meta name="twitter:image" content="https://avatars1.githubusercontent.com/u/23342943?s=460&amp;u=3a5d64c4c86dfbe552ed689e2f968105dff2553a&amp;v=4">
+  <meta name="twitter:card" content="summary">
+  <meta name="og:image:width" content="256">
+  <meta name="og:image:height" content="256">
+  <meta name="og:image" content="https://avatars1.githubusercontent.com/u/23342943?s=460&amp;u=3a5d64c4c86dfbe552ed689e2f968105dff2553a&amp;v=4">
+  <meta name="twitter:image:alt" content="Full stuck developer">
+</head>
+
+<body>
+  <main>
+    <header class="header-wrapper">
+      <h1>
+        <a href="/">
+          (〃￣ω￣〃ゞ
+        </a>
+      </h1>
+      <ul><li>
+          <a href="/stuff/">Stuff</a>
+        </li><li>
+          <a href="/about/">Me</a>
+        </li></ul>
+    </header>
+
+    <section>
+      <div>
+        
+
+<article>
+  <header>
+    
+      <p class="date">20 Oct 2019</p>
+    
+    <h1>Git workflow mudah kok!</h1>
+    
+      
+      
+      
+    
+      
+      
+      
+        <a class="postlist-tag" href="
+        /tags/git/
+      ">git</a>
+      
+    
+      
+      
+      
+        <a class="postlist-tag" href="
+        /tags/tips/
+      ">tips</a>
+      
+    
+  </header>
+  <div>
+    <div>
+      <p>Kali saya akan membahas beberapa hal mengenai <a href="https://git-scm.com/">Git</a> sebuah aplikasi versioning yang tentunya mempermudah kita saat membuat aplikasi / memaintain aplikasi.</p>
+<p>Git merupakan aplikasi versioning, ya dimana kegunaan-nya adalah versioning aplikasi / atau apapun, saya pernah menemukan novel, buku, dan berkas perpustakaan yang menggunakan Git sebagai versioning karena saking gampangnya dipelajari. Lebih baik juga jika berkas kenegaraan kita menggunakan Git, mudah bukan? ntar tau dah kapan menikah, kapan punya SIM, kapan anak pertama lahir, <em>your git your history but this you can't revert</em>.</p>
+<p>Hadirnya Git di inisiasi oleh Linus Trovalds walaupun sekarang di kepalai oleh Junio Hamano. Sebelum Git ada <a href="https://en.wikipedia.org/wiki/Comparison_of_version-control_software">banyak sekali aplikasi versioning</a>, tetapi yang paling populer adalah Git.</p>
+<p>Mari simulasikan. Suatu hari Wawan, Joni, dan Ayu akan membuat aplikasi. Hal pertama yang dilakukan Joni adalah membuat Git Repository</p>
+<h2 id="init-your-workflow-first">Init your workflow first <a class="direct-link" href="#init-your-workflow-first">#</a></h2>
+<pre class="language-bash"><code class="language-bash"><span class="highlight-line">$ <span class="token function">git</span> init <span class="token comment"># inisiasi git repostitory</span></span><br><span class="highlight-line"><span class="token comment"># Joni membuat file untuk mengisi git repository</span></span><br><span class="highlight-line">$ <span class="token builtin class-name">echo</span> <span class="token string">"# Awesome App!"</span> <span class="token operator">></span> README.md</span><br><span class="highlight-line">$ <span class="token function">git</span> <span class="token function">add</span> <span class="token builtin class-name">.</span> <span class="token comment"># Joni menaruh semua file ke stage area</span></span><br><span class="highlight-line">$ <span class="token function">git</span> <span class="token function">diff</span> <span class="token comment"># Joni memeriksa perubahan yang dilakukan-nya</span></span><br><span class="highlight-line"><span class="token comment"># Joni menaruh semua file ke HEAD</span></span><br><span class="highlight-line">$ <span class="token function">git</span> commit -m <span class="token string">"Innitial commit of awesome app!"</span></span></code></pre>
+<p>Git mempunyai 2 area yaitu <em>stage area</em> dan <em>HEAD area</em>. Gampangnya jika kamu sudah merasa selesai menulis/merubah file lakukan <code>git add &lt;nama file&gt;</code> untuk menaruh semua file ke dalam <em>stage area</em> untuk kamu periksa lagi apakah perubahan yang kamu lakukan sudah benar. Jika perubahan yang kamu lakukan sudah benar dan kamu sudah mantab maka lakukan <code>git commit -m &quot;&lt;your message&gt;&quot;</code> untuk memindahkan file yang kamu rubah ke <em>HEAD area</em> dimana nantinya orang lain dapat melihat perubahan yang kamu lakukan.</p>
+<p>Wawan ternyata sudah membuat Git remote repository tempat mereka kerja di Gitlab, Joni lalu menambahakan repo tersebut ke local repostitory-nya.</p>
+<pre class="language-bash"><code class="language-bash"><span class="highlight-line"><span class="token comment"># menambahkan remote repository</span></span><br><span class="highlight-line">$ <span class="token function">git</span> <span class="token function">add</span> remote origin git@git.gitlab.com:yourgroupname/awesome-app.git</span></code></pre>
+<p>Sekarang kalian sudah project kalian sudah mempunyai remote repository dimana nantinya Wawan dan Ayu dapat meng-copy project-nya melalui remote repository</p>
+<p><img src="https://nvie.com/img/centr-decentr@2x.png" alt="Dencentralized Workflow"></p>
+<p>Kita dapat menambahkan remote repository sebanyak mungkin dengan <code>git add remote &lt;name&gt;</code>. Ini biasa digunakan jika kita memliliki banyak remote repository.</p>
+<p><code>origin</code> merupakan nama default untuk menentukan manakah remote repository. Biasanya remote repository lain digunakan sebagai mirror (eg: linux-kernel, ffmpeg, libvips, etc), mempunyai banyak mirror repository.</p>
+<pre class="language-bash"><code class="language-bash"><span class="highlight-line"><span class="token comment"># mirror remote repository</span></span><br><span class="highlight-line">$ <span class="token function">git</span> <span class="token function">add</span> remote mirror git@git.github.com:yourgroupname/awesome-app.git</span><br><span class="highlight-line">$ <span class="token function">git</span> push mirror master</span></code></pre>
+<h2 id="git-branching%2C-your-app-lifecycle">Git Branching, your app lifecycle <a class="direct-link" href="#git-branching%2C-your-app-lifecycle">#</a></h2>
+<p>Git seperti sebuah pohon, <em>branch</em> dalam Git merupakan sebuah kopi dari <em>branch</em> yang lain. Branch utama pada Git dinamakan <em>master</em>, Git workflow yang baik adalah Git workflow yang menggunakan <em>branch</em> dengan benar.</p>
+<p>Hari kedua sebelum diskusi tim dimulai, Wawan membuat <code>git branch</code> dahulu</p>
+<pre class="language-bash"><code class="language-bash"><span class="highlight-line"><span class="token comment"># create new branch from master</span></span><br><span class="highlight-line">$ <span class="token function">git</span> checkout -b develop master</span><br><span class="highlight-line"><span class="token comment"># deploy branch to remote repository</span></span><br><span class="highlight-line">$ <span class="token function">git</span> push origin develop --set-upstream</span><br><span class="highlight-line"><span class="token comment"># Wawan create feature branch</span></span><br><span class="highlight-line">$ <span class="token function">git</span> checkout -b feature develop</span><br><span class="highlight-line"><span class="token comment"># Wawan deploy feature branch to remote repo</span></span><br><span class="highlight-line">$ <span class="token function">git</span> push origin feature --set-upstream</span></code></pre>
+<p>Wawan lalu bilang ke teman - teman lain bahwa nanti saat awal development kita akan menggunakan branch <strong>feature</strong> sebagai branch development yang aktif. Branch <strong>develop</strong> akan digunakan sebagai masa <em>staging</em> aplikasi dan branch <strong>master</strong> akan digunakan untuk merilis aplikasi.</p>
+<p>Ternyata Ayu mendapatkan ticket di Jira untuk memulai project terlebih dahulu. Okay!</p>
+<pre class="language-bash"><code class="language-bash"><span class="highlight-line"><span class="token comment"># Ayu meng clone project</span></span><br><span class="highlight-line">$ <span class="token function">git</span> clone git@git.gitlab.com:yourgroupname/awesome-app.git</span><br><span class="highlight-line"><span class="token comment"># Ayu membuat feature branch-nya dari branch feature</span></span><br><span class="highlight-line">$ <span class="token function">git</span> checkout -b feature-user-login feature</span><br><span class="highlight-line"><span class="token comment"># ayu mulai mengerjakan fitur tersebut</span></span></code></pre>
+<p>Dari yang mereka ber-tiga kerjakan dapat dilihat bahwa Branch master (production) sama sekali tidak bersinggungan dengan branch feature, branch feature besinggungan langsung dengan branch develop dimana merupakan branch staging, tempat mereka bertiga testing aplikasi sebelum rilis.</p>
+<p>Kesimpulannya begini :</p>
+<ul>
+<li>Ada 3 main branch pada aplikasi mereka (master, develop, feature)</li>
+<li>master branch merupakan production branch</li>
+<li>develop branch bersinggungan dengan master branch, digunakan sebagai branch staging / testing</li>
+<li>feature branch merupakan tempat kerja para developer, penamaan dapat menggunakan feature-<em>namafituranda</em></li>
+</ul>
+<p><img src="https://nvie.com/img/git-model@2x.png" alt="Illustrasi git branch"></p>
+<h2 id="git-merging%2C-the-battle-of-developers">Git Merging, the battle of developers <a class="direct-link" href="#git-merging%2C-the-battle-of-developers">#</a></h2>
+<p>Ayu sudah menyelesaikan fiturnya, lalu dia meng-upload fitur tersebut ke remote repository</p>
+<pre class="language-bash"><code class="language-bash"><span class="highlight-line">$ <span class="token function">git</span> <span class="token function">add</span> login.cpp</span><br><span class="highlight-line">$ <span class="token function">git</span> commit -m <span class="token string">"add: login function"</span></span><br><span class="highlight-line">$ <span class="token function">git</span> push origin feature-login --set-upstream</span></code></pre>
+<p>Yay, perkerjaan Ayu sudah ada pada remote branch, waktunya untuk <em>merging</em>. Merging adalah proses mengabungkan branch satu dengan yang lainnya. Biasanya proses merge ini dinamakan Merge Request / Pull Request. Fitur ini tidak tersedia di local Git anda adanya di Gitlab/Github atau layanan versioning lainya. Untuk selanjutnya saya menyebut ini Pull Request (PR).</p>
+<p>Proses PR ini simpel-nya cuma menggabungkan branch target dengan branch dimana tempat development terjadi. Dapat dilakukan juga di lokal dengan cara ini:</p>
+<pre class="language-bash"><code class="language-bash"><span class="highlight-line"><span class="token comment"># merge feature-login to feature</span></span><br><span class="highlight-line">$ <span class="token function">git</span> merge feature feature-login</span><br><span class="highlight-line"><span class="token comment"># merge to develop branch to test it on staging</span></span><br><span class="highlight-line">$ <span class="token function">git</span> merge develop feature</span><br><span class="highlight-line"><span class="token comment"># merge develop branch to master, app is going to production</span></span><br><span class="highlight-line">$ <span class="token function">git</span> merge master develop</span></code></pre>
+<p>Biasanya proses PR digunakan sebagai proses <em>code review</em>, oleh developer lain terhadap kode yang kita buat. Jika developer lain sudah merasa oke dengan kode yang kita buat, maka developer itulah nanti yang mengabungkan branch tersebut. Contoh proses code-review dan PR bisa dilihat <a href="https://github.com/vuejs-id/docs/pull/160">disini</a></p>
+<h3 id="merge-conflict">Merge Conflict <a class="direct-link" href="#merge-conflict">#</a></h3>
+<p>Pasti kita pernah mengalami ini sekali atau setiap saat, tergantung seramai apakah sebuah aplikasi di buat. Merge conflict bukanlah hal yang tabu dan perlu ditakuti. Conflict dapat terjadi karena satu developer mengedit 2 hal yang sama.</p>
+<p>Cuma memang, kalau kalian melihat kata <em>conflict</em> mesti merasa itu sebuah kesalahan, bukan itu hal yang biasa terjadi jika kalian berkerja dengan banyak orang pada suatu codebase jangan takut bisa di <em>resolve</em> kok.</p>
+<p>Biasanya kita bingung bagaimana sih langkah pertama untuk memperbaiki konfik kode ini? Jikalau ini terjadi sebelum kamu melakukan <code>git push</code> kamu dapat menyelesaikan-nya di lokal. Tapi bagaimana jika ini terjadi saat proses PR?</p>
+<p>Branch feature-login yang ayu buat tadi ternyata ada conflict yang harus di selesaikan! bagaimana caranya Ayu menyelesaikan ini pada saat proses PR?</p>
+<pre class="language-cpp"><code class="language-cpp"><span class="highlight-line"><span class="token comment">// contoh merge conflict</span></span><br><span class="highlight-line">cout<span class="token operator">&lt;&lt;</span><span class="token string">"Hello please"</span></span><br><span class="highlight-line"><span class="token operator">&lt;&lt;</span><span class="token operator">&lt;&lt;</span><span class="token operator">&lt;&lt;</span><span class="token operator">&lt;</span> HEAD</span><br><span class="highlight-line">cout<span class="token operator">&lt;&lt;</span><span class="token string">"Open an issue in IRC"</span></span><br><span class="highlight-line"><span class="token operator">==</span><span class="token operator">==</span><span class="token operator">==</span><span class="token operator">=</span></span><br><span class="highlight-line">cout<span class="token operator">&lt;&lt;</span><span class="token string">"Open an issue in Github"</span></span><br><span class="highlight-line"><span class="token operator">>></span><span class="token operator">>></span><span class="token operator">>></span><span class="token operator">></span> feature<span class="token operator">-</span>login</span></code></pre>
+<p>Pertama-tama ayu mengambil update yang menyebabkan conflict dengan cara</p>
+<pre class="language-bash"><code class="language-bash"><span class="highlight-line"><span class="token comment"># Ayu berada pada branch feature-login</span></span><br><span class="highlight-line"><span class="token comment"># mengambil update yang menyebabkan conflict pada branch feature</span></span><br><span class="highlight-line"><span class="token comment"># perintah ini akan melakukan sinkronisasi ke branch feature</span></span><br><span class="highlight-line"><span class="token comment"># perintah akan menghasilkan error, merge conflict</span></span><br><span class="highlight-line">$ <span class="token function">git</span> pull upstream feature</span><br><span class="highlight-line"><span class="token operator">></span> Error merge conflict <span class="token keyword">in</span> login.cpp</span></code></pre>
+<p>Nah lalu sekarang kita tinggal periksa mana kode yang membuat PR tadi menghasilkan conflict, lakukan resolve di lokal anda.</p>
+<pre class="language-bash"><code class="language-bash"><span class="highlight-line"><span class="token comment"># Conflict sudah dibenarkan mari kita update</span></span><br><span class="highlight-line">$ <span class="token function">git</span> <span class="token function">add</span> login.cpp</span><br><span class="highlight-line">$ <span class="token function">git</span> commit -m <span class="token string">"merge-conflict: login.cpp"</span></span><br><span class="highlight-line">$ <span class="token function">git</span> push</span></code></pre>
+<p>PR yang Ayu buat akan otomatis ter-update dan mengecek apakah branch feature nanti masih conflict atau tidak. Jika tidak maka fitur yang dibuat ayu siap meluncur ke staging dan production.</p>
+<h2 id="git-tag's%2C-handle-your-version">Git Tag's, handle your version <a class="direct-link" href="#git-tag's%2C-handle-your-version">#</a></h2>
+<p>Git mempunyai fitur tagging, biasanya fitur ini digunakan untuk menandai versi sebuah aplikasi.</p>
+<pre class="language-bash"><code class="language-bash"><span class="highlight-line"><span class="token comment"># Aplikasi siap meluncur dengan versi 0.1</span></span><br><span class="highlight-line"><span class="token comment"># Commit terakhir adalah fitur login Ayu</span></span><br><span class="highlight-line">$ <span class="token function">git</span> tag <span class="token number">0.1</span></span><br><span class="highlight-line"><span class="token comment"># menandakan bahwa sekarang aplikasi anda dengan commit terakhir Ayu</span></span><br><span class="highlight-line"><span class="token comment"># tadi merupakan versi 0.1</span></span></code></pre>
+<p>Tagging biasanya dilakukan di branch <em>master</em>, <code>tag</code> tidak seperti sebuah branch, tag merupakan satu kesatuan sendiri. Use case, misal aplikasi versi 1.0 mengalami bug pada login, sementara aplikasi 2.0 tidak. User tidak bisa meng-upgrade aplikasi karena harus bayar lagi. Git tag merupakan solusinya.</p>
+<pre class="language-bash"><code class="language-bash"><span class="highlight-line"><span class="token comment"># mari ke versi 1.0</span></span><br><span class="highlight-line">$ <span class="token function">git</span> checkout <span class="token number">1.0</span></span><br><span class="highlight-line">$ <span class="token function">git</span> checkout -b feature-fix-login-on-v1</span></code></pre>
+<p>Tag tidak berlaku sebagai branch, tag merupakan satu kesatuan sendiri, jadi jika anda ingin memperbaiki sesuatu harap, memperbaiki di brach baru lagi yang anda buat berdasarkan branch tag ini.</p>
+<h2 id="notes">Notes <a class="direct-link" href="#notes">#</a></h2>
+<p>Begitulah sekiranya Git workflow, mudah atau malah masih bingung? Haha. Untuk memahami sesuatu memang lebih mudah dengan cara mempraktekannya. Yuk mari praktekkan! Agar aplikasi kita dapat dengan mudah di maintain dan jika ada bug, kita lebih tau commit manankah yang menyebabkan bug tersebut.</p>
+<p>Thanks, Happy Git~ here some notes, I steal their image too...</p>
+<ul>
+<li><a href="https://buddy.works/blog/5-types-of-git-workflows">Buddy - Git Workflow</a></li>
+<li><a href="https://nvie.com/posts/a-successful-git-branching-model/">Successful Git Branching Model</a></li>
+<li><a href="https://www.atlassian.com/git/tutorials/comparing-workflows">Attlasian Git Workflow</a></li>
+</ul>
+<p>Git Interactive Tutorial</p>
+<ul>
+<li><a href="https://learngitbranching.js.org/">learngitbranching.js.org</a></li>
+<li><a href="https://try.github.io/">try git by Github</a></li>
+<li><a href="http://gitready.com/">git ready</a></li>
+</ul>
+<p>Be happy be good people eveybody :)</p>
+
+    </div>
+  </div>
+</article>
+<p><a href="/">← Home</a></p>
+
+      </div>
+    </section>
+
+    <footer class="footer-wrapper">
+      <div>
+        <ul>
+          
+            <li>
+              <a href="https://github.com/mandaputtra"> Github </a> </li>
+          
+            <li>
+              <a href="mandaputtra"> Twitter </a> </li>
+          
+        </ul>
+      </div>
+    </footer>
+
+  </main>
+</body>
+
+</html>

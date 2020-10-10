@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Click to send whatsapp with javascript</title>
+  <meta name="og:title" content="Click to send whatsapp with javascript">
+
+  <meta name="description" content="Make a link that triggers send whatsapp from javascript">
+  <meta name="og:description" content="Make a link that triggers send whatsapp from javascript">
+  <link rel="stylesheet" href="/css/reset.css">
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="stylesheet" href="/css/prism-base16-monokai.dark.css">
+  <link rel="alternate" href="/feed/feed.xml" type="application/atom+xml" title="mandaputtra::fullstuck_developer">
+  <link rel="shortcut icon" href="https://cdn.glitch.com/238f8585-6bd5-40c4-a0ff-2b87d4acea6c%2Ftil-16.png?v=1561397433743" type="image/x-icon">
+  <link rel="icon" href="https://cdn.glitch.com/238f8585-6bd5-40c4-a0ff-2b87d4acea6c%2Ftil-16.png?v=1561397433743" type="image/x-icon">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Mukta&display=swap">
+  <meta name="twitter:image" content="https://avatars1.githubusercontent.com/u/23342943?s=460&amp;u=3a5d64c4c86dfbe552ed689e2f968105dff2553a&amp;v=4">
+  <meta name="twitter:card" content="summary">
+  <meta name="og:image:width" content="256">
+  <meta name="og:image:height" content="256">
+  <meta name="og:image" content="https://avatars1.githubusercontent.com/u/23342943?s=460&amp;u=3a5d64c4c86dfbe552ed689e2f968105dff2553a&amp;v=4">
+  <meta name="twitter:image:alt" content="Full stuck developer">
+</head>
+
+<body>
+  <main>
+    <header class="header-wrapper">
+      <h1>
+        <a href="/">
+          (〃￣ω￣〃ゞ
+        </a>
+      </h1>
+      <ul><li>
+          <a href="/stuff/">Stuff</a>
+        </li><li>
+          <a href="/about/">Me</a>
+        </li></ul>
+    </header>
+
+    <section>
+      <div>
+        
+
+<article>
+  <header>
+    
+      <p class="date">29 Sep 2018</p>
+    
+    <h1>Click to send whatsapp with javascript</h1>
+    
+      
+      
+      
+    
+      
+      
+      
+        <a class="postlist-tag" href="
+        /tags/javascript/
+      ">javascript</a>
+      
+    
+      
+      
+      
+        <a class="postlist-tag" href="
+        /tags/tips/
+      ">tips</a>
+      
+    
+  </header>
+  <div>
+    <div>
+      <blockquote>
+<p>TL;DR You can use link below and place it on your button, or whatever. Its simply will open up whatsapp on user phone. But it isn't automatically send. <a href="https://api.whatsapp.com/send?phone=+">https://api.whatsapp.com/send?phone=+</a><em>YOURNUMBER</em>&amp;text=%20<em>YOURMESSAGE</em>. use encodeURIComponent('your text here')</p>
+</blockquote>
+<p>What we were built here it is a dynamic send to WhatsApp link with JavaScript approach you can use the link above and give it a try</p>
+<p>Okay I'll use JSBin with this, first open up then its just easy you will use <code>split()</code> and <code>join()</code> string property on JavaScript here my script.</p>
+<pre class="language-js"><code class="language-js"><span class="highlight-line">  <span class="token comment">// https://api.whatsapp.com/send?phone=+&amp;text=%20</span></span><br><span class="highlight-line"></span><br><span class="highlight-line">  <span class="token keyword">var</span> yourNumber <span class="token operator">=</span> <span class="token string">""</span></span><br><span class="highlight-line">  <span class="token keyword">var</span> yourMessage <span class="token operator">=</span> <span class="token string">""</span></span><br><span class="highlight-line"></span><br><span class="highlight-line">  <span class="token comment">// %20 mean space in link</span></span><br><span class="highlight-line">  <span class="token comment">// If you already had an array then you just join them with '%20'</span></span><br><span class="highlight-line">  <span class="token comment">// easy right</span></span><br><span class="highlight-line"></span><br><span class="highlight-line">  <span class="token keyword">function</span> <span class="token function">getLinkWhastapp</span><span class="token punctuation">(</span><span class="token parameter">number<span class="token punctuation">,</span> message</span><span class="token punctuation">)</span> <span class="token punctuation">{</span></span><br><span class="highlight-line">    number <span class="token operator">=</span> yourNumber</span><br><span class="highlight-line">    message <span class="token operator">=</span> yourMessage<span class="token punctuation">.</span><span class="token function">split</span><span class="token punctuation">(</span><span class="token string">' '</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">join</span><span class="token punctuation">(</span><span class="token string">'%20'</span><span class="token punctuation">)</span></span><br><span class="highlight-line">    </span><br><span class="highlight-line">    <span class="token keyword">return</span> console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token string">'https://api.whatsapp.com/send?phone='</span> <span class="token operator">+</span> number <span class="token operator">+</span> <span class="token string">'&amp;text=%20'</span> <span class="token operator">+</span> message<span class="token punctuation">)</span></span><br><span class="highlight-line">  <span class="token punctuation">}</span></span><br><span class="highlight-line"></span><br><span class="highlight-line">  <span class="token function">getLinkWhastapp</span><span class="token punctuation">(</span><span class="token punctuation">)</span></span></code></pre>
+<p>Copy that on jsbin, give phone number and message do you want, make sure you use WhatsApp, It will open up WhatsApp on your phone with the message you wrote.</p>
+<p>Further reading :</p>
+<ul>
+<li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/split">split()</a></li>
+<li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/join">join()</a></li>
+</ul>
+<hr>
+<h2 id="important">Important <a class="direct-link" href="#important">#</a></h2>
+<p>This post was made to learn JS <code>split</code> and <code>join</code> for production purpose you should use <code>encodeURIComponent()</code></p>
+<pre class="language-js"><code class="language-js"><span class="highlight-line">  <span class="token keyword">function</span> <span class="token function">getLinkWhastapp</span><span class="token punctuation">(</span><span class="token parameter">number<span class="token punctuation">,</span> message</span><span class="token punctuation">)</span> <span class="token punctuation">{</span></span><br><span class="highlight-line">    <span class="token keyword">var</span> url <span class="token operator">=</span> <span class="token string">'https://api.whatsapp.com/send?phone='</span> </span><br><span class="highlight-line">       <span class="token operator">+</span> number </span><br><span class="highlight-line">       <span class="token operator">+</span> <span class="token string">'&amp;text='</span> </span><br><span class="highlight-line">       <span class="token operator">+</span> <span class="token function">encodeURIComponent</span><span class="token punctuation">(</span>message<span class="token punctuation">)</span></span><br><span class="highlight-line">    </span><br><span class="highlight-line">    <span class="token keyword">return</span> url</span><br><span class="highlight-line">  <span class="token punctuation">}</span></span></code></pre>
+
+    </div>
+  </div>
+</article>
+<p><a href="/">← Home</a></p>
+
+      </div>
+    </section>
+
+    <footer class="footer-wrapper">
+      <div>
+        <ul>
+          
+            <li>
+              <a href="https://github.com/mandaputtra"> Github </a> </li>
+          
+            <li>
+              <a href="mandaputtra"> Twitter </a> </li>
+          
+        </ul>
+      </div>
+    </footer>
+
+  </main>
+</body>
+
+</html>

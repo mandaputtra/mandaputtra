@@ -1,0 +1,155 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Apa itu ffmpeg dan maipulasi video</title>
+  <meta name="og:title" content="Apa itu ffmpeg dan maipulasi video">
+
+  <meta name="description" content="Pengenalan ffmpeg, perintah - perintah, dan dasar - dasar manipulasi video">
+  <meta name="og:description" content="Pengenalan ffmpeg, perintah - perintah, dan dasar - dasar manipulasi video">
+  <link rel="stylesheet" href="/css/reset.css">
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="stylesheet" href="/css/prism-base16-monokai.dark.css">
+  <link rel="alternate" href="/feed/feed.xml" type="application/atom+xml" title="mandaputtra::fullstuck_developer">
+  <link rel="shortcut icon" href="https://cdn.glitch.com/238f8585-6bd5-40c4-a0ff-2b87d4acea6c%2Ftil-16.png?v=1561397433743" type="image/x-icon">
+  <link rel="icon" href="https://cdn.glitch.com/238f8585-6bd5-40c4-a0ff-2b87d4acea6c%2Ftil-16.png?v=1561397433743" type="image/x-icon">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Mukta&display=swap">
+  <meta name="twitter:image" content="https://avatars1.githubusercontent.com/u/23342943?s=460&amp;u=3a5d64c4c86dfbe552ed689e2f968105dff2553a&amp;v=4">
+  <meta name="twitter:card" content="summary">
+  <meta name="og:image:width" content="256">
+  <meta name="og:image:height" content="256">
+  <meta name="og:image" content="https://avatars1.githubusercontent.com/u/23342943?s=460&amp;u=3a5d64c4c86dfbe552ed689e2f968105dff2553a&amp;v=4">
+  <meta name="twitter:image:alt" content="Full stuck developer">
+</head>
+
+<body>
+  <main>
+    <header class="header-wrapper">
+      <h1>
+        <a href="/">
+          (〃￣ω￣〃ゞ
+        </a>
+      </h1>
+      <ul><li>
+          <a href="/stuff/">Stuff</a>
+        </li><li>
+          <a href="/about/">Me</a>
+        </li></ul>
+    </header>
+
+    <section>
+      <div>
+        
+
+<article>
+  <header>
+    
+      <p class="date">11 Oct 2020</p>
+    
+    <h1>Apa itu ffmpeg dan maipulasi video</h1>
+    
+      
+      
+      
+    
+      
+      
+      
+        <a class="postlist-tag" href="
+        /tags/ffmpeg/
+      ">ffmpeg</a>
+      
+    
+      
+      
+      
+        <a class="postlist-tag" href="
+        /tags/tips/
+      ">tips</a>
+      
+    
+  </header>
+  <div>
+    <div>
+      <p>Saya sendiri on/off soal <em>procedural generation app</em>, saya sebenernya suka sekali ngulik - ngulik video/grafis generation walaupun belum banyak yang bisa saya share. Tulisan berikut mungkin berantakan (karena lebih seperti <em>note</em>, daripada tulisan), tujuan dari tulisan berikut adalah mengenalkan ffmpeg secepat mungkin dengan beberapa contoh perintah.</p>
+<p><a href="https://ffmpeg.org/">ffmpeg</a> dikenal sebagai satu - satunya perangkat lunak terbuka manipulasi video terlengkap. Proyek ffmpeg ini dirilis sebagai perangkat lunak terbuka pada tahun 2000, dan terus dikembangkan sampai sekarang. Mungkin banyak yang mengenal ffmpeg dengan kompresi video-nya - tapi banyak juga kok perintah - perintah, pada ffmpeg ini yang memungkinkan kita untuk membuat video editor.</p>
+<h2 id="installasi-%2F-pemasangan">Installasi / Pemasangan <a class="direct-link" href="#installasi-%2F-pemasangan">#</a></h2>
+<p>Saya suka menggunakan <a href="https://www.johnvansickle.com/ffmpeg/faq/">ffmpeg static build</a> download saja dan tinggal taruh folder <code>bin</code> atau <em>symlink</em>. Untuk platform lain silahkan untuk menuju <a href="https://ffmpeg.org/download.html">dokumentasi resmi</a>.</p>
+<p>Untuk <a href="https://www.gyan.dev/ffmpeg/builds/">windows</a></p>
+<pre class="language-bash"><code class="language-bash"><span class="highlight-line"><span class="token comment"># untuk linux cara symlink</span></span><br><span class="highlight-line">$ <span class="token function">ln</span> -s ~/path/to/downloaded/build/ffmpeg ~/.local/bin/</span><br><span class="highlight-line"><span class="token comment"># setelah itu tinggal diakses dengan, ingat taruh di bin agar dapat diakses secara global</span></span><br><span class="highlight-line">$ ffmpeg</span></code></pre>
+<p>Jangan lupa juga ffprobe, dan ffplay sekalian dipasang.</p>
+<p>Untuk nodejs saya sering menggunakan <a href="https://www.npmjs.com/package/ffmpeg-static">ffmpeg-static</a></p>
+<h2 id="cara-baca-command">Cara baca command <a class="direct-link" href="#cara-baca-command">#</a></h2>
+<p>Perintah dibawah digunakan untuk merubah video <code>.mp4</code> ke <code>.webm</code>. ffmpeg akan otomatis akan menggunakan konfigurasi <em>default</em> (enconding, bitrate, dkk) dan mengkonversi jenis video ke <code>.webm</code></p>
+<pre class="language-bash"><code class="language-bash"><span class="highlight-line">$ ffmpeg -i input.mp4 output.avi</span></code></pre>
+<p>Perintah dibawah adalah perintah untuk mengkompresi video dan merubah encoding menjadi webm.</p>
+<pre class="language-bash"><code class="language-bash"><span class="highlight-line">$ ffmpeg -i source.mp4 -c:v libvpx-vp9 -b:v 1M -c:a libopus -b:a 128k target.webm</span></code></pre>
+<p>Nah untuk perintah kedua ini mari kita pecah satu - satu, agar lebih jelas.</p>
+<ol>
+<li><code>-i source.mp4</code> Ini digunakan untuk mengambil input video</li>
+<li><code>-c:v</code> opsi ini <code>c</code> untuk codec dan <code>v</code> untuk video (bagian codec akan saya jelaskan nanti)</li>
+<li><code>-b:v</code> <code>b</code> disini adalah video bitrate (akan saya jelaskan dibawah)</li>
+<li><code>-c:a</code> dan <code>-b:a</code> sama seperti diatas tapi ini untuk audio</li>
+</ol>
+<p>ffmpeg selain bisa menformat Video bisa juga digunakan untuk memformat Audio. Jadi kita bisa optimisasikan sebuah Video baik itu melalui Audio bitrate maupun Video. Bagian berikutnya lagi saya akan mendemokan soal <em>complex filter</em> dan <em>buffer chaining</em> di ffmpeg.</p>
+<h2 id="ffmpeg-complex-filter">ffmpeg Complex Filter <a class="direct-link" href="#ffmpeg-complex-filter">#</a></h2>
+<pre class="language-bash"><code class="language-bash"><span class="highlight-line">                <span class="token punctuation">[</span>main<span class="token punctuation">]</span></span><br><span class="highlight-line">input --<span class="token operator">></span> <span class="token function">split</span> ---------------------<span class="token operator">></span> overlay --<span class="token operator">></span> output</span><br><span class="highlight-line">            <span class="token operator">|</span>                             ^</span><br><span class="highlight-line">            <span class="token operator">|</span><span class="token punctuation">[</span>tmp<span class="token punctuation">]</span>                  <span class="token punctuation">[</span>flip<span class="token punctuation">]</span><span class="token operator">|</span></span><br><span class="highlight-line">            +-----<span class="token operator">></span> crop --<span class="token operator">></span> vflip -------+</span></code></pre>
+<p>Nuaah ~ sampe sini nih, menurut saya ini adalah bagian menarik dari ffmpeg, filter. Filter pada ffmpeg dapat digunakan pada file gambar maupun video. Filter pada ffmpeg dapat menggunakan <em>buffer chaining</em> yang artinya kita dapat menggabungkan 2 atau lebih proses filter pada ffmpeg. Berikut adalah diagram yang ada pada dokumentasi. Silahkan download video <a href="https://www.pexels.com/video/bikers-and-carriages-driving-on-street-852038/">berikut</a> dan jalankan command ffmpeg dibawah untuk mempraktekkan, dengan contoh command pada <a href="https://ffmpeg.org/ffmpeg-filters.html">dokumentasi</a>.</p>
+<pre class="language-bash"><code class="language-bash"><span class="highlight-line">$ ffmpeg -i input.mp4 -vf <span class="token string">"split [main][tmp]; [tmp] crop=iw:ih/2:0:0, vflip [flip]; [main][flip] overlay=0:H/2"</span> output.mp4</span></code></pre>
+<p>Diagram diatas menjelaskan bahwa proses pada ffmpeg dapat dibagi beberapa buah. Menggunankan <code>libavfilter</code> filter pada ffmpeg dapan menerima banyak output dan menghasilkan banyak output pula. Ini adalah konsep <em>buffer chaining</em> yang ingin saya tekankan, karena konsep ini sangat berguna untuk video <em>processing</em> maupun video prosedural generatif. Mari kita pecah satu persatu.</p>
+<p>Input video dimasukan kedalam proses split, menghasilakn 2 buffer. satu dinamakan <code>[main]</code> satu lagi <code>[tmp]</code>, <code>[tmp]</code> melalui proses <code>crop</code> di potong video-nya, lalu dibalik (diputer 180') dengan <code>vflip</code> menghasilkan output <code>[flip]</code>. Kedua <code>[main]</code> dan <code>[flip]</code> yang dihasilkan lalu digabung menggunakan overlay, dengan aturan setengah dari tinggi video tersebut. Mari kita lihat hasil dari perintah tersebut.</p>
+<p><img src="/img/ffmpeg_input_output_1.jpg" alt="image result"></p>
+<p><code>iw</code> input width. <code>ih</code> input heigt. <code>iw:ih/x:y:keep_aspect</code> memotong video berdasarkan posisi, <code>keep_aspect</code> untuk menentukan <em>aspect ratio</em> dari sebuah video. <code>0:H/2</code>, dalam overlay tempatkan input overlay ke-setengah tinggi dari video tujuan</p>
+<h2 id="chroma-key">Chroma Key <a class="direct-link" href="#chroma-key">#</a></h2>
+<p>Biasa dikenal seperti <em>Green Screen Keying</em>, sebuah proses penghapusan warna dari video - warna tersebut lalu dapat diganti dengan hal lain - seperti background video atau yang lainnya. Berikut contoh perintah dan penjelasan.</p>
+<pre class="language-bash"><code class="language-bash"><span class="highlight-line">$ ffmpeg -i <span class="token operator">&lt;</span>base-video<span class="token operator">></span> -i <span class="token operator">&lt;</span>overlay-video<span class="token operator">></span> -filter_complex <span class="token string">'[1:v]colorkey=0x&lt;color>:&lt;similarity>:&lt;blend>[ckout];[0:v][ckout]overlay[out]'</span> -map <span class="token string">'[out]'</span> <span class="token operator">&lt;</span>output-file<span class="token operator">></span></span></code></pre>
+<p>Contoh hasil, bisa lihat di <a href="https://twitter.com/_mandaputtra/status/1304025623241711618?s=20">tweet saya</a>. Nah, kita bisa memakai overlay-video ataupun memakai overlay-gambar dengan ekstensi <code>.png</code> atau <code>.jpeg/jpg</code>.</p>
+<p>Baris pertama <code>[1:v]colorkey=0x&lt;color&gt;:&lt;similarity&gt;:&lt;blend&gt;[ckout];</code> nuaaaah, <code>[1:v]</code> mengakses video greenscreen hapus warna (saya memakai 0x3BBD1E) hijaunya, lalu mengeluarkan output <code>[ckout]</code>.</p>
+<p>Baris kedua <code>[0:v][ckout]overlay[out]</code>, nah karena pada ffmpeg, ditaruh pertama maka akan di proses duluan. Perintah berikut dapat diartiakn menaruh <code>[ckout]</code> (video green screen wanita) diatas <code>[0:v]</code> (background_hacktoberfest.png) dan menghasilkan output <code>[out]</code>.</p>
+<p>Penggunaan <code>-map [out] output-file.mp4</code> adalah memilih hasil output mana yang harus diikutkan ke dalam file final.</p>
+<blockquote>
+<p>.mov merupakan ekstensi video yang bisa transparan, seperti .png dan .webp kalau dalam konteks grafis</p>
+</blockquote>
+<h2 id="bitrate%2C-framerate%2C-dan-encoding">Bitrate, Framerate, dan Encoding <a class="direct-link" href="#bitrate%2C-framerate%2C-dan-encoding">#</a></h2>
+<p>Bitrate, pada ffmepg bitrate dimaksudkan adalah seberapa banyak bits (byte) yang diproses oleh FFMPEG dalam satu waktu, semakin besar bitrate semakin besar pula ukuran file. Dalam ffmpeg opsi ini biasanya dipanggil dengan <code>-b</code>.</p>
+<p>Framerate (FPS-Frame per second), semakin tinggi Framerate maka semakin halus pergerakan di sebuah video, semakin tinggi juga mempengaruhi size video. Kebanyakan video sudah bagus ditayangkan di 30FPS.</p>
+<p>Encoding, dalam ffmpeg bisa dikatakan adalah sebuah proses untuk mengubah format file, contoh dari <code>mp4</code> ke <code>webp</code>. Ffmpeg mempunya buaaaaanyaaak sekali codecs ~ yang saya sendiri jarang pakai haha. Bisa dilihat di <a href="https://www.ffmpeg.org/ffmpeg-codecs.html#Description">sini</a>.</p>
+<h2 id="ffprobe-dan-ffplay">ffprobe dan ffplay <a class="direct-link" href="#ffprobe-dan-ffplay">#</a></h2>
+<p><a href="https://ffmpeg.org/ffprobe.html#toc-Description">ffprobe</a>, biasanya digunakan untuk mengambil dan mengubah metadata pada sebuah video, seperti judul, tanggal, dan yang lain.</p>
+<p><a href="https://ffmpeg.org/ffplay.html">ffplay</a>, media player praktis dari ffmepg.</p>
+<h2 id="sumber-belajar">Sumber belajar <a class="direct-link" href="#sumber-belajar">#</a></h2>
+<ul>
+<li>Tentu <a href="https://ffmpeg.org/documentation.html">dokumentasi</a>, dan <a href="https://trac.ffmpeg.org/">dokumentasi lagi</a></li>
+<li><a href="https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/globalCompositeOperation">composite operation</a>, sering saya gunakan sebagai referensi jenis jenis overlay dan bagaimana sifatnya</li>
+<li>Saya sering browsing <a href="https://video.stackexchange.com/">di video.stackexchange</a> kebanyakan yang jawab pertanyaan <a href="https://video.stackexchange.com/users/1871/gyan">maintainer ffmepg sendiri</a></li>
+<li>Dan tidak lupa pula di Youtube, banyak sekali contoh operasi command ffmpeg.</li>
+</ul>
+
+    </div>
+  </div>
+</article>
+<p><a href="/">← Home</a></p>
+
+      </div>
+    </section>
+
+    <footer class="footer-wrapper">
+      <div>
+        <ul>
+          
+            <li>
+              <a href="https://github.com/mandaputtra"> Github </a> </li>
+          
+            <li>
+              <a href="mandaputtra"> Twitter </a> </li>
+          
+        </ul>
+      </div>
+    </footer>
+
+  </main>
+</body>
+
+</html>

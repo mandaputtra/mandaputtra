@@ -1,0 +1,140 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Compress image on the fly with bandwidth hero</title>
+  <meta name="og:title" content="Compress image on the fly with bandwidth hero">
+
+  <meta name="description" content="Make your browsing more fuzz, with reduced image quality">
+  <meta name="og:description" content="Make your browsing more fuzz, with reduced image quality">
+  <link rel="stylesheet" href="/css/reset.css">
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="stylesheet" href="/css/prism-base16-monokai.dark.css">
+  <link rel="alternate" href="/feed/feed.xml" type="application/atom+xml" title="mandaputtra::fullstuck_developer">
+  <link rel="shortcut icon" href="https://cdn.glitch.com/238f8585-6bd5-40c4-a0ff-2b87d4acea6c%2Ftil-16.png?v=1561397433743" type="image/x-icon">
+  <link rel="icon" href="https://cdn.glitch.com/238f8585-6bd5-40c4-a0ff-2b87d4acea6c%2Ftil-16.png?v=1561397433743" type="image/x-icon">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Mukta&display=swap">
+  <meta name="twitter:image" content="https://avatars1.githubusercontent.com/u/23342943?s=460&amp;u=3a5d64c4c86dfbe552ed689e2f968105dff2553a&amp;v=4">
+  <meta name="twitter:card" content="summary">
+  <meta name="og:image:width" content="256">
+  <meta name="og:image:height" content="256">
+  <meta name="og:image" content="https://avatars1.githubusercontent.com/u/23342943?s=460&amp;u=3a5d64c4c86dfbe552ed689e2f968105dff2553a&amp;v=4">
+  <meta name="twitter:image:alt" content="Full stuck developer">
+</head>
+
+<body>
+  <main>
+    <header class="header-wrapper">
+      <h1>
+        <a href="/">
+          (〃￣ω￣〃ゞ
+        </a>
+      </h1>
+      <ul><li>
+          <a href="/stuff/">Stuff</a>
+        </li><li>
+          <a href="/about/">Me</a>
+        </li></ul>
+    </header>
+
+    <section>
+      <div>
+        
+
+<article>
+  <header>
+    
+      <p class="date">19 Sep 2019</p>
+    
+    <h1>Compress image on the fly with bandwidth hero</h1>
+    
+      
+      
+      
+    
+      
+      
+      
+        <a class="postlist-tag" href="
+        /tags/javascript/
+      ">javascript</a>
+      
+    
+      
+      
+      
+        <a class="postlist-tag" href="
+        /tags/howk/
+      ">howk</a>
+      
+    
+  </header>
+  <div>
+    <div>
+      <blockquote>
+<p>So learning code more easy if you read other people code, so be it I made this sort of episode Howk (How does it work) by reading some Open Source project, explain technically and maybe we can get some insight after it.</p>
+</blockquote>
+<p>Recently I got stumbled on Open Source chrome extension named <a href="https://github.com/ayastreb/bandwidth-hero">bandwidth-hero</a> developed by <strong>@ayastreb</strong> the usage of this extension are very simple, just install the extension from chrome or firefox store, insert your <a href="https://github.com/ayastreb/bandwidth-hero-proxy">server</a> URL (I use my own proxy server, localhost works too), and enable it.</p>
+<p>The extension will start saving your data-plan by compress the image you requested around the web.</p>
+<p>So, I <code>git clone</code> the repo and try to making sense of how this could work.</p>
+<h2 id="it's-just-a-proxy">It's just a proxy <a class="direct-link" href="#it's-just-a-proxy">#</a></h2>
+<blockquote>
+<p>In computer networks, a proxy server is a server that acts as an intermediary for requests from clients seeking resources from other servers. - Wikipedia</p>
+</blockquote>
+<p>If you notice on your <em>dev tools</em> network tab with the extension enabled, you requested <code>https://placekeanu/700/350</code> but on network tab, it says <em><a href="http://myserver.dev/?url=https%3A%2F%2Fplacekeanu.com%2F700%2F350&amp;l=40">http://myserver.dev/?url=https%3A%2F%2Fplacekeanu.com%2F700%2F350&amp;l=40</a></em> - it pointed to my server and respond a binary result of an image you requested. But the <code>img-src</code> tag still on <code>https://placekeanu/700/350</code>.</p>
+<p>The image aren't saved on the server it is on the fly compression. The cookie itself requested using your server, so it is your server requested the image not the browser.</p>
+<p>Then I notice something - when image request / other request get throw out from a browser it only need a correct respond to make something happen on the page. Whether it had some cookie or not, it only need correct response (cookie are validated in header, see <a href="https://github.com/ayastreb/bandwidth-hero-proxy/blob/master/src/proxy.js">here</a>).</p>
+<p>The server part compress image using <a href="https://www.npmjs.com/package/sharp">sharp</a> the fastest image compression you could get in Node.js, believe me I use it for years, it uses <a href="https://github.com/libvips/libvips">libvps</a> at the core.</p>
+<p>The server code itself are very <a href="https://github.com/ayastreb/bandwidth-hero-proxy/blob/master/src/compress.js">simple</a> it compress image, make it a buffer, send it back with correct format. It has many options on quality, you can enabled by adding query params.</p>
+<h2 id="what-api-that-makes-this-possible%3F">What API that makes this possible? <a class="direct-link" href="#what-api-that-makes-this-possible%3F">#</a></h2>
+<p><img src="https://developer.chrome.com/static/images/webrequestapi.png" alt="web request cycle"></p>
+<p>If we build a chrome we can get some useful API on networking by enabling this on <code>manifest.json</code></p>
+<pre class="language-json"><code class="language-json"><span class="highlight-line">  <span class="token property">"permissions"</span><span class="token operator">:</span> <span class="token punctuation">[</span></span><br><span class="highlight-line">    <span class="token string">"activeTab"</span><span class="token punctuation">,</span></span><br><span class="highlight-line">    <span class="token string">"tabs"</span><span class="token punctuation">,</span></span><br><span class="highlight-line">    <span class="token string">"storage"</span><span class="token punctuation">,</span></span><br><span class="highlight-line">    <span class="token string">"webRequest"</span><span class="token punctuation">,</span> <span class="token comment">// this permission</span></span><br><span class="highlight-line">    <span class="token string">"webRequestBlocking"</span><span class="token punctuation">,</span></span><br><span class="highlight-line">    <span class="token string">"&lt;all_urls>"</span></span><br><span class="highlight-line">  <span class="token punctuation">]</span></span></code></pre>
+<p>You can use some useful listener in <a href="https://developer.chrome.com/extensions/webRequest"><code>webRequest</code></a> API. There are 3 main <code>webRequest</code> API that used by this project to make this possible :</p>
+<ul>
+<li><code>webRequest.onBeforeRequest</code></li>
+<li><code>webRequest.onCompleted</code></li>
+<li><code>webRequest.onHeadersReceived</code></li>
+</ul>
+<p>The main player here are <code>onBeforeRequest</code> listener. It capture url you requested, payload, header, everything on network tab show. All listener placed on <a href="https://github.com/ayastreb/bandwidth-hero/blob/master/src/background.js"><code>background.js</code></a>.</p>
+<blockquote>
+<p>beware on using browser extension, make sure it is secure / opensource, cause it will be validated by many people at least we can make sure that the extension doesn't had unwanted tracking.</p>
+</blockquote>
+<pre class="language-js"><code class="language-js"><span class="highlight-line">  <span class="token comment">// ...</span></span><br><span class="highlight-line">  <span class="token keyword">let</span> redirectUrl <span class="token operator">=</span> <span class="token template-string"><span class="token template-punctuation string">`</span><span class="token interpolation"><span class="token interpolation-punctuation punctuation">${</span>state<span class="token punctuation">.</span>proxyUrl<span class="token interpolation-punctuation punctuation">}</span></span><span class="token string">?url=</span><span class="token interpolation"><span class="token interpolation-punctuation punctuation">${</span><span class="token function">encodeURIComponent</span><span class="token punctuation">(</span>url<span class="token punctuation">)</span><span class="token interpolation-punctuation punctuation">}</span></span><span class="token template-punctuation string">`</span></span></span><br><span class="highlight-line">  <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token operator">!</span>isWebpSupported<span class="token punctuation">)</span> redirectUrl <span class="token operator">+=</span> <span class="token string">'&amp;jpeg=1'</span></span><br><span class="highlight-line">  <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token operator">!</span>state<span class="token punctuation">.</span>convertBw<span class="token punctuation">)</span> redirectUrl <span class="token operator">+=</span> <span class="token string">'&amp;bw=0'</span></span><br><span class="highlight-line">  <span class="token keyword">if</span> <span class="token punctuation">(</span>state<span class="token punctuation">.</span>compressionLevel<span class="token punctuation">)</span> <span class="token punctuation">{</span></span><br><span class="highlight-line">      redirectUrl <span class="token operator">+=</span> <span class="token string">'&amp;l='</span> <span class="token operator">+</span> <span class="token function">parseInt</span><span class="token punctuation">(</span>state<span class="token punctuation">.</span>compressionLevel<span class="token punctuation">,</span> <span class="token number">10</span><span class="token punctuation">)</span></span><br><span class="highlight-line">  <span class="token punctuation">}</span></span><br><span class="highlight-line">  <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token operator">!</span><span class="token function">isFirefox</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token keyword">return</span> <span class="token punctuation">{</span> redirectUrl <span class="token punctuation">}</span></span><br><span class="highlight-line">  <span class="token comment">// Firefox allows onBeforeRequest event listener to return a Promise</span></span><br><span class="highlight-line">  <span class="token comment">// and perform redirect when this Promise is resolved.</span></span><br><span class="highlight-line">  <span class="token comment">// This allows us to run HEAD request before redirecting to compression</span></span><br><span class="highlight-line">  <span class="token comment">// to make sure that the image should be compressed.</span></span><br><span class="highlight-line">  <span class="token keyword">return</span> axios<span class="token punctuation">.</span><span class="token function">head</span><span class="token punctuation">(</span>url<span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">then</span><span class="token punctuation">(</span><span class="token parameter">res</span> <span class="token operator">=></span> <span class="token punctuation">{</span></span><br><span class="highlight-line">      <span class="token keyword">if</span> <span class="token punctuation">(</span></span><br><span class="highlight-line">          res<span class="token punctuation">.</span>status <span class="token operator">===</span> <span class="token number">200</span> <span class="token operator">&amp;&amp;</span></span><br><span class="highlight-line">          res<span class="token punctuation">.</span>headers<span class="token punctuation">[</span><span class="token string">'content-length'</span><span class="token punctuation">]</span> <span class="token operator">></span> <span class="token number">1024</span> <span class="token operator">&amp;&amp;</span></span><br><span class="highlight-line">          res<span class="token punctuation">.</span>headers<span class="token punctuation">[</span><span class="token string">'content-type'</span><span class="token punctuation">]</span> <span class="token operator">&amp;&amp;</span></span><br><span class="highlight-line">          res<span class="token punctuation">.</span>headers<span class="token punctuation">[</span><span class="token string">'content-type'</span><span class="token punctuation">]</span><span class="token punctuation">.</span><span class="token function">startsWith</span><span class="token punctuation">(</span><span class="token string">'image'</span><span class="token punctuation">)</span></span><br><span class="highlight-line">      <span class="token punctuation">)</span> <span class="token punctuation">{</span></span><br><span class="highlight-line">          <span class="token keyword">return</span> <span class="token punctuation">{</span> redirectUrl <span class="token punctuation">}</span></span><br><span class="highlight-line">      <span class="token punctuation">}</span></span><br><span class="highlight-line">  <span class="token comment">// ...</span></span></code></pre>
+<p>the code above manipulate image url we requested and return manipulated URL so in network tab you'll see our manipulated url.</p>
+<p>Some site had CSP rules on their site, it can be pass by adding the correct header after request completed. It is on <code>webRequest.onHeadersReceived</code> you can see the code <a href="https://github.com/ayastreb/bandwidth-hero/blob/master/src/background/patchContentSecurity.js">here</a></p>
+<p><code>webRequest.onCompleted</code> this api are only used to count how bytes was saved, and show to it the users.</p>
+<h2 id="some-image-wont-compressed%3F">Some Image wont compressed? <a class="direct-link" href="#some-image-wont-compressed%3F">#</a></h2>
+<p>Yes it is, since it uses web request proxy it cant process image that already declared (blob / base64) on src like this</p>
+<pre class="language-html"><code class="language-html"><span class="highlight-line"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>img</span> <span class="token attr-name">src</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>somehowdev.towont upload some html tag with base64<span class="token punctuation">"</span></span> <span class="token punctuation">/></span></span></span></code></pre>
+<p>You will see this on google search result, however it still usefull if you open website that had lot of images, facebook, reddit, 9gag etc.</p>
+<p>Thanks for reading! I usualy visit some opensource project and make sense on how it works, since it can be usefull way on doing somethings. See ya next <em>Howk</em>. Have a good day; be good people.</p>
+
+    </div>
+  </div>
+</article>
+<p><a href="/">← Home</a></p>
+
+      </div>
+    </section>
+
+    <footer class="footer-wrapper">
+      <div>
+        <ul>
+          
+            <li>
+              <a href="https://github.com/mandaputtra"> Github </a> </li>
+          
+            <li>
+              <a href="mandaputtra"> Twitter </a> </li>
+          
+        </ul>
+      </div>
+    </footer>
+
+  </main>
+</body>
+
+</html>

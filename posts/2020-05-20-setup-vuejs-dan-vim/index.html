@@ -1,0 +1,135 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Konfigurasi Vim dengan Vue.js</title>
+  <meta name="og:title" content="Konfigurasi Vim dengan Vue.js">
+
+  <meta name="description" content="Agar ngoding lama, ga mikirin error tapi mikirin shortcut Vim">
+  <meta name="og:description" content="Agar ngoding lama, ga mikirin error tapi mikirin shortcut Vim">
+  <link rel="stylesheet" href="/css/reset.css">
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="stylesheet" href="/css/prism-base16-monokai.dark.css">
+  <link rel="alternate" href="/feed/feed.xml" type="application/atom+xml" title="mandaputtra::fullstuck_developer">
+  <link rel="shortcut icon" href="https://cdn.glitch.com/238f8585-6bd5-40c4-a0ff-2b87d4acea6c%2Ftil-16.png?v=1561397433743" type="image/x-icon">
+  <link rel="icon" href="https://cdn.glitch.com/238f8585-6bd5-40c4-a0ff-2b87d4acea6c%2Ftil-16.png?v=1561397433743" type="image/x-icon">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Mukta&display=swap">
+  <meta name="twitter:image" content="https://avatars1.githubusercontent.com/u/23342943?s=460&amp;u=3a5d64c4c86dfbe552ed689e2f968105dff2553a&amp;v=4">
+  <meta name="twitter:card" content="summary">
+  <meta name="og:image:width" content="256">
+  <meta name="og:image:height" content="256">
+  <meta name="og:image" content="https://avatars1.githubusercontent.com/u/23342943?s=460&amp;u=3a5d64c4c86dfbe552ed689e2f968105dff2553a&amp;v=4">
+  <meta name="twitter:image:alt" content="Full stuck developer">
+</head>
+
+<body>
+  <main>
+    <header class="header-wrapper">
+      <h1>
+        <a href="/">
+          (〃￣ω￣〃ゞ
+        </a>
+      </h1>
+      <ul><li>
+          <a href="/stuff/">Stuff</a>
+        </li><li>
+          <a href="/about/">Me</a>
+        </li></ul>
+    </header>
+
+    <section>
+      <div>
+        
+
+<article>
+  <header>
+    
+      <p class="date">20 May 2020</p>
+    
+    <h1>Konfigurasi Vim dengan Vue.js</h1>
+    
+      
+      
+      
+    
+      
+      
+      
+        <a class="postlist-tag" href="
+        /tags/vim/
+      ">vim</a>
+      
+    
+      
+      
+      
+        <a class="postlist-tag" href="
+        /tags/tips/
+      ">tips</a>
+      
+    
+  </header>
+  <div>
+    <div>
+      <p>Vim dan segala pemujanya.</p>
+<p>Banyak orang yang pakai Vim pada bilang membangkitkan produktifitas kita sebagai programmer, dikarenakan kita tidak usah sering sering menggunakan mouse untuk klik sana klik situ. Atau untuk beberapa task seperti bikin komentar di code, hapus sebagian code, dsb.</p>
+<p>Bisa dibilang itu bener, bisa dibilang juga tidak haha.</p>
+<p>Alasan saya belajar Vim karena ringan itu aja. Saya masih inget dulu pas jadi programmer pakai laptop bapuk, buka VSCode aja rasanya berat minta ampun ~ jadi saya dulu sering gunain <code>nano</code>. Bayangkan sadja <a href="https://webpack.js.org/concepts/hot-module-replacement">HMR</a>, VSCode, dan Chrome, laptop 2Gbmu bakal ngadat minta udahan.</p>
+<h2 id="neovim">NeoVim <a class="direct-link" href="#neovim">#</a></h2>
+<p>Saya pakai <a href="https://neovim.io/">NeoVim</a> karena om <a href="https://nusendra.com/post/how-to-setup-my-personal-vim">nusendra</a> pakai itu juga, jadi tanyakan ke-dia jangan saya.</p>
+<h2 id="plugin-manager">Plugin Manager <a class="direct-link" href="#plugin-manager">#</a></h2>
+<p>Nah ini nih, banyak sekali plugin manager di ranah Vim, personal saya pilih <a href="https://github.com/junegunn/vim-plug">vim-plug</a> dikarenakan saya tergoda dengan kata minimalis. Pokoknya tinggal <code>Plug 'nama-orang-yang-bikin/package</code> lalu <code>:PlugInstall</code> ter install deh plugin yang kamu mau.</p>
+<p>Install-nya pun gampang coy :</p>
+<pre class="language-bash"><code class="language-bash"><span class="highlight-line">  $ <span class="token function">curl</span> -fLo ~/.vim/autoload/plug.vim --create-dirs <span class="token punctuation">\</span></span><br><span class="highlight-line">      https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim</span></code></pre>
+<p>Lalu tinggal kamu install deh pluggin yang mungkin kamu perluin. Tulis ini pada <code>.config/nvim/init.vim</code></p>
+<pre class="language-vim"><code class="language-vim"><span class="highlight-line">  <span class="token comment">" Contoh installasi plugin di vim-plug</span></span><br><span class="highlight-line">  <span class="token keyword">call</span> plug#<span class="token function">begin</span><span class="token punctuation">(</span><span class="token string">'~/.vim/plugged'</span><span class="token punctuation">)</span></span><br><span class="highlight-line"></span><br><span class="highlight-line">  <span class="token comment">" install vim-sensible</span></span><br><span class="highlight-line">  Plug <span class="token string">'tpope/vim-sensible'</span></span><br><span class="highlight-line">  Plug <span class="token string">'morhetz/gruvbox'</span> <span class="token comment">" install tema vim gruvbox</span></span><br><span class="highlight-line"></span><br><span class="highlight-line">  <span class="token keyword">call</span> plug#<span class="token function">end</span><span class="token punctuation">(</span><span class="token punctuation">)</span></span></code></pre>
+<p>Close vim-nya pakai <code>:wq</code> buka lagi, terus jalanin command <code>:PlugInstall</code> ter-install deh plugin-nya.</p>
+<h2 id="setup-auto-complete-dan-vue">Setup Auto Complete dan Vue <a class="direct-link" href="#setup-auto-complete-dan-vue">#</a></h2>
+<p>Untuk autocomplete saya pilih <a href="https://github.com/neoclide/coc.nvim">coc</a>. Karena coc punya banyak plugin, seperti coc-prettier, coc-eslint, coc-vetur, jadi ya tidak ada salahnya untuk pakai itu. Segala developement saya sehari hari JS, Vue, PHP sudah ada plugin-nya di coc, tentu coc juga ringan walapun di tulis pakai JS (Type Script).</p>
+<p>Berikut silahkan lihat <a href="https://github.com/mandaputtra/dotfiles/blob/master/nvim/plug-config/coc.vim">disini</a> untuk konfigurasi coc saya.</p>
+<p>Nah untuk vue, prettier, dan eslint saya saranin gausah dah pakai plugin lain, prettier, dan eslint juga punya plugin untuk coc, jadi saya pakai aja dah.</p>
+<pre class="language-bash"><code class="language-bash"><span class="highlight-line">  <span class="token comment"># run di dalam command vim SHIFT + :</span></span><br><span class="highlight-line">  :CocInstall coc-eslint coc-prettier coc-json</span></code></pre>
+<p>Setelah di install jangan lupa juga untuk setup si <strong>coc-settings.json</strong>-nya. Contoh seperti punya saya <a href="https://github.com/mandaputtra/dotfiles/blob/master/nvim/coc-settings.json">juga boleh</a>.</p>
+<p>Setelah itu kita konfigurasi syntax highlighting-nya nih.</p>
+<p>Vue punya konsep <a href="https://vuejs.org/v2/guide/single-file-components.html">SFC</a> jadi agak spesial caranya, tapi tenang - selalu ada plugin haha. Saya pakai <a href="https://github.com/posva/vim-vue">vue-vim</a> dan untuk plugin comment saya ikut dokumentasi dari vim-vue juga.</p>
+<p>Selesai juga akhirnya konfigurasi kita, paling tidak vim-mu terlihat di video ini pas <a href="https://streamable.com/ynhnxo">ngedit komponen vue</a></p>
+<p>Nah ~ waktunya kesimpulan</p>
+<h2 id="kesimpulan">Kesimpulan <a class="direct-link" href="#kesimpulan">#</a></h2>
+<p>Haruskah pakai Vim? Tidak, ga perlu. Saya cuma pengen tangan saya ga bayak pindah dari keyboard aja, biar ga kena <a href="https://en.wikipedia.org/wiki/Repetitive_strain_injury">RSI</a> dan kalau misal ada kondisi darurat saya harus pakai laptop dengan spek rendah paling tidak ada editor yang bisa saya pakai.</p>
+<p>Ingin pakai vim tapi ga pingin konfigurasi? Gampang pakai saja <a href="https://spacevim.org/">SpaceVim</a>. Semua konfigurasi macam syntax, autocomplete, terminal, file navigasi dan lain - lain sudah disediakan :)</p>
+<p>Seberapa cepat kita dapat migrasi editor ke Vim? Kalau dipakai terus saya yakin bakal cepet bisa. Untuk sementara ini saya masih 1 Minggu pakai. Waktu kerja saya masih pakai VSCode. Vim cuma saya pakai saat ngedit proyek - proyek hobi. Mungkin 1 - 2 bulan lagi saya akan <em>full-vim</em>.</p>
+<h2 id="catatan">Catatan <a class="direct-link" href="#catatan">#</a></h2>
+<ul>
+<li>Beberapa video dari <a href="https://www.youtube.com/watch?v=XA2WjJbmmoM&amp;list=PL8tzorAO7s0jy7DQ3Q0FwF3BnXGQnDirs">toughbout di youtube</a> sangat bagus buat latian / konfigurasi vim</li>
+<li>Lebih baik jangan copas, setup vim orang lain ~ kadang break haha. Mending contih plugin yang dia pakai dan setup sendiri</li>
+<li>Ingat coc-settings.json, pada bagian eslint harus ada filetype <code>vue</code></li>
+</ul>
+
+    </div>
+  </div>
+</article>
+<p><a href="/">← Home</a></p>
+
+      </div>
+    </section>
+
+    <footer class="footer-wrapper">
+      <div>
+        <ul>
+          
+            <li>
+              <a href="https://github.com/mandaputtra"> Github </a> </li>
+          
+            <li>
+              <a href="mandaputtra"> Twitter </a> </li>
+          
+        </ul>
+      </div>
+    </footer>
+
+  </main>
+</body>
+
+</html>
