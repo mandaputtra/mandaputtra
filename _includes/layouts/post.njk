@@ -1,0 +1,28 @@
+---
+layout: layouts/base.njk
+---
+
+
+<article>
+  <header>
+    {% if date %}
+      <p class="date">{{ date | readableDate }}</p>
+    {% endif %}
+    <h1>{{ title }}</h1>
+    {% for tag in tags %}
+      {% set tagUrl %}
+        /tags/{{ tag }}/
+      {% endset %}
+      {# for some  #}
+      {% if tag !== 'posts' and tag !== 'nav' %}
+        <a class="postlist-tag" href="{{ tagUrl | url }}">{{ tag }}</a>
+      {% endif %}
+    {% endfor %}
+  </header>
+  <div>
+    <div>
+      {{ content | safe }}
+    </div>
+  </div>
+</article>
+<p><a href="{{ '/' | url }}">← Home</a></p>

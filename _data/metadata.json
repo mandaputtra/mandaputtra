@@ -1,0 +1,25 @@
+{
+  "title": "mandaputtra::fullstuck_developer",
+  "heading": "(〃￣ω￣〃ゞ",
+  "url": "https://mandaputtra.github.io/",
+  "description": "a curious persona",
+  "feed": {
+    "subtitle": "a curious persona",
+    "filename": "feed.xml",
+    "path": "/feed/feed.xml",
+    "url": "https://mandaputtra.github.io/",
+    "id": "https://mandaputtra.github.io/"
+  },
+  "author": {
+    "name": "Manda Puttra",
+    "site": "https://mandaputtra.github.io/",
+    "socials": [
+      { "text": "Github", "icon": "", "handle": "https://github.com/mandaputtra" },
+      { "text": "Twitter", "icon": "", "handle": "mandaputtra" }
+    ]
+  },
+  "favicon": "https://cdn.glitch.com/238f8585-6bd5-40c4-a0ff-2b87d4acea6c%2Ftil-16.png?v=1561397433743",
+  "social_image": "https://avatars1.githubusercontent.com/u/23342943?s=460&u=3a5d64c4c86dfbe552ed689e2f968105dff2553a&v=4",
+  "social_image_height": 256,
+  "social_image_width": 256
+}
