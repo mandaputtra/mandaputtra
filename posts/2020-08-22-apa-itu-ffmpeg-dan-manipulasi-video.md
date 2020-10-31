@@ -1,6 +1,6 @@
 ---
 tags: ["ffmpeg", "tips"]
-title: "Apa itu ffmpeg dan maipulasi video"
+title: "Apa itu ffmpeg dan manipulasi video"
 description: "Pengenalan ffmpeg, perintah - perintah, dan dasar - dasar manipulasi video"
 date: 2020-10-11
 ---
