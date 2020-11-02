@@ -4,6 +4,10 @@ Checkout my [website](https://mandaputtra.id/) fellas, mostly Indonesian Article
 
 [![Mandaputtra Not So Important Stats](https://github-readme-stats.vercel.app/api?username=mandaputtra)](https://github.com/anuraghazra/github-readme-stats)
 
+
+[![Used Langs](https://github-readme-stats.vercel.app/api/top-langs?username=mandaputtra)](https://github.com/anuraghazra/github-readme-stats)
+
+
 Upcoming Projects.
 
 - Game Dev, making games with JavaScript or other things. Maybe streamed on Twitch (still no progress)
