@@ -10,6 +10,6 @@ Checkout my [website](https://mandaputtra.id/) fellas, mostly Indonesian Article
 
 Upcoming Projects.
 
-- Game Dev, making games with JavaScript or other things. Maybe streamed on Twitch (still no progress)
+- Game Dev, silly apps, and some other projects
 - Revamping My Blog to have more sections!
 - Thingking about billion dollar startup.
