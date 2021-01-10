@@ -1,10 +1,10 @@
 ---
-layout: layouts/home.njk
+layout: layouts/base.njk
 ---
 
-<h1>Latest 10</h1>
-
-{% set postslist = collections.posts | head(-10) %}
-{% include "postslist.njk" %}
-
-<p>Older posts on <a href="{{ '/archives/' | url }}">the archive</a>.</p>
+{# <h1>Latest 10</h1> #}
+{#  #}
+{# {% set postslist = collections.posts | head(-10) %} #}
+{# {% include "postslist.njk" %} #}
+{#  #}
+{# <p>Older posts on <a href="{{ '/archives/' | url }}">the archive</a>.</p> #}
