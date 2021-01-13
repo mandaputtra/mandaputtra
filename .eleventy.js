@@ -37,6 +37,7 @@ module.exports = function (eleventyConfig) {
   eleventyConfig.addJavaScriptFunction("getTagList", getTagList);
 
   eleventyConfig.addPassthroughCopy("img");
+  eleventyConfig.addPassthroughCopy("fonts");
   eleventyConfig.addPassthroughCopy("css");
   eleventyConfig.addPassthroughCopy("CNAME");
   /* Markdown Plugins */
