@@ -2,9 +2,27 @@
 layout: layouts/base.njk
 ---
 
-{# <h1>Latest 10</h1> #}
-{#  #}
-{# {% set postslist = collections.posts | head(-10) %} #}
-{# {% include "postslist.njk" %} #}
-{#  #}
-{# <p>Older posts on <a href="{{ '/archives/' | url }}">the archive</a>.</p> #}
+<div class="hero">
+<div class="logo-wrapper">
+  <div class="logo">
+    {{ metadata.heading }}
+  </div>
+</div>
+
+<h1 class="homepage-title">
+  Manda Putra
+</h1>
+
+<h2 class="homepage-subtitle">
+  "Full stuck developer, linux gamer, maybe lurking on your server"
+</h2>
+  
+</div>
+
+
+<div class="direction">
+  <a href="/archives" class="button-cartoon">Writing</a>
+  <a href="/gallery" class="button-cartoon">Gallery</a>
+  <a href="/stuff" class="button-cartoon">Me</a>
+  <a href="/about" class="button-cartoon">Stuff</a>
+</div>

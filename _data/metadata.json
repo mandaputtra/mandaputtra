@@ -1,20 +1,24 @@
 {
   "title": "mandaputtra::fullstuck_developer",
-  "heading": "(〃￣ω￣〃ゞ",
-  "url": "https://mandaputtra.github.io/",
-  "description": "a curious persona",
+  "heading": "(σ´∀｀)σ",
+  "url": "https://mandaputtra.id/",
+  "description": "get your fun vibes in programming",
   "feed": {
-    "subtitle": "a curious persona",
+    "subtitle": "get your fun vibes in programming",
     "filename": "feed.xml",
     "path": "/feed/feed.xml",
-    "url": "https://mandaputtra.github.io/",
-    "id": "https://mandaputtra.github.io/"
+    "url": "https://mandaputtra.id/",
+    "id": "https://mandaputtra.id/"
   },
   "author": {
     "name": "Manda Puttra",
-    "site": "https://mandaputtra.github.io/",
+    "site": "https://mandaputtra.id/",
     "socials": [
-      { "text": "Github", "icon": "", "handle": "https://github.com/mandaputtra" },
+      {
+        "text": "Github",
+        "icon": "",
+        "handle": "https://github.com/mandaputtra"
+      },
       { "text": "Twitter", "icon": "", "handle": "mandaputtra" }
     ]
   },
@@ -23,3 +27,4 @@
   "social_image_height": 256,
   "social_image_width": 256
 }
+

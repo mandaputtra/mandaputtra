@@ -2,12 +2,23 @@
 @charset "utf-8";
 
 // Our variables
-$base-font-family: 'Mukta', sans-serif;
-$background-color:  #fffcf2;
-$tags-color:        #403d39;
-$border-color:      #ccc5b9;
-$font-color:        #252422;
-$border-radius: 5px;
+$base-font-family: sans-serif;
+
+$white:                 #f4eeff;
+$dark-blue:             #424874;
+$blue:                  #a6b1e1;
+$bright-blue:           #dcd6f7;
+$black:                 #312c51;
+
+$yellow:                #fecd1a;
+$pink:                  #ffacb7;
+
+// Pallete 2
+
+
+$border-radius-small: 8px;
+$border-radius-medium: 15px;
+$border-radius-round: 100%;
 
 @mixin media-query($device) {
     @media screen and (max-width: $device) {
