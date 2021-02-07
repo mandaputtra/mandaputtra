@@ -3,14 +3,14 @@
   <li class="postlist">
     <p>
       <time class="postlist-date" datetime="{{ post.date | htmlDateString }}">
-       {{ post.date | readableDate }} - 
+        {{ post.date | readableDate }} -
       </time>
       <a class="postlist-title" href="{{ post.url | url }}">
         {% if post.data.title %} {{ post.data.title }} {% else %}
           <code>{{ post.url }}</code>
         {% endif %}
       </a>
-
+      <p class="postlist-descriptions">{{ post.data.description }}</p>
     </p>
   </li>
 {% endfor %}

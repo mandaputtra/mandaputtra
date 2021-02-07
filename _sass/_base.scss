@@ -1,9 +1,132 @@
 // DEFAUTL STYLE
+h1 {
+  font-size: $h1;
+}
+
+a {
+  color: $black;
+
+  &:hover {
+    color: $blue;
+  }
+
+  &:visited {
+    color:  $dark-blue;
+  }
+
+  &:active {
+    color: $blue;
+  }
+}
+
+a.direct-link {
+  font-size: 1rem;
+}
+
+// ARTICLE
+article {
+  header {
+    display: block;
+    padding: 0;
+    margin-bottom: 2rem;
+
+    p.date {
+      display: block;
+    }
+
+    h1 {
+      display: block;
+    }
+
+    .postlist-tag {
+      text-decoration: none;
+      background-color: $dark-blue;
+      color: $white;
+      padding: 0.2rem 0.3rem;
+      border-radius: $border-radius-small;
+    }
+  }
+
+  h2 {
+    font-size: $h2;
+    margin-bottom: 1rem;
+  }
+
+  pre {
+    margin-bottom: 1rem;
+  }
+
+  p {
+    margin-bottom: 1rem;
+
+    b {
+      font-weight: bold;
+    }
+
+    code {
+      background-color: $dark-blue;
+      border-radius: $border-radius-small;
+      color: $white;
+      padding: 0.2rem 0.3rem;
+      font-family: $code-font-family;
+    }
+
+  }
+
+  pre {
+    border-radius: $border-radius-small;
+  }
+  
+  blockquote {
+      background: $bright-blue;
+      border-left: 10px solid $dark-blue;
+      margin-bottom: 1rem;
+      padding: 0.5em 10px;
+      quotes: "\201C""\201D""\2018""\2019";
+
+      &:before {
+        color: $dark-blue;
+        content: open-quote;
+        font-size: 2rem;
+        line-height: 0.1em;
+        margin-right: 0.25em;
+        vertical-align: -0.4em;
+      }
+
+      p {
+        display: inline;
+      }
+  }
+
+
+  p img {
+    max-width: 100%;;
+  }
+
+  ul {
+    margin-bottom: 1rem;
+    list-style: square outside none;
+  }
+}
+
+
 header {
   max-width: 65ch;
   padding: 2ch  2ch 0ch 2ch;
   margin: auto;
   position: relative;
+  display: flex;
+  justify-content: space-between;
+
+  nav {
+    ol > li > a {
+      color: $black;
+
+      &:visited {
+        color: $black;
+      }
+    }
+  }
 
   .logo-wrapper {
     text-decoration: none;
@@ -50,8 +173,19 @@ main {
     .postlist {
       padding: 0.5ch;
       margin-bottom: 0.5rem;
+      .postlist-date {
+        font-weight: bold;
+      }
       .postlist-title {
-        color: $dark-blue;
+        color: $black;
+
+        &:hover {
+          color: $blue;
+        }
+      }
+
+      .postlist-descriptions {
+        color: $blue;
       }
     }
   }
