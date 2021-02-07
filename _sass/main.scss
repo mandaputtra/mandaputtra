@@ -1,29 +1,3 @@
-// storing variables and mixins
-@charset "utf-8";
-
-// Our variables
-$base-font-family: 'Mukta', sans-serif;
-$background-color:  #fffcf2;
-$tags-color:        #403d39;
-$border-color:      #ccc5b9;
-$font-color:        #252422;
-$border-radius: 5px;
-// Use media queries like this:
-// @include media-query($on-palm) {
-//     .wrapper {
-//         padding-right: $spacing-unit / 2;
-//         padding-left: $spacing-unit / 2;
-//     }
-// }
-
-@mixin media-query($device) {
-    @media screen and (max-width: $device) {
-        @content;
-    }
-}
-
-$on-palm: 880px;
-$on-super-small: 500px;
-
-// Import partials from `sass_dir` (defaults to `_sass`)
+@import "variables";
 @import "base";
+

@@ -1,10 +1,8 @@
 ---
 layout: layouts/base.njk
-permalink: 404.html
-excludeFromSitemap: true
 ---
 
-# Content not found.
+# Still On Development
 
 Go <a href="{{ '/' | url }}">home</a>.
 

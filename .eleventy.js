@@ -2,6 +2,7 @@ const { DateTime } = require("luxon");
 const pluginRss = require("@11ty/eleventy-plugin-rss");
 const pluginSyntaxHighlight = require("@11ty/eleventy-plugin-syntaxhighlight");
 const fs = require("fs");
+const util = require("util");
 const getTagList = require("./_11ty/getTagList");
 
 module.exports = function (eleventyConfig) {
@@ -11,6 +12,7 @@ module.exports = function (eleventyConfig) {
 
   eleventyConfig.addLayoutAlias("post", "layouts/post.njk");
   eleventyConfig.addLayoutAlias("base", "layouts/base.njk");
+  eleventyConfig.addLayoutAlias("home", "layouts/home.njk");
 
   eleventyConfig.addFilter("readableDate", (dateObj) => {
     return DateTime.fromJSDate(dateObj, { zone: "utc" }).toFormat(
@@ -23,6 +25,9 @@ module.exports = function (eleventyConfig) {
     return DateTime.fromJSDate(dateObj).toFormat("yyyy-LL-dd");
   });
 
+  eleventyConfig.addFilter("dump", (obj) => {
+    return util.inspect(obj);
+  });
   // Get the first `n` elements of a collection.
   eleventyConfig.addFilter("head", (array, n) => {
     if (n < 0) {
@@ -37,7 +42,9 @@ module.exports = function (eleventyConfig) {
   eleventyConfig.addJavaScriptFunction("getTagList", getTagList);
 
   eleventyConfig.addPassthroughCopy("img");
+  eleventyConfig.addPassthroughCopy("fonts");
   eleventyConfig.addPassthroughCopy("css");
+  eleventyConfig.addPassthroughCopy("js");
   eleventyConfig.addPassthroughCopy("CNAME");
   /* Markdown Plugins */
   let markdownIt = require("markdown-it");

@@ -8,11 +8,12 @@ pagination:
     - nav
     - post
     - posts
-layout: layouts/home.njk
+layout: layouts/base.njk
 renderData:
   title: Tagged “{{ tag }}”
 permalink: /tags/{{ tag }}/
 ---
+
 <h1>Tagged “{{ tag }}”</h1>
 
 {% set postslist = collections[ tag ] %}
