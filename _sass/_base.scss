@@ -111,18 +111,11 @@ article {
 
   ol {
     margin-bottom: 1rem;
-    list-style: none;
-    counter-reset: my-awesome-counter;
+    list-style-type: decimal;
   }
 
   ol li {
     margin-bottom: 0.5rem;
-    counter-increment: my-awesome-counter;
-  }
-
-  ol li::before {
-    content: counter(my-awesome-counter) ". ";
-    font-weight: bold;
   }
 }
 
