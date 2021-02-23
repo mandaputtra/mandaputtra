@@ -63,18 +63,19 @@ article {
       font-weight: bold;
     }
 
-    code {
-      background-color: $dark-blue;
-      border-radius: $border-radius-small;
-      color: $white;
-      padding: 0.2rem 0.3rem;
-      font-family: $code-font-family;
-    }
+  }
 
+  code {
+    background-color: $dark-blue;
+    border-radius: $border-radius-small;
+    color: $white;
+    padding: 0.2rem 0.3rem;
+    font-family: $code-font-family;
   }
 
   pre {
     border-radius: $border-radius-small;
+    margin-bottom: 1rem !important;
   }
   
   blockquote {
@@ -106,6 +107,22 @@ article {
   ul {
     margin-bottom: 1rem;
     list-style: square outside none;
+  }
+
+  ol {
+    margin-bottom: 1rem;
+    list-style: none;
+    counter-reset: my-awesome-counter;
+  }
+
+  ol li {
+    margin-bottom: 0.5rem;
+    counter-increment: my-awesome-counter;
+  }
+
+  ol li::before {
+    content: counter(my-awesome-counter) ". ";
+    font-weight: bold;
   }
 }
 
