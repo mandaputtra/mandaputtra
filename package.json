@@ -5,11 +5,10 @@
   "scripts": {
     "build": "npx gulp build-sass & npx eleventy",
     "start": "concurrently \"npx eleventy --serve\" \"npx gulp watch-sass\" ",
-    "debug": "DEBUG=* npx eleventy",
-    "deploy": "npm run build && push-dir --dir=_site --branch=master --cleanup"
+    "debug": "DEBUG=* npx eleventy"
   },
   "engines": {
-    "node": "10.x"
+    "node": "12.x"
   },
   "repository": {
     "type": "git",
