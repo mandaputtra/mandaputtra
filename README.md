@@ -5,7 +5,7 @@ Checkout my [website](https://mandaputtra.id/) fellas, mostly Indonesian Article
 [![Not So Important Stats](https://github-readme-stats.vercel.app/api?username=mandaputtra)](https://github.com/anuraghazra/github-readme-stats)
 
 
-[![Used Langs](https://github-readme-stats.vercel.app/api/top-langs?username=mandaputtra)](https://github.com/anuraghazra/github-readme-stats)
+[![Used Langs](https://github-readme-stats.vercel.app/api/top-langs/?username=mandaputtra&hide=java,objective-c)](https://github.com/anuraghazra/github-readme-stats)
 
 
 Upcoming Projects.
