@@ -2,14 +2,14 @@ Hello, my _handle_ is my name (〃￣ω￣〃ゞ A Software Engineer (no _degree
 
 Checkout my [website](https://mandaputtra.id/) fellas, mostly Indonesian Article.. 
 
-[![Not So Important Stats](https://github-readme-stats.vercel.app/api?username=mandaputtra)](https://github.com/anuraghazra/github-readme-stats)
-
-
-[![Used Langs](https://github-readme-stats.vercel.app/api/top-langs/?username=mandaputtra&hide=java,objective-c)](https://github.com/anuraghazra/github-readme-stats)
-
-
 Upcoming Projects.
 
 - Game Dev, silly apps, and some other projects
 - Revamping My Blog to have more sections!
+- Definetfly should blog moreee!!
 - Thingking about billion dollar startup.
+
+[![Not So Important Stats](https://github-readme-stats.vercel.app/api?username=mandaputtra)](https://github.com/anuraghazra/github-readme-stats)
+
+
+[![Used Langs](https://github-readme-stats.vercel.app/api/top-langs/?username=mandaputtra&hide=java,objective-c)](https://github.com/anuraghazra/github-readme-stats)
