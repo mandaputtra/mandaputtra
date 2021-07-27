@@ -13,7 +13,7 @@ You may want to contact him via [email](mailto:mandaputra@gmail.com) if you had 
 
 But before that lest talk about his runtime right now :
 
-- Work at [ZeroOneGroup](https://zero-one-group.com/) as Full Stack Developer.
+- Work at [ZeroOneGroup](https://zero-one-group.com/) as Product Engineer.
 - Mantain Vue.js ID Group on [github](vuejs.id) and telegram.
 - Tinkering with his idea of 10 Billion Dollars software that hadn't released yet.
 - Made a book about programming, blogging about programming and daily life.
