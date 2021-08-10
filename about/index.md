@@ -7,7 +7,7 @@ navtitle: Me
 templateClass: tmpl-post
 ---
 
-Manda Putra is Software Enginner (Web Development) without _degree_ to proof it. Help many companies to do software engineering and also became the part of it. His company right now call him Product Engineer, although he admit doesn't do well with front-end development.
+Manda Putra is Software Engineer (Web Development) without _degree_ to proof it. Help many companies to do software engineering and also became the part of it. His company right now call him Product Engineer, although he admit doesn't do well with front-end development.
 
 He always interested in technical low level stuff, realtime apps, esoteric programming languages, and databases!. Probably the best way to describe his passion is with this motto "If you don't understand the beginning, you wont able to make a better future".
 
