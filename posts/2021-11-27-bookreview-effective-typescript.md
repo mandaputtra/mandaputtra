@@ -8,7 +8,9 @@ en:
 
 > TLDR: Buku yang efektif, penuh dengan tips - trick bagaimana bekerja dengan TypeScript. 4.5/5.
 
-Sebelumnya saya sendiri kurang pengalaman dengan _typed lang_ ~ saya sering nulis interface 2 kali karena malas extends atau bikin genericnya. Ada beberapa hal yang membuat saya sendiri suka sama _typed lang_ seperti C++/golang ga compile ya ga jalan, belum lagi fitur seperti autocompletion, refactoring, dan banyak lainnya.
+Bulan kemarin, sebagai bahan bacaan rekomendasi dari kantor saya membaca buku [Effective Typescript](https://effectivetypescript.com/).
+
+Sebelumnya saya sendiri kurang pengalaman dengan _typed lang_ ~ saya sering nulis interface 2 kali karena malas extends atau bikin genericnya. Ada beberapa hal yang membuat saya sendiri suka sama _typed lang_ seperti C++/Golang tidak compile ya tidak jalan, belum lagi fitur seperti autocompletion, refactoring, IDE error diagnostic, dan banyak lainnya.
 
 Jadi apa saja yang saya pelajari? Dengan tidak berurutan ~ mari kita kupas.
 
@@ -117,7 +119,7 @@ function saveCustomerData(): CustomerData {
 
 ## Test the type declaration
 
-Bacaan ini ada pada chapter 6. Saya sepertinya hanya melihat ini di TypeScript, dimana kita harus bikin Test pada Type Declaration kita sendri. Disini dibahas juga kenapa sih kita harus ngetes tipe? Bukannya tipe itu ya cuma tipe aja ga perlu di test?
+Bacaan ini ada pada chapter 6. Saya sepertinya hanya melihat ini di TypeScript, dimana kita harus bikin Test pada Type Declaration kita sendri. Disini dibahas juga kenapa sih kita harus ngetes tipe? Bukannya tipe itu ya cuma tipe aja tidak perlu di test?
 
 Aslinya test ini lebih cocok digunakan kalau kita memakai generic dikarenakan jikalau kita menggunakan generic, sifat suatu fungsi berpengaruh dengan tipe parameter yang di masukan.
 
@@ -157,11 +159,11 @@ Third party lib confusion, nah ini memang tidak bisa dihindari. Sering kita dapa
 
 Kebanyakan opsi kompiler, kalau ini saya mau menyanggah juga bingung memang benar sih kita dapat menargetkan kode kita ke bentuk ECMA manapun ES5, ES6 sampai ke ES200 besok. Ada beberapa fitur yang hanya bisa dipakai jika opsinya kita hidupkan pada `tsconfig.json`, jadi ada kemungkinan dimana confignya berbeda akan menghasilkan kode yang berbeda pula.
 
-Walapun begitu ~ saya setuju jika TypeScript ini lebih banyak membantu daripada menyusahkan, paling ga mengurangi test pada aplikasi JS kita dulu.
+Walapun begitu ~ saya setuju jika TypeScript ini lebih banyak membantu daripada menyusahkan, paling tidak mengurangi test pada aplikasi JS kita dulu.
 
 ## Kesimpulan
 
-Dari 8 bagian yang ada pada buku tentunya saya sendiri ga bakal bisa jelasin satu persatu ~ ntar malah copy paste bukunya. Ada beberapa kesimpulan yang saya dapat tarik soal buku ini :
+Tentu lebih banyak lagi topik topik yang yang mebuat saya "Oh Oh Gituuu", tapi dari 8 bagian yang ada pada buku tentunya saya sendiri tidak bakal bisa jelasin satu persatu ~ ntar malah copy paste bukunya. Ada beberapa kesimpulan yang saya dapat tarik soal buku ini :
 
 - Padat, berisi banyak tips, trick dan opini dimana kita harus menggunakan TypeScript
 - Beberapa kode contoh cukup banyak sehingga kita sendiri lebih mengerti apa kegunaan cara - cara yang kita pakai
