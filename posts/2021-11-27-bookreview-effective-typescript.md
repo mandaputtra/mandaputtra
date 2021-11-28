@@ -8,7 +8,7 @@ en:
 
 > TLDR: Buku yang efektif, penuh dengan tips - trick bagaimana bekerja dengan TypeScript. 4.5/5.
 
-Bulan kemarin, sebagai bahan bacaan rekomendasi dari kantor saya membaca buku [Effective Typescript](https://effectivetypescript.com/).
+Bulan kemarin, sebagai bahan bacaan rekomendasi dari kantor, saya membaca buku [Effective Typescript](https://effectivetypescript.com/).
 
 Sebelumnya saya sendiri kurang pengalaman dengan _typed lang_ ~ saya sering nulis interface 2 kali karena malas extends atau bikin genericnya. Ada beberapa hal yang membuat saya sendiri suka sama _typed lang_ seperti C++/Golang tidak compile ya tidak jalan, belum lagi fitur seperti autocompletion, refactoring, IDE error diagnostic, dan banyak lainnya.
 
