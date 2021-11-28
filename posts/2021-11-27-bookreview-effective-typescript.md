@@ -2,7 +2,7 @@
 tags: ["book review"]
 title: "Review Buku: Effective TypeScript"
 description: "Tips dan trick menggunakan TypeScript?"
-date: 2021-02-23
+date: 2021-11-27
 en:
 ---
 
