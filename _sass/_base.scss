@@ -188,6 +188,7 @@ main {
       }
       .postlist-title {
         color: $black;
+        text-decoration: none;
 
         &:hover {
           color: $blue;

@@ -2,7 +2,8 @@
 @charset "utf-8";
 
 // Our variables
-$base-font-family: "Atkinson Hyperlegible Regular", Arial, Helvetica, sans-serif;
+$heading-font-family: 'Crimson Pro', serif;
+$body-font-family: 'Work Sans', sans-serif;
 $code-font-family: Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace;
 // $base-font-family: sans-serif;
 
@@ -22,9 +23,9 @@ $border-radius-medium: 15px;
 $border-radius-round: 100%;
 
 // font-size
-$h1: 1.8rem;
-$h2: 1.5rem;
-$h3: 1.2rem;
+$h1: 3rem;
+$h2: 2rem;
+$h3: 1.8rem;
 
 @mixin media-query($device) {
     @media screen and (max-width: $device) {
@@ -84,14 +85,22 @@ $on-super-small: 500px;
 	}
 }
 
-$font-path: '../fonts/Atkinson-Hyperlegible-Regular-102';
-@include font-face("Atkinson Hyperlegible Regular", $font-path)
+$font-path: '../fonts/CrimsonPro-VariableFont_wght';
+@include font-face("Crimson Pro", $font-path);
 
+
+$font-path-body: '../fonts/WorkSans-VariableFont_wght.ttf';
+@include font-face("Work Sans", $font-path-body);
 
 body {
   background-color: $white;
-  font-family: $base-font-family;
+  font-family: $body-font-family;
   font-size: 18px;
   color: $black;
   line-height: 1.7;
+}
+
+h1, h2, h3, h4, h5, h6 {
+ font-family: $heading-font-family;
+  line-height: 1.2;
 }
