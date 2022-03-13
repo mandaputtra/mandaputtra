@@ -6,11 +6,4 @@ layout: layouts/base.njk
 
 Go <a href="{{ '/' | url }}">home</a>.
 
-{% comment %}
-Read more: https://www.11ty.io/docs/quicktips/not-found/
-
-This will work for both GitHub pages and Netlify:
-
-- https://help.github.com/articles/creating-a-custom-404-page-for-your-github-pages-site/
-- https://www.netlify.com/docs/redirects/#custom-404
-  {% endcomment %}
+I want to do some experimental stuff here, some exploration project like graphic, math, but with the twits of programming. But this page are still empty. So ~ maybe you can comeback later. I'm sorry :((

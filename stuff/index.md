@@ -27,7 +27,7 @@ I believe programming isn't for everyone, but if you want to learn the stuff you
 4. Official Documentation, sometimes you should read something on the docs.
 5. Please be patient, coding is hard - take your time.
 
-### Some Indonesian resource
+## Some Indonesian resource
 
 Banyak yang saya suka di youtube, beberapa :
 
