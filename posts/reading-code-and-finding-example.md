@@ -161,7 +161,7 @@ it('Format Month M MM MMM MMMM', () => {
 })
 ```
 
-Above code says that below are the library behaviour when formatting invalid date. It should be the same as how `Date` library behave too and below it it format month and the format should also be the same as other library format, this mean that dayjs wanted to be compatible with other libs behaviour in here it's [moment.js](https://momentjs.com/)
+Above code says that below are the library behaviour when formatting invalid date. It should be the same as how `Date` library behave too and below it, the test format month and the format should also be the same as other library format, this mean that dayjs wanted to be compatible with other libs behaviour in here it's [moment.js](https://momentjs.com/)
 
 A great programmer always placed comment on top of their function at least it explain on how to use it. This is a must if you're making a function that anybody else will use. To search it sometimes I just clone the source code and began to read it, searching by keyword.
 
