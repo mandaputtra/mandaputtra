@@ -147,7 +147,7 @@ Your library documentation sometimes good enough to find an example, but if you 
 
 Most library had a `test` folder it contain code to test the library. Learn to read the test, it sometimes describe most of all scenario on how to use the library. Here I clip it from dayjs source code:
 
-```
+```js
 it('Format invalid date', () => {
   expect(dayjs('').format()).toBe(new Date('').toString())
   expect(dayjs('otherString').format()).toBe(new Date('otherString').toString())
