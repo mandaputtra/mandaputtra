@@ -5,17 +5,17 @@ description: "Make a link that triggers send whatsapp from javascript"
 date: 2018-09-29
 ---
 
-> TL;DR You can use link below and place it on your button, or whatever. Its simply will open up whatsapp on user phone. But it isn't automatically send. https://api.whatsapp.com/send?phone=+*YOURNUMBER*&text=%20*YOURMESSAGE*. use encodeURIComponent('your text here')
+> TL;DR You can use link below and place it on your button, or whatever. Its simply will open up whatsapp on user phone. But it isn't automatically send. https://api.whatsapp.com/send?phone=+<YOURNUMBER>&text=%20<YOURMESSAGE>. use encodeURIComponent('your text here')
 
 What we were built here it is a dynamic send to WhatsApp link with JavaScript approach you can use the link above and give it a try
 
 Okay I'll use JSBin with this, first open up then its just easy you will use `split()` and `join()` string property on JavaScript here my script.
 
 ```js
-// https://api.whatsapp.com/send?phone=+{{ *YOURNUMBER* }}&text=%20{{ *YOUR MESSAGE* }}
+// https://api.whatsapp.com/send?phone=+{{ YOURNUMBER }}&text=%20{{ YOURMESSAGE }}
 
-var yourNumber = "{{ your number in string}}";
-var yourMessage = "{{ your message in string }}";
+var yourNumber = "your number in string";
+var yourMessage = "your message in string";
 
 // %20 mean space in link
 // If you already had an array then you just join them with '%20'
