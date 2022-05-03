@@ -89,7 +89,7 @@ $font-path: '../fonts/CrimsonPro-VariableFont_wght';
 @include font-face("Crimson Pro", $font-path);
 
 
-$font-path-body: '../fonts/WorkSans-VariableFont_wght.ttf';
+$font-path-body: '../fonts/WorkSans-VariableFont_wght';
 @include font-face("Work Sans", $font-path-body);
 
 body {

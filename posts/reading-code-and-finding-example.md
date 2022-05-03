@@ -2,7 +2,6 @@
 tags: ["programming", "errand"]
 title: "Reading Code, Error, and Find Example"
 description: "How being ignorant slows you down"
-eleventyExcludeFromCollections: true
 date: 2022-05-04
 ---
 
