@@ -6,11 +6,13 @@ eleventyExcludeFromCollections: true
 date: 2022-05-04
 ---
 
-Sometimes I mentor programming to my friends, and I always said that understanding what the code you wrote are doing will be an important asset.
+Sometimes I mentor programming to my friends, and I always said that understanding what the code you wrote will be an important asset.
 
 It's been 5 year since I professionally code, and I think the most important skill that I learn is reading code, make sense of an error and finding example.
 
-When people joining boot camp or learning through online tutorials, the first thing that you want is completing the task, make it work. After it works, the most important part to do is figuring out why it is to work.
+When people joining bootcamp or learning through online tutorials, the first thing that you want is completing the task, make it work. After it works, the most important part to do is figuring out why it is to work.
+
+Most coding bootcamp are starting to label someone that could create React website is understand JavaScript enough, No. The fact that you can create something is great achievement, but if you want to understand it step by step it will be a greater one.
 
 ## Reading Code
 
@@ -18,7 +20,7 @@ If you got to learn modern programming/software making, you got to see some 3rd 
 
 That lib are **just other people code**, repeat with me! JUST OTHER PEOPLE CODE!
 
-That means most of the time you could read their implementation. The code are sometimes placed online on platform like GitHub, GitLab, etc. Just google it, "your-library source code". Most of the time you'll get the result at top.
+That means most of the time you could read their implementation. The code are sometimes placed online on platform like GitHub, GitLab, etc. Just google it, "your-library source code".
 
 Lest's say you're curious about how do [dayjs](https://github.com/iamkun/dayjs/) does [subtraction](https://day.js.org/docs/en/manipulate/subtract#docsNav) to a date.
 
@@ -81,15 +83,15 @@ Read the error carefully, search on google for guide on how to solve it and figu
 
 Error is a blessing, those HTML/CSS developer, they not getting error message at all! They must figure out how does `flex`, `box-sizing` really works to fix "Why this are not in center" type of question. That's why some people are better at translating design more than you, because they do mistakes all the time and learn it again and again.
 
-You're to ignorant sometimes to read error messages and just copy paste that to google. Sometimes you find it, sometimes not. I see this with so many people that are new too UNIX ecosystem. CLI tools always have `--help` or `man` section at least read it sometimes.
+You're too ignorant sometimes to read error messages and just copy paste that to google. Sometimes you find it, sometimes not. I see this with so many people that are new too UNIX ecosystem. CLI tools always have `--help` or `man` section at least read it sometimes.
 
 ```bash
 $ your-cli-tools --help
 ```
 
-Remember your error message doesn't always shows up on StackOverflow, sometimes other people using different variable name, if it is `undefined` that mean just one thing, you haven't declare it yet.
+Remember your error message doesn't always shows up on StackOverflow, sometimes other people using different variable name, if it is `undefined` its mean just one thing, you haven't declare it yet.
 
-I remember the old days I learn programming through [Vuejs.id](https://vuejs.id) community, whenever I ask they taught me how to find the core problem, not just showing me how it should be done.
+I remember the old days I learn programming through [Vuejs.id](https://vuejs.id) community. Whenever I ask, they taught me how to find the core problem, not just showing me how it should be done.
 
 Even when I tried to wrote this article I happened encounter a strange error message
 
@@ -112,7 +114,7 @@ Read it carefully don't just ignore the details. It says `TemplateContentPrematu
 @11ty/eleventy/src/Template.js:708:23)
 ```
 
-So your google query should be like these "11ty TemplateContentPrematureUseError" not "Tried to use templateContent too early (./posts/reading-code-and-finding-example.md) (via TemplateContentPrematureUseError)". Other people doesn't have `post-reading-code-and-finding-example.md`so strip it out from your search query.
+So your google query should be like these "11ty TemplateContentPrematureUseError", because the error happened in `@11ty/eleventy` module and it says `TemplateContentPrematureUseError` you could add "Tried to use templateContent" it would be more verbose.
 
 Take your time, give it 5 minutes. Understand why it happened, if you must just open the `node_modules` and start hacking there (but if your libs uses typescript - you need to recompile it lol).
 
@@ -122,7 +124,7 @@ Take your time, give it 5 minutes. Understand why it happened, if you must just 
 
 ## Finding example
 
-Admit it most of the time you're just _layering brick type of programmer_ (or as I joke), other people code already do many heavy lifting programming to make your code run. Like when someone use a 3D library, you can just wrote:
+Admit it most of the time you're just _layering brick type of programmer_. Other people code already do many heavy lifting programming to make your code run. Like when you want a 3D box, you can just wrote:
 
 ```js
 const geometry = new THREE.BoxGeometry();
@@ -135,16 +137,16 @@ camera.position.z = 5;
 
 And baam!! You got a 3D Cube. To find example is somewhat challenging and fun. It was the same concept as reading code, but where do I find it?.
 
-There are many places that I do look for when to find code example. Here are some list:
+There are many places that I do look to find code example. Here are some list:
 
 1. Their documentation
 2. Test/example folder
 3. The source code comments
 4. Searching on the internet
 
-Your library documentation are sometimes good enough to find an example, but if you want some advanced stuff you must learn something to its details! There are no shortcut. Read the docs carefully to find the true meaning of calling a function.
+Your library documentation sometimes good enough to find an example, but if you want some advanced stuff you must learn something to its details! There are no shortcut. Read the docs carefully to find the true meaning of calling an API.
 
-Most library had a `test` folder it contain code to test the library. Learn to read the test, it sometimes describe most all scenario on how to use the library. Here I clip it from dayjs source code:
+Most library had a `test` folder it contain code to test the library. Learn to read the test, it sometimes describe most of all scenario on how to use the library. Here I clip it from dayjs source code:
 
 ```
 it('Format invalid date', () => {
@@ -162,9 +164,9 @@ it('Format Month M MM MMM MMMM', () => {
 
 Above code says that below are the library behaviour when formatting invalid date. It should be the same as how `Date` library behave too and below it it format month and the format should also be the same as other library format, this mean that dayjs wanted to be compatible with other libs behaviour in here it's [moment.js](https://momentjs.com/)
 
-A great programmer always placed comment on to of their function at least it explain on how to use it. This is a must if you're making a function that anybody else will use. To search it sometimes I just clone the source code and began to read it, searching by keyword.
+A great programmer always placed comment on top of their function at least it explain on how to use it. This is a must if you're making a function that anybody else will use. To search it sometimes I just clone the source code and began to read it, searching by keyword.
 
-Lest say you use this [query builder](https://github.dev/koskimas/kysely) but the docs are so minimal, you want to do database transaction, most of query builder that you know have _transaction_ helper, but you cannot find any example. What you do is open your editor, clone the project and find the keyword.
+Lest say you use this [query builder](https://github.dev/koskimas/kysely) but the docs are so minimal, you want to do database transaction, most of query builder that you know have `transaction` helper, but you cannot find any example. What you do is open your editor, clone the project and find the keyword.
 
 ![finding how to do transaction in kysely query builder](/img/code-example.webp)
 
