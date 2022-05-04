@@ -11,7 +11,7 @@ It's been 5 year since I professionally code, and I think the most important ski
 
 When people joining bootcamp or learning through online tutorials, the first thing that you want is completing the task, make it work. After it works, the most important part to do is figuring out why it is to work.
 
-Most coding bootcamp are starting to label someone that could create React website is understand JavaScript enough, No. The fact that you can create something is great achievement, but if you want to understand it step by step it will be a greater one.
+Most coding bootcamp are starting to labeled someone that could create React website understand JavaScript enough, no. The fact that you can create something is great achievement, but if you want to understand it step by step it will be a greater one.
 
 ## Reading Code
 
@@ -123,7 +123,8 @@ Take your time, give it 5 minutes. Understand why it happened, if you must just 
 
 ## Finding example
 
-Admit it most of the time you're just _layering brick type of programmer_. Other people code already do many heavy lifting programming to make your code run. Like when you want a 3D box, you can just wrote:
+Admit it, most of the time you're just _layering brick type of programmer_. Other people code already do many heavy lifting programming to make your code run. Like when you want a 3D box, you can just write:
+
 
 ```js
 const geometry = new THREE.BoxGeometry();
@@ -143,9 +144,9 @@ There are many places that I do look to find code example. Here are some list:
 3. The source code comments
 4. Searching on the internet
 
-Your library documentation sometimes good enough to find an example, but if you want some advanced stuff you must learn something to its details! There are no shortcut. Read the docs carefully to find the true meaning of calling an API.
+Your library documentation sometimes good enough to find an example, but if you want some advanced stuff you must learn something to its details! There are no shortcuts. Read the docs carefully to find the true meaning of calling an API.
 
-Most library had a `test` folder it contain code to test the library. Learn to read the test, it sometimes describe most of all scenario on how to use the library. Here I clip it from dayjs source code:
+Most library had a `test` folder, it contains code to test the library. Learn to read the test, it sometimes describes most of all scenario on how to use the library. Here I clip it from dayjs source code:
 
 ```js
 it('Format invalid date', () => {
@@ -161,20 +162,24 @@ it('Format Month M MM MMM MMMM', () => {
 })
 ```
 
-Above code says that below are the library behaviour when formatting invalid date. It should be the same as how `Date` library behave too and below it, the test format month and the format should also be the same as other library format, this mean that dayjs wanted to be compatible with other libs behaviour in here it's [moment.js](https://momentjs.com/)
+Above code says that below are the library behaviour when formatting invalid date. It should be the same as how `Date` library behave too and below it, the test format month and the format should also be the same as other library format, this mean that dayjs wanted to be compatible with other libs' behaviour in here it's [moment.js](https://momentjs.com/)
 
-A great programmer always placed comment on top of their function at least it explain on how to use it. This is a must if you're making a function that anybody else will use. To search it sometimes I just clone the source code and began to read it, searching by keyword.
+A great programmer always placed a comment on top of their function, at least it explains on how to use it. This is a must if you're making a function that anybody else will use. To search, sometimes I just clone the source code and began to read it, searching by keyword.
 
-Lest say you use this [query builder](https://github.dev/koskimas/kysely) but the docs are so minimal, you want to do database transaction, most of query builder that you know have `transaction` helper, but you cannot find any example. What you do is open your editor, clone the project and find the keyword.
+Lest say you use this [query builder](https://github.dev/koskimas/kysely) but the docs are so minimal, you want to do database transaction, most query builder that you know have `transaction` helper, but you cannot find any example. What you do is open your editor, clone the project and find the keyword.
 
 ![finding how to do transaction in kysely query builder](/img/code-example.webp)
 
-Lest say if you're still cannot understand it, the most of you can do is searching for help, form internet or if you have friend ask him/her. But don't just take it for granted, again don't be ignorant ask how they do it step by step.
+Lest say if you still cannot understand it, the most of you can do is searching for help, form internet or if you have friends ask them. But don't just take it for granted, again don't be ignorant, ask how they do it step by step.
 
-That's it, if you want TLDR, it's just one "Don't be so ignorant". So many people are smarter than you because they trying again and again. There are no magic tricks in learning programming, you just try again and again, build again and again, fix again and again until you got what you want.
+That's it, if you want TLDR, it's just one "Don't be so ignorant". So many people are smarter than you because they're trying again and again. There are no magic tricks in learning programming, you just try again and again, build again and again, fix again and again until you got what you want.
 
 ---
 
 Here a hot take for Indonesian college student, take it to the bottom of your heart before contacting me to help assist you with your final semester project.
 
-I wont help you doing your _skripsi_ (final semester project) if you don't want to open source it, go somewhere else. Like you are doing state of the art code, your idea sucks and so many people already doing it.
+I won't help you do your _skripsi_ (final semester project) if you don't want to open source it, go somewhere else. Your idea sucks, so many people already do what you do, you don't have a good selling point, and your code is not state-of-the-art problem-solving.
+
+Why are you afraid that your friend copy your project, bullshit. If you wrote the code you should know better, don't be a coward - no wonder most government system sucks, it contains a lot of cowards.
+
+Take your time, I don't want you in hurry - but I don't want you to not learn it either.
