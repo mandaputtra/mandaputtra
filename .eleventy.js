@@ -6,7 +6,13 @@ const util = require("util");
 const getTagList = require("./_11ty/getTagList");
 
 module.exports = function (eleventyConfig) {
-  eleventyConfig.addPlugin(pluginRss);
+  eleventyConfig.ignores.add("./sitemap.xml.njk");
+  eleventyConfig.ignores.add("./feed/feed.njk")
+
+  if (process.env.NODE_ENV === 'production') {
+    eleventyConfig.addPlugin(pluginRss);
+  }
+
   eleventyConfig.addPlugin(pluginSyntaxHighlight);
   eleventyConfig.setDataDeepMerge(true);
 
