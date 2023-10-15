@@ -1,6 +1,6 @@
 ---
 tags: ["conference"]
-title: "LOUCA 2023 - Learning How to Prepare Big Events"
+title: "LOUCA 2023 - Is Very Very Hot"
 description: "LibreOffice and Ubuntu Conference Asia 2023, Big Big nerdy tech event!"
 date: 2023-10-10
 ---
@@ -16,7 +16,7 @@ Kesempatan ini memberikan saya bertemu dengan beberapa wajah, komunitas linux In
 
 Tugas yang saya lakukan kebanyakan berkaitan dengan beberapa syarat visa untuk teman - teman pembicara dari luar negara. Pada saat hari H, saya bertugas sebagai operator pada main hall bersama teman baru saya mas Iman (Imanuel) - dari KLAS (Komunitas Linux Arek Surabaya).
 
-![Sedang bertugas dengan mas Iman](../img/IMG_0188.webp)
+![Sedang bertugas dengan mas Iman](/img/IMG_0188.webp)
 
 ## Pelajaran Baru
 
@@ -41,9 +41,13 @@ Franklin Weng, saya cukup tercengang saat Pak Franklin mendemonstrasikan integra
 
 Ditutup dengan keringat bercucur, karena solo sangat panas bukan maen. Acara LOUCA 2023 berakhir pada tanggal 8 Oktober 2023. Terimakasih atas bantuan teman - teman, peserta, dan sponsor atas pengalaman ini. Terimakasi atas kesempatanya. Berikut foto bareng bersama wajah - wajah panitia, yang sudah ga sabar menunggu makan malam.
 
-![Panitia](../img/NC_08352.webp)
+![Panitia](/img/NC_08352.webp)
 
-And to our sponsors :
+**Special thanks to our sponsors!**
 
-![Thanks LibreOffice](../img/sponsor_light_tdf_xgmd7d.png)
-![Thanks Ubuntu](../img/sponsor_light_ubuntu_dnsoad.png)
+<br/>
+
+<div style="display: flex; margin: 0 auto; justify-content: space-around">
+  <img src="/img/sponsor_light_tdf_xgmd7d.png" width="250" alt="The Document Foundation">
+  <img src="/img/sponsor_light_ubuntu_dnsoad.png" width="250" alt="Canonical Ubuntu">
+</div>
