@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{ renderData.title or title or metadata.title }}</title>
+  <meta name="og:title" content="{{ renderData.title or title or metadata.title }}">
+
+  <meta name="description" content="{{ renderData.description or description or metadata.description }}">
+  <meta name="og:description" content="{{ renderData.description or description or metadata.description }}">
+  <link rel="stylesheet" href="{{ '/css/reset.css' | url }}">
+  <link rel="stylesheet" href="{{ '/css/bank-transfer.css' | url }}">
+  <link rel="alternate" href="{{ metadata.feed.path | url }}" type="application/atom+xml" title="{{ metadata.title }}">
+  <link rel="shortcut icon" href="{{ metadata.favicon }}" type="image/x-icon">
+  <link rel="icon" href="{{ metadata.favicon }}" type="image/x-icon">
+  <meta name="twitter:image" content="{{metadata.social_image}}">
+  <meta name="twitter:card" content="summary">
+  <meta name="og:image:width" content="{{metadata.social_image_width}}">
+  <meta name="og:image:height" content="{{metadata.social_image_height}}">
+  <meta name="og:image" content="{{metadata.social_image}}">
+  <meta name="twitter:image:alt" content="Full stuck developer">
+</head>
+
+<body>
+  <header id="header-bank-transfer">
+    <h1>
+        Bank Account
+    </h1>
+    <h2>All under name ~ Cahyo Manda Saputra ~</h2>
+  </header>
+  <main id="bank-transfer">
+    <ul>
+      <li>
+          <img src="https://upload.wikimedia.org/wikipedia/commons/5/5c/Bank_Central_Asia.svg" alt="Bank BCA logo" width="200">
+          <p id="bca-number">8025215466</p>
+          <button id="bca" type="button">Copy</button>
+      </li>
+      <li>
+          <img src="https://upload.wikimedia.org/wikipedia/commons/a/ad/Bank_Mandiri_logo_2016.svg" alt="Bank Mandiri Logo" width="200">
+          <p id="mandiri-number">1370021831769</p>
+          <button id="mandiri" type="button">Copy</button>
+      </li>
+      <li>
+          <img src="https://upload.wikimedia.org/wikipedia/commons/c/c0/Logo-jago.svg" alt="Bank Jago logo">
+          <p id="jago-number">103341175097</p>
+          <button id="jago" type="button">Copy</button>
+      </li>
+    </ul>
+  </main>
+
+  <script>
+    const jagoBtn = document.querySelector("#jago")
+    const mandiriBtn = document.querySelector("#mandiri")
+    const bcaBtn = document.querySelector("#bca")
+
+    jagoBtn.addEventListener("click", copyBank)
+    mandiriBtn.addEventListener("click", copyBank)
+    bcaBtn.addEventListener("click", copyBank)
+
+    function copyBank(el) {
+      const type = el.target.id
+      const copyText = document.querySelector(`#${type}-number`)
+      const text = copyText.innerHTML.trim()
+      navigator.clipboard.writeText(text);
+      alert("Bank Number Copied to clipboard");
+    }
+  </script>
+</body>
+
+</html>

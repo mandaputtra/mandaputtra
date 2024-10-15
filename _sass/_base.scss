@@ -11,7 +11,7 @@ a {
   }
 
   &:visited {
-    color:  $dark-blue;
+    color: $dark-blue;
   }
 
   &:active {
@@ -62,7 +62,6 @@ article {
     b {
       font-weight: bold;
     }
-
   }
 
   code {
@@ -78,31 +77,30 @@ article {
     border-radius: $border-radius-small;
     margin-bottom: 1rem !important;
   }
-  
+
   blockquote {
-      background: $bright-blue;
-      border-left: 10px solid $dark-blue;
-      margin-bottom: 1rem;
-      padding: 0.5em 10px;
-      quotes: "\201C""\201D""\2018""\2019";
+    background: $bright-blue;
+    border-left: 10px solid $dark-blue;
+    margin-bottom: 1rem;
+    padding: 0.5em 10px;
+    quotes: "\201C" "\201D" "\2018" "\2019";
 
-      &:before {
-        color: $dark-blue;
-        content: open-quote;
-        font-size: 2rem;
-        line-height: 0.1em;
-        margin-right: 0.25em;
-        vertical-align: -0.4em;
-      }
+    &:before {
+      color: $dark-blue;
+      content: open-quote;
+      font-size: 2rem;
+      line-height: 0.1em;
+      margin-right: 0.25em;
+      vertical-align: -0.4em;
+    }
 
-      p {
-        display: inline;
-      }
+    p {
+      display: inline;
+    }
   }
 
-
   p img {
-    max-width: 100%;;
+    max-width: 100%;
   }
 
   ul {
@@ -120,10 +118,9 @@ article {
   }
 }
 
-
 header {
   max-width: 65ch;
-  padding: 2ch  2ch 0ch 2ch;
+  padding: 2ch 2ch 0ch 2ch;
   margin: auto;
   position: relative;
   display: flex;
@@ -202,4 +199,3 @@ main {
     }
   }
 }
-
