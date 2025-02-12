@@ -1,21 +1,23 @@
+@use "variables";
+
 // DEFAUTL STYLE
 h1 {
-  font-size: $h1;
+  font-size: variables.$h1;
 }
 
 a {
-  color: $black;
+  color: variables.$black;
 
   &:hover {
-    color: $blue;
+    color: variables.$blue;
   }
 
   &:visited {
-    color: $dark-blue;
+    color: variables.$dark-blue;
   }
 
   &:active {
-    color: $blue;
+    color: variables.$blue;
   }
 }
 
@@ -40,15 +42,15 @@ article {
 
     .postlist-tag {
       text-decoration: none;
-      background-color: $dark-blue;
-      color: $white;
+      background-color: variables.$dark-blue;
+      color: variables.$white;
       padding: 0.2rem 0.3rem;
-      border-radius: $border-radius-small;
+      border-radius: variables.$border-radius-small;
     }
   }
 
   h2 {
-    font-size: $h2;
+    font-size: variables.$h2;
     margin-bottom: 1rem;
   }
 
@@ -66,27 +68,27 @@ article {
 
   code {
     font-size: 1rem;
-    background-color: $dark-blue;
-    border-radius: $border-radius-small;
-    color: $white;
+    background-color: variables.$dark-blue;
+    border-radius: variables.$border-radius-small;
+    color: variables.$white;
     padding: 0.2rem 0.3rem;
-    font-family: $code-font-family;
+    font-family: variables.$code-font-family;
   }
 
   pre {
-    border-radius: $border-radius-small;
+    border-radius: variables.$border-radius-small;
     margin-bottom: 1rem !important;
   }
 
   blockquote {
-    background: $bright-blue;
-    border-left: 10px solid $dark-blue;
+    background: variables.$bright-blue;
+    border-left: 10px solid variables.$dark-blue;
     margin-bottom: 1rem;
     padding: 0.5em 10px;
     quotes: "\201C" "\201D" "\2018" "\2019";
 
     &:before {
-      color: $dark-blue;
+      color: variables.$dark-blue;
       content: open-quote;
       font-size: 2rem;
       line-height: 0.1em;
@@ -128,10 +130,10 @@ header {
 
   nav {
     ol > li > a {
-      color: $black;
+      color: variables.$black;
 
       &:visited {
-        color: $black;
+        color: variables.$black;
       }
     }
   }
@@ -140,15 +142,15 @@ header {
     text-decoration: none;
     width: 5rem;
     height: 2rem;
-    border-radius: $border-radius-medium;
-    background-color: $blue;
-    color: $dark-blue;
+    border-radius: variables.$border-radius-medium;
+    background-color: variables.$blue;
+    color: variables.$dark-blue;
     display: flex;
     align-items: center;
     justify-content: center;
     position: relative;
     margin: 0 0 1rem 0;
-    border: 0.2rem solid $dark-blue;
+    border: 0.2rem solid variables.$dark-blue;
 
     &:before {
       content: " ";
@@ -156,10 +158,10 @@ header {
       top: 0;
       width: 5rem;
       height: 2.2rem;
-      border-radius: $border-radius-medium;
-      background-color: $blue;
+      border-radius: variables.$border-radius-medium;
+      background-color: variables.$blue;
       z-index: -1;
-      border: 0.2rem solid $dark-blue;
+      border: 0.2rem solid variables.$dark-blue;
     }
 
     .logo {
@@ -185,16 +187,16 @@ main {
         font-weight: bold;
       }
       .postlist-title {
-        color: $black;
+        color: variables.$black;
         text-decoration: none;
 
         &:hover {
-          color: $blue;
+          color: variables.$blue;
         }
       }
 
       .postlist-descriptions {
-        color: $blue;
+        color: variables.$blue;
       }
     }
   }

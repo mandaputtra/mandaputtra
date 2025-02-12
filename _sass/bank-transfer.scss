@@ -1,5 +1,5 @@
-@import "variables";
-@import "base";
+@use "variables";
+@use "base";
 
 #header-bank-transfer {
   flex-direction: column;
@@ -13,7 +13,7 @@
 
     li {
       margin-bottom: 2rem;
-      border: 3px solid $pink;
+      border: 3px solid variables.$pink;
       border-radius: 10px;
       padding: 1.5rem;
       text-align: center;
