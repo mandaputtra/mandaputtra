@@ -5,9 +5,9 @@ description: "Biaya laptop untuk jadi programmer, dan keluhan"
 date: 2020-02-29
 ---
 
-Semua pekerjaan butuh modal, entah itu dedikasi belajar yang tinggi, relasi, atau uang. Seseorang tanya saya "Mas, kalau mau jadi programmer butuh modal berapa, apa aja?".
+Semua pekerjaan butuh modal, entah itu dedikasi belajar yang tinggi, relasi, atau uang. Seseorang tanya saya "Mas, kalau mau jadi programmer butuh modal berapa, apa aja?". Tapi yang jelas, kalau mau kerja harus bayar uang dulu mending gausah aja.
 
-Menarik, tidak ada yang pernah tanya seperti ini, padahal saya sering komplain kalau laptop baru harga 4 juta aja masih kalah sama droplet DO yang \$5 USD per-bulan.
+Menarik, tidak ada yang pernah tanya seperti ini, padahal saya sering komplain kalau laptop baru harga 4 juta aja masih kalah sama droplet DO yang \$7 USD per-bulan.
 
 Makin lama tak terasa jadi programmer bukanlah hal yang 'murah', apalagi sekarang bukan kaya dulu lagi ~ dulu kebanyakan setiap perusahaan menyediakan pegawainya laptop untuk bekerja, sekarang kemungkinan tidak - lebih banyak.
 
@@ -23,13 +23,19 @@ Kenapa kok 350rb? Di ibaratkan kita langganan Indihome (kalau bisa jangan indiho
 
 Pokoknya pilih yang sekiranya kamu mampu menjalani, mau nongkrong di rumah orang yang punya wifi juga boleh.
 
-## Laptop, 4jt - 10jt
+## Laptop, 5jt - 10jt
 
 Ini laptop [saya dulu](https://www.sg-comp.com/lenovo-g40-45-amd-e1-harga-ekonomis-kinerja-efektif/) harga di tahun 2012 3jt di beliin ortu. Saat pertama saya kerja freelance (sekitar tahun 2018) pakai laptop itu, terpaksa saya harus pakai arch, editor geany, karena apa? ringan hemat memori (RAM). Jadi saya masih bisa buka firefox sambil ngoding Angular. Beruntungnya di rumah komputer saya cukup bagus jadi saya jarang pakai laptop buat ngoding kecuali saya harus keluar rumah.
 
 Nah komponen laptop yang bener - bener perlu diperhatikan adalah sebagai berikut.
 
-### Penyimpanan harus SSD!
+Laptop yang saya rekomen di range harga ini :
+
+- [Macbook Air M1 8/16](https://shopee.co.id/MACBOOK-AIR-M1-SECOND-13%E2%80%9D-RAM-8-16-INTERNAL-128-256-512-GB-i.642863238.27466398731?sp_atk=e82ce618-cfd9-4372-834b-9ff0f9850066&xptdk=e82ce618-cfd9-4372-834b-9ff0f9850066)
+- [Lenovo Ideapad](https://shopee.co.id/Lenovo-Ideapad-Slim-3i-Core-i3-1215U-8GB-512SSD-Windows-11-OHS-Full-HD-14-inch-Laptop-14IAU7-CXID-i.468999408.18558718491?sp_atk=99c7f35a-ca58-430a-a4e0-53e8eba51e72&xptdk=99c7f35a-ca58-430a-a4e0-53e8eba51e72)
+- Thinkpad Bekas, yang penting SSD dan ram 16Gb
+
+### Penyimpanan harus SSD
 
 Dalam dunia kerja nanti kebanyakan akan dikasih project yang udah jalan cukup lama. File `.git` ini ternyata cukup berat untuk project project lama dikarenakan menyimpan banyak histori.
 
@@ -53,5 +59,4 @@ Beberapa program akan memakan banyak RAM, seperti Browser, Android Studio, dan l
 
 Tidak juga biaya Internet, Programmer perlu biaya laptop, tentu tanpa laptop-pun kamu bisa ngoding ~ spesifikasi rekomendasi sebagai berikut CPU 2.4Ghz, RAM 8Gb dan SSD 256Gb. Komponen terpenting adalah SSD. Mau bekas atau mau baru, mau bisa di upgrade atau tidak. Yang penting siap tempur :)
 
-Sama oiya kalau mau develop aplikasi iOS / Mac ya harus pakai MacBook yak, ga ada pilihan lain kecuali Hackintos (Kalau mau ribet).
-
+Sama oiya kalau mau develop aplikasi iOS / Mac ya harus pakai MacBook yak.
