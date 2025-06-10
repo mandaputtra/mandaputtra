@@ -13,7 +13,7 @@ Today I sit at a cafe and work, I look at my desk mate, he uses AI to generate t
 
 That's my inner voice. Obviously I don't want to start a fight with people that I just met. And I don't want young and aspiring software engineer to quit either.
 
-AI need more context to progress and saying "Its still not center yet" on you prompt aren't gonna fix it in your first try. Wasting your time, why doing software development when you don't want to understand the pieces after pieces working together? I don't know every CSS rules. But at least I care, I know how some of them works, and I know how to fix some bugs.
+AI need more context to progress and saying "Its still not center yet" on your prompt aren't gonna fix it in your first try. Wasting your time, why doing software development when you don't want to understand the pieces after pieces working together? I don't know every CSS rules. But at least I care, I know how some of them works, and I know how to fix some bugs.
 
 This remind me of [Jonathan Blow](https://www.youtube.com/watch?v=ZSRHeXYDLko) talks, it's starting to collapse lol.
 
