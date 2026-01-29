@@ -13,3 +13,9 @@ Upcoming Maybe :
 - Revamping My Blog to have more sections!
 - Definetfly should blog moreee!!
 - Thingking about billion dollar startup.
+
+Leetcode : 
+
+I started doing leetcode, Hoping that I can do one solution a day challange
+
+![LeetCode Stats](https://leetcard.jacoblin.cool/mandaputtra?theme=chartreuse&font=Inika)
