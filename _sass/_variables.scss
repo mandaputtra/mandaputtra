@@ -75,8 +75,8 @@ $on-super-small: 500px;
 	);
 
 	@each $ext in $exts {
-		$extmod: if(map.has-key($extmods, $ext), $ext + map.get($extmods, $ext), $ext);
-		$format: if(map.has-key($formats, $ext), map.get($formats, $ext), $ext);
+		$extmod: if(sass(map.has-key($extmods, $ext)): $ext + map.get($extmods, $ext); else: $ext);
+		$format: if(sass(map.has-key($formats, $ext)): map.get($formats, $ext); else: $ext);
 		$src: list.append($src, url(string.quote($path + "." + $extmod)) format(string.quote($format)), comma);
 	}
 

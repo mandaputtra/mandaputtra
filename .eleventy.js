@@ -61,9 +61,10 @@ module.exports = function (eleventyConfig) {
     linkify: true,
   };
   let opts = {
-    permalink: true,
-    permalinkClass: "direct-link",
-    permalinkSymbol: "#",
+    permalink: markdownItAnchor.permalink.linkInsideHeader({
+      class: "direct-link",
+      symbol: "#",
+    }),
   };
 
   eleventyConfig.setLibrary(
