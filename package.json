@@ -8,7 +8,7 @@
     "debug": "DEBUG=* npx eleventy"
   },
   "engines": {
-    "node": "20.x"
+    "node": "24.x"
   },
   "repository": {
     "type": "git",
@@ -24,18 +24,18 @@
   },
   "homepage": "https://github.com/11ty/eleventy-base-blog#readme",
   "dependencies": {
-    "gulp": "^4.0.2",
-    "gulp-sass": "^5.1.0"
+    "gulp": "^5.0.1",
+    "gulp-sass": "^6.0.1"
   },
   "devDependencies": {
-    "@11ty/eleventy": "^1.0.1",
-    "@11ty/eleventy-plugin-rss": "^1.1.2",
-    "@11ty/eleventy-plugin-syntaxhighlight": "^4.0.0",
-    "concurrently": "^7.1.0",
-    "luxon": "^2.3.2",
-    "markdown-it": "^13.0.0",
-    "markdown-it-anchor": "^8.6.2",
+    "@11ty/eleventy": "^3.1.5",
+    "@11ty/eleventy-plugin-rss": "^3.0.0",
+    "@11ty/eleventy-plugin-syntaxhighlight": "^5.0.2",
+    "concurrently": "^9.2.1",
+    "luxon": "^3.7.2",
+    "markdown-it": "^14.1.1",
+    "markdown-it-anchor": "^9.2.0",
     "push-dir": "^0.4.1",
-    "sass": "^1.51.0"
+    "sass": "^1.99.0"
   }
 }

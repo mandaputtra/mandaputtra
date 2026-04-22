@@ -1,4 +1,4 @@
-@import "variables";
+@use "variables";
 
 .homepage {
   display: flex;
@@ -39,10 +39,10 @@
   .logo-wrapper {
     width: 7rem;
     height: 3.4rem;
-    border: 0.3rem solid $dark-blue;
-    border-radius: $border-radius-medium;
-    background-color: $blue;
-    color: $dark-blue;
+    border: 0.3rem solid variables.$dark-blue;
+    border-radius: variables.$border-radius-medium;
+    background-color: variables.$blue;
+    color: variables.$dark-blue;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -55,10 +55,10 @@
       top: 0;
       width: 7rem;
       height: 3.6rem;
-      border-radius: $border-radius-medium;
-      background-color: $blue;
+      border-radius: variables.$border-radius-medium;
+      background-color: variables.$blue;
       z-index: -1;
-      border: 0.3rem solid $dark-blue;
+      border: 0.3rem solid variables.$dark-blue;
     }
 
     .logo {
@@ -73,10 +73,10 @@
     text-decoration: none;
     width: 5rem;
     height: 2rem;
-    border: 0.2rem solid $dark-blue;
-    border-radius: $border-radius-small;
-    background-color: $blue;
-    color: $black;
+    border: 0.2rem solid variables.$dark-blue;
+    border-radius: variables.$border-radius-small;
+    background-color: variables.$blue;
+    color: variables.$black;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -90,10 +90,10 @@
       top: 0;
       width: 5rem;
       height: 2.2rem;
-      border-radius: $border-radius-small;
-      background-color: $blue;
+      border-radius: variables.$border-radius-small;
+      background-color: variables.$blue;
       z-index: -1;
-      border: 0.2rem solid $dark-blue;
+      border: 0.2rem solid variables.$dark-blue;
     }
   }
 
