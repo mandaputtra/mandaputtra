@@ -1,0 +1,172 @@
+---
+layout: layouts/slides.njk
+title: Using AI Skill for Everyday Use
+description: A simple Reveal.js deck about using AI skills in daily workflows.
+permalink: /slides/using-ai-skill-for-everyday-use/
+tags:
+  - presentation
+---
+
+<section>
+  <h2>Using AI Skill for Everyday Use 🤖</h2>
+  <p>How “skills” turn LLMs into reliable agents for real work</p>
+  <p><small>Arrow keys to navigate</small></p>
+</section>
+
+<section>
+  <h2>Agenda 🧭</h2>
+  <ol>
+    <li>The problem: procedural knowledge</li>
+    <li>The solution: AI agent skills</li>
+    <li>Efficient execution: progressive disclosure</li>
+    <li>How this maps to “memory”</li>
+    <li>Best practices & security</li>
+  </ol>
+</section>
+
+<section data-transition="fade">
+  <h2>The Problem 😵‍💫</h2>
+  <h3>Lack of Procedural Knowledge</h3>
+  <ul>
+    <li class="fragment">LLMs are great at <strong>reasoning</strong> and <strong>facts</strong></li>
+    <li class="fragment">They’re weaker at <strong>repeatable, multi-step workflows</strong></li>
+    <li class="fragment">Real tasks need “how to do it”, not just “what it is”</li>
+  </ul>
+</section>
+
+<section data-transition="fade" data-auto-animate>
+  <h2 data-id="compare-title">Without Skills… 🧩</h2>
+  <ul>
+    <li class="fragment">You must prompt <strong>every single step</strong>, every time</li>
+    <li class="fragment">Or the agent <strong>guesses</strong> missing steps</li>
+    <li class="fragment">Result: inconsistent outcomes, inefficiency, avoidable errors</li>
+  </ul>
+</section>
+
+<section data-transition="fade" data-auto-animate>
+  <h2 data-id="compare-title">With Skills ✅</h2>
+  <ul>
+    <li class="fragment">A <strong>standard way</strong> to teach an agent a job</li>
+    <li class="fragment">Written as a <strong>version-controllable</strong> file (e.g., <code>skill.md</code>)</li>
+    <li class="fragment">Contains: when to use it + how to do it (step-by-step)</li>
+  </ul>
+</section>
+
+<section>
+  <h2>Skill File Structure 🧱</h2>
+  <ul>
+    <li class="fragment"><strong>YAML front matter</strong> (required): name, description</li>
+    <li class="fragment"><strong>Body</strong>: concrete procedure / checklist</li>
+    <li class="fragment">Goal: make agent behavior <strong>predictable</strong> and <strong>auditable</strong></li>
+  </ul>
+</section>
+
+<section>
+  <h2>Example: <code>skill.md</code> ✍️</h2>
+  <pre><code class="language-markdown">---
+name: summarize-video-notes
+description: Turn long notes into a short talk outline and slides
+---
+
+1) Extract the 3–5 key ideas.
+2) Reframe as “problem → solution → implementation → risks”.
+3) Draft slide titles + 3 bullets each.
+4) Add a final “takeaways” slide.</code></pre>
+  <p><small>Simple format, easy to review in a PR.</small></p>
+</section>
+
+<section>
+  <section>
+    <h2>Efficient Execution ⚡</h2>
+    <h3>Progressive Disclosure</h3>
+    <p>Don’t load everything into the LLM context window.</p>
+    <p class="fragment"><small>In Reveal.js: use <strong>vertical slides</strong> for a “drill down” 💡</small></p>
+  </section>
+
+  <section>
+    <h2>Progressive Disclosure = 3 Tiers 🪜</h2>
+    <ol>
+      <li class="fragment"><strong>Tier 1 (Startup)</strong>: names + descriptions (table of contents)</li>
+      <li class="fragment"><strong>Tier 2 (Trigger)</strong>: load full <code>skill.md</code> when needed</li>
+      <li class="fragment"><strong>Tier 3 (Execution)</strong>: load scripts/assets only if required</li>
+    </ol>
+  </section>
+
+  <section data-transition="slide">
+    <h2>What This Looks Like 🛠️</h2>
+    <div style="display:flex; gap:24px; align-items:center;">
+      <div style="flex:1; text-align:left;">
+        <ul>
+          <li class="fragment">Scan skill metadata (fast routing)</li>
+          <li class="fragment">Load only the matching procedure</li>
+          <li class="fragment">Pull scripts/assets only if needed</li>
+        </ul>
+        <p class="fragment"><small>Example skill page (screenshot): <code>vercel-labs/skills</code></small></p>
+      </div>
+      <div style="flex:1;">
+        <img
+          src="/img/find-skills-skill.png"
+          alt="Screenshot of a SKILL.md file on GitHub"
+          style="max-height:360px; width:auto; border-radius:12px; box-shadow: 0 10px 30px rgba(0,0,0,.35);"
+        >
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Why This Matters 🎯</h2>
+    <ul>
+      <li class="fragment">Protects the context window (less noise)</li>
+      <li class="fragment">Makes the agent faster to route tasks</li>
+      <li class="fragment">Encourages reusable “modules” of behavior</li>
+    </ul>
+  </section>
+</section>
+
+<section>
+  <h2>Cognitive Architecture Analogy 🧠</h2>
+  <p>Agent designs increasingly mirror human memory.</p>
+</section>
+
+<section>
+  <h2>Mapping to “Memory”</h2>
+  <ul>
+    <li class="fragment"><strong>Semantic memory</strong>: facts & knowledge (often via RAG)</li>
+    <li class="fragment"><strong>Episodic memory</strong>: interaction history / logs</li>
+    <li class="fragment"><strong>Procedural memory</strong>: skills (how-to workflows)</li>
+  </ul>
+</section>
+
+<section>
+  <h2>Tools vs Skills 🧰</h2>
+  <ul>
+    <li class="fragment"><strong>Tools</strong> (e.g., MCP): raw capabilities (read files, call APIs)</li>
+    <li class="fragment"><strong>Skills</strong>: judgment + procedure for using tools correctly</li>
+    <li class="fragment">Skills answer: “<em>when</em> and <em>how</em> should the agent act?”</li>
+  </ul>
+</section>
+
+<section data-transition="convex">
+  <h2>Best Practices & Security 🔒</h2>
+  <ul>
+    <li class="fragment">Skills can run scripts → treat like software dependencies</li>
+    <li class="fragment">Review before installing (code + prompts)</li>
+    <li class="fragment">Watch for prompt injection / malicious instructions</li>
+    <li class="fragment">Prefer least-privilege tool access</li>
+  </ul>
+</section>
+
+<section>
+  <h2>Takeaways ✅</h2>
+  <ul>
+    <li class="fragment">LLMs need help with repeatable procedures</li>
+    <li class="fragment">Skills make workflows consistent and reusable</li>
+    <li class="fragment">Progressive disclosure keeps agents efficient</li>
+    <li class="fragment">Always review skills like you review code</li>
+  </ul>
+</section>
+
+<section>
+  <h2>Questions? 🙋</h2>
+  <p>Thanks.</p>
+</section>
