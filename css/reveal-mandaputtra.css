@@ -1,0 +1,180 @@
+:root {
+  --color-bg-base: #f4eeff;
+  --color-bg-muted: #dcd6f7;
+  --color-text-base: #312c51;
+  --color-text-muted: #424874;
+  --color-brand-primary: #a6b1e1;
+  --color-brand-secondary: #424874;
+  --color-accent-yellow: #fecd1a;
+  --color-accent-pink: #ffacb7;
+
+  --radius-sm: 8px;
+  --radius-md: 15px;
+
+  --shadow-sm: 0.35rem 0.35rem 0 #424874;
+  --shadow-md: 0.45rem 0.45rem 0 #424874;
+}
+
+@font-face {
+  font-family: "Crimson Pro";
+  src: url("/fonts/CrimsonPro-VariableFont_wght.ttf") format("truetype");
+  font-weight: 1 999;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Crimson Pro";
+  src: url("/fonts/CrimsonPro-Italic-VariableFont_wght.ttf") format("truetype");
+  font-weight: 1 999;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Work Sans";
+  src: url("/fonts/WorkSans-VariableFont_wght.ttf") format("truetype");
+  font-weight: 1 999;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Work Sans";
+  src: url("/fonts/WorkSans-Italic-VariableFont_wght.ttf") format("truetype");
+  font-weight: 1 999;
+  font-style: italic;
+  font-display: swap;
+}
+
+.reveal {
+  --r-background-color: var(--color-bg-base);
+  --r-main-font: "Work Sans", sans-serif;
+  --r-main-font-size: 38px;
+  --r-main-color: var(--color-text-base);
+  --r-heading-font: "Crimson Pro", serif;
+  --r-heading-color: var(--color-text-base);
+  --r-heading-text-transform: none;
+  --r-link-color: var(--color-text-base);
+  --r-link-color-hover: var(--color-brand-secondary);
+  --r-selection-background-color: var(--color-brand-primary);
+  --r-selection-color: var(--color-text-base);
+}
+
+.reveal ::selection {
+  background: var(--color-brand-primary);
+  color: var(--color-text-base);
+}
+
+.reveal a {
+  text-decoration: underline;
+  text-decoration-thickness: 0.12em;
+  text-underline-offset: 0.12em;
+}
+
+.reveal a:visited {
+  color: var(--color-text-base);
+}
+
+.reveal a:hover {
+  color: var(--color-brand-secondary);
+}
+
+.reveal .slides section {
+  padding: 0.25rem 0.25rem;
+}
+
+.reveal h1, .reveal h2, .reveal h3 {
+  letter-spacing: 0;
+}
+
+.reveal p, .reveal li {
+  line-height: 1.4;
+}
+
+.reveal ul, .reveal ol {
+  margin: 0.75rem 0;
+}
+
+.reveal ul li, .reveal ol li {
+  margin-bottom: 0.35rem;
+}
+
+.reveal code {
+  font-family: Consolas, Monaco, "Andale Mono", "Ubuntu Mono", monospace;
+}
+
+.reveal :not(pre) > code {
+  background: var(--color-text-muted);
+  color: var(--color-bg-base);
+  padding: 0.15em 0.35em;
+  border-radius: var(--radius-sm);
+}
+
+.reveal pre {
+  border-radius: var(--radius-md);
+  border: 0.2rem solid var(--color-text-muted);
+  background: var(--color-bg-muted);
+  box-shadow: var(--shadow-sm);
+}
+
+.reveal pre code {
+  color: var(--color-text-base);
+  font-size: 0.85em;
+  line-height: 1.35;
+}
+
+.reveal img {
+  border-radius: var(--radius-md);
+}
+
+.reveal .card {
+  border: 0.2rem solid var(--color-text-muted);
+  border-radius: var(--radius-md);
+  background: var(--color-bg-muted);
+  box-shadow: var(--shadow-sm);
+  padding: 1rem 1.25rem;
+}
+
+.reveal .closing-columns {
+  display: flex;
+  gap: 3rem;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.reveal .closing-left {
+  flex: 1.15;
+  text-align: left;
+}
+
+.reveal .closing-right {
+  flex: 0.85;
+  text-align: center;
+}
+
+.reveal .closing-right img {
+  width: 320px;
+  max-width: 100%;
+  height: auto;
+  border: 0.2rem solid var(--color-text-muted);
+  border-radius: var(--radius-md);
+  background: var(--color-bg-base);
+  padding: 12px;
+  box-shadow: var(--shadow-sm);
+}
+
+.reveal .closing-right a {
+  word-break: break-all;
+}
+
+@media (max-width: 700px) {
+  .reveal .closing-columns {
+    flex-direction: column;
+    gap: 2rem;
+  }
+
+  .reveal .closing-left {
+    text-align: center;
+  }
+}
