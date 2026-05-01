@@ -1,203 +1,204 @@
 ---
 layout: layouts/reveal.njk
-title: Using AI Skills in Everyday Task
-description: A practical talk about using AI for writing, planning, coding, and daily work.
+title: Memakai AI Skills Untuk Kebutuhan Sehari - Hari
+description: Talk praktis untuk menggunakan AI untuk menulis, merencanakan, membuat ringkasan, dan kerja sehari-hari.
 ---
 
 <div class="reveal">
   <div class="slides">
     <section>
-      <h1>Using AI Skills in Everyday Task</h1>
+      <h1>Memakai AI Skills untuk Kebutuhan Sehari-hari</h1>
       <p>Manda Putra</p>
-      <p><small>TRAE AI @ ILC Timoho, Yogyakarta — 02 May 2026</small></p>
+      <p>
+        <small>TRAE AI @ ILC Timoho, Yogyakarta — 02 Mei 2026</small>
+      </p>
     </section>
 
     <section>
-      <h2>Why this matters</h2>
+      <h2>Glossarium</h2>
       <ul>
-        <li>Less busywork, more judgment</li>
-        <li>Faster research, better summaries, more consistent output</li>
-        <li>Works for product workflows and HR workflows</li>
+        <li><b>AI Agents</b>: AI yang bisa mengikuti tujuan, menyusun langkah, dan memakai tools untuk menyelesaikan
+          kerja.</li>
+        <li><b>LLM</b> (Large Language Model): “otak chat” yang membuat teks; bagus untuk draft dan ringkasan, tapi bisa
+          salah.</li>
+        <li><b>MCP</b> (Model Context Protocol): standar agar agent bisa terhubung ke tools/data (misalnya scraper)
+          dengan cara yang rapi dan konsisten.</li>
       </ul>
     </section>
 
     <section>
-      <h2>Two things today</h2>
+      <h2>Kenapa kita butuh skills untuk AI agents?</h2>
+      <ul>
+        <li>Membuat pengetahuan jadi prosedural (bisa diulang)</li>
+        <li>Riset lebih cepat, ringkasan lebih bagus, output lebih konsisten</li>
+        <li>Bisa dipakai untuk <i>hampir</i> semua jenis workflow</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>Tiga hal hari ini</h2>
       <ol>
-        <li>What are AI Skills and why we should use that?</li>
-        <li>Using TRAE SOLO to create automation and using skills for better result</li>
+        <li>Apa itu AI skills dan kenapa kita perlu memakainya?</li>
+        <li>Pakai TRAE SOLO untuk bikin automation + pakai skills agar hasilnya lebih bagus</li>
+        <li>Apakah biayanya sepadan?</li>
       </ol>
     </section>
 
     <section>
-      <h2>Audience check</h2>
+      <h2>Cerita singkat</h2>
+      <p>Anggap saya pemilik bakery yang tersebar di Yogyakarta.
+        Setiap bulan saya ingin rangkuman riviu gerai - gerai yang ada di Yogyakarta</p>
+    </section>
+
+    <section>
+      <h2>Masalahnya</h2>
       <ul>
-        <li>Product: faster discovery, better specs, clearer communication</li>
-        <li>HR: better screening summaries, policy drafts, report briefs</li>
-        <li>Everyone: more time for human decisions</li>
+        <li>Review tersebar dan banyak <i>noise</i></li>
+        <li>Baca semua review itu makan waktu</li>
+        <li>Pada akhirnya tetap membutuhkan keputusan manusia</li>
       </ul>
     </section>
 
     <section>
-      <h2>The story</h2>
-      <p>I’m a bakery owner.</p>
-      <p>Parsley bakery, Yogyakarta.</p>
-      <p>I want a brief report of Google Maps reviews.</p>
-      <aside class="notes">
-        Use this to make it concrete: the goal is not “use AI”, it’s “get a weekly brief and take action”.
-      </aside>
-    </section>
-
-    <section>
-      <h2>The pain</h2>
+      <h2>Apa itu “AI Skills”?</h2>
       <ul>
-        <li>Reviews are scattered and noisy</li>
-        <li>Reading every review takes time</li>
-        <li>You still need a human decision at the end</li>
+        <li>Micro-workflow yang bisa dipakai ulang</li>
+        <li>Kemampuan dengan kontrak input/output yang jelas</li>
+        <li>Bikin hasil lebih konsisten, bukan jawaban yang random</li>
       </ul>
     </section>
 
     <section>
-      <h2>What are “AI Skills”?</h2>
+      <h2>AI skills ≠ sekadar prompting</h2>
       <ul>
-        <li>Reusable micro-workflows</li>
-        <li>A capability with a clear input/output contract</li>
-        <li>Helps you get consistent results, not random answers</li>
+        <li>Prompting: percakapan sekali pakai</li>
+        <li>Skills: “building block” yang bisa diulang</li>
+        <li>Lebih cocok untuk tim: gampang dipakai ulang dan direview</li>
       </ul>
     </section>
 
     <section>
-      <h2>AI skills ≠ prompting</h2>
+      <h2>Kenapa pakai AI skills?</h2>
       <ul>
-        <li>Prompting: one-off conversation</li>
-        <li>Skills: repeatable building blocks</li>
-        <li>Better for teams: easier to reuse and review</li>
+        <li>Konsisten: formatnya sama setiap kali</li>
+        <li>Delegasi: kita kasih tujuan + batasan</li>
+        <li>Cepat: hemat waktu untuk kerja repetitif</li>
       </ul>
     </section>
 
     <section>
-      <h2>Why use AI skills?</h2>
+      <h2>Model yang sehat: manusia + AI</h2>
       <ul>
-        <li>Consistency: same format every time</li>
-        <li>Delegation: you provide goal + constraints</li>
-        <li>Speed: less time on repetitive work</li>
+        <li>Manusia: tentukan tujuan dan ambil keputusan</li>
+        <li>AI: bikin draft, merangkum, menyusun struktur</li>
+        <li>Manusia: verifikasi, edit, dan eksekusi</li>
       </ul>
     </section>
 
     <section>
-      <h2>Good model: human + AI</h2>
+      <h2>Dari skills → jadi sistem</h2>
+      <p>Kalau workflow-nya bisa diulang, jadikan automation.</p>
+    </section>
+
+    <section>
+      <h2>Model berpikir TRAE SOLO</h2>
       <ul>
-        <li>Human: sets the goal and decides</li>
-        <li>AI: drafts, summarizes, structures</li>
-        <li>Human: verifies, edits, ships</li>
+        <li>Agent session: memahami tugas kamu</li>
+        <li>Skills: kemampuan “plug-in”</li>
+        <li>Automation: dijadwalkan supaya jalan sendiri</li>
       </ul>
     </section>
 
     <section>
-      <h2>Guardrails (important for HR)</h2>
+      <h2>Hasil lebih bagus = input lebih bagus</h2>
       <ul>
-        <li>Privacy: don’t paste secrets, keys, or private personal data</li>
-        <li>Accuracy: treat output as draft, verify sources</li>
-        <li>Bias: ask for assumptions and blind spots</li>
+        <li>Konteks: siapa, apa, di mana, kenapa</li>
+        <li>Batasan: tone, panjang, format, audiens</li>
+        <li>Review loop: asumsi, edge cases, “apa yang mungkin salah?”</li>
       </ul>
     </section>
 
     <section>
-      <h2>From skills → systems</h2>
-      <p>If a workflow is repeatable, automate it.</p>
-    </section>
-
-    <section>
-      <h2>TRAE SOLO mental model</h2>
+      <h2>Tujuan demo</h2>
+      <p>Ringkasan mingguan review Google Maps untuk Party bakery (Yogyakarta)</p>
       <ul>
-        <li>Agent session: understands your task</li>
-        <li>Skills: plug-in capabilities</li>
-        <li>Automation: schedule it to run without you</li>
+        <li>Singkat dan actionable</li>
+        <li>Ditulis untuk owner yang sibuk</li>
+        <li>Diakhiri checklist</li>
       </ul>
     </section>
 
     <section>
-      <h2>Better results = better inputs</h2>
-      <ul>
-        <li>Context: who, what, where, why</li>
-        <li>Constraints: tone, length, format, audience</li>
-        <li>Review loop: assumptions, edge cases, “what could be wrong?”</li>
-      </ul>
-    </section>
-
-    <section>
-      <h2>Demo goal</h2>
-      <p>Weekly Google Maps review brief for Parsley bakery (Yogyakarta)</p>
-      <ul>
-        <li>Short and actionable</li>
-        <li>Written for a busy owner</li>
-        <li>Ends with a checklist</li>
-      </ul>
-    </section>
-
-    <section>
-      <h2>Demo: the skill</h2>
+      <h2>Demo: skill yang dipakai</h2>
       <p>Google Maps scraper skill</p>
       <p><small>https://skills.sh/gosom/google-maps-scraper/google-maps-scraper</small></p>
       <aside class="notes">
-        Explain what a skill is: someone packaged a capability into a reusable unit.
+        Jelaskan bahwa skill itu kemampuan yang sudah “dipaketkan” supaya bisa dipakai ulang.
       </aside>
     </section>
 
     <section>
-      <h2>Demo: prompt pattern</h2>
+      <h2>Demo: pola prompt</h2>
       <pre><code>
-Context: I run Parsley bakery in Yogyakarta.
-Goal: Generate a weekly brief from the latest Google Maps reviews.
-Constraints: 1 page max, bullet-driven, actionable, non-technical.
-Output sections:
-1) Summary (3 bullets)
-2) Themes: praise & complaints
-3) Notable quotes
-4) Action checklist (this week / next month)
-      </code></pre>
-      <aside class="notes">
-        Point out: this is reusable. The structure is the “skill” you’re building as a habit.
-      </aside>
+          Konteks: Saya menjalankan Parsley bakery di Yogyakarta.
+          Tujuan: Buat ringkasan bulanan dari review Google Maps terbaru.
+          Batasan: Maks 1 halaman, poin-poin, actionable, non-teknis.
+          Struktur output:
+
+          1) Ringkasan (3 bullet)
+          2) Tema: pujian & keluhan
+          3) Kutipan penting
+          4) Checklist aksi (minggu ini / bulan depan)
+        </code></pre>
     </section>
 
     <section>
-      <h2>Demo: make it automation</h2>
+      <h2>Demo: jadikan automation</h2>
       <ul>
-        <li>Schedule: weekly</li>
-        <li>Same report format each run</li>
-        <li>Only review + decide (human stays in control)</li>
+        <li>Jadwal: mingguan</li>
+        <li>Format report konsisten setiap run</li>
+        <li>Tinggal review + ambil keputusan (manusia tetap pegang kontrol)</li>
       </ul>
     </section>
 
     <section>
-      <h2>What the report looks like</h2>
+      <h2>Bentuk report-nya</h2>
       <ul>
-        <li>Summary: what changed since last week</li>
-        <li>Top complaints: what to fix</li>
-        <li>Top praise: what to preserve</li>
-        <li>Action list: do this week, plan next month</li>
+        <li>Ringkasan: apa yang berubah sejak minggu lalu</li>
+        <li>Keluhan utama: yang harus diperbaiki</li>
+        <li>Pujian utama: yang harus dipertahankan</li>
+        <li>Daftar aksi: lakukan minggu ini, rencanakan bulan depan</li>
       </ul>
     </section>
 
     <section>
       <h2>CTA</h2>
-      <p>Try 1 automation this week.</p>
+      <p>Coba 1 automation minggu ini.</p>
       <ul>
-        <li>Review brief (business)</li>
-        <li>Hiring pipeline snapshot (HR)</li>
-        <li>Meeting recap + action items (product)</li>
+        <li>Ringkasan review (bisnis)</li>
+        <li>Snapshot pipeline rekrutmen (HR)</li>
+        <li>Rangkuman meeting + action items (produk)</li>
       </ul>
     </section>
 
     <section>
-      <h2>Closing</h2>
-      <ul>
-        <li>Build AI skills as habits</li>
-        <li>Automate the repetitive</li>
-        <li>Keep the human decision-making</li>
-      </ul>
-      <p><small>Q&amp;A</small></p>
+      <div class="closing-columns">
+        <div class="closing-left">
+          <h2>Penutup</h2>
+          <ul>
+            <li>Jadikan AI skills sebagai kebiasaan</li>
+            <li>Automasi yang repetitif</li>
+            <li>Keputusan tetap di tangan manusia</li>
+          </ul>
+          <p><small>Tanya jawab</small></p>
+        </div>
+        <div class="closing-right">
+          <h3>Link</h3>
+          <p><a href="https://s.id/Fb9L5">https://s.id/Fb9L5</a></p>
+          <img src="{{ '/img/qr-using-ai-skills.png' | url }}" alt="QR Code menuju https://s.id/Fb9L5">
+          <p><small>Scan untuk buka link</small></p>
+        </div>
+      </div>
     </section>
   </div>
 </div>
