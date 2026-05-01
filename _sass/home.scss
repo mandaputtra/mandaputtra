@@ -48,17 +48,12 @@
     justify-content: center;
     position: relative;
     margin: 0 0 1rem 0;
+    box-shadow: 0.45rem 0.45rem 0 variables.$dark-blue;
+    transition: transform 120ms ease, box-shadow 120ms ease;
 
-    &:before {
-      content: " ";
-      position: absolute;
-      top: 0;
-      width: 7rem;
-      height: 3.6rem;
-      border-radius: variables.$border-radius-medium;
-      background-color: variables.$blue;
-      z-index: -1;
-      border: 0.3rem solid variables.$dark-blue;
+    &:hover {
+      transform: translate(-2px, -2px);
+      box-shadow: 0.55rem 0.55rem 0 variables.$dark-blue;
     }
 
     .logo {
@@ -83,17 +78,12 @@
     position: relative;
     margin: 0.5rem;
     font-weight: 500;
+    box-shadow: 0.35rem 0.35rem 0 variables.$dark-blue;
+    transition: transform 120ms ease, box-shadow 120ms ease;
 
-    &:before {
-      content: " ";
-      position: absolute;
-      top: 0;
-      width: 5rem;
-      height: 2.2rem;
-      border-radius: variables.$border-radius-small;
-      background-color: variables.$blue;
-      z-index: -1;
-      border: 0.2rem solid variables.$dark-blue;
+    &:hover {
+      transform: translate(-2px, -2px);
+      box-shadow: 0.45rem 0.45rem 0 variables.$dark-blue;
     }
   }
 

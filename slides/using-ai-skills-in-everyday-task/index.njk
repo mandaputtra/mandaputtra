@@ -1,0 +1,203 @@
+---
+layout: layouts/reveal.njk
+title: Using AI Skills in Everyday Task
+description: A practical talk about using AI for writing, planning, coding, and daily work.
+---
+
+<div class="reveal">
+  <div class="slides">
+    <section>
+      <h1>Using AI Skills in Everyday Task</h1>
+      <p>Manda Putra</p>
+      <p><small>TRAE AI @ ILC Timoho, Yogyakarta — 02 May 2026</small></p>
+    </section>
+
+    <section>
+      <h2>Why this matters</h2>
+      <ul>
+        <li>Less busywork, more judgment</li>
+        <li>Faster research, better summaries, more consistent output</li>
+        <li>Works for product workflows and HR workflows</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>Two things today</h2>
+      <ol>
+        <li>What are AI Skills and why we should use that?</li>
+        <li>Using TRAE SOLO to create automation and using skills for better result</li>
+      </ol>
+    </section>
+
+    <section>
+      <h2>Audience check</h2>
+      <ul>
+        <li>Product: faster discovery, better specs, clearer communication</li>
+        <li>HR: better screening summaries, policy drafts, report briefs</li>
+        <li>Everyone: more time for human decisions</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>The story</h2>
+      <p>I’m a bakery owner.</p>
+      <p>Parsley bakery, Yogyakarta.</p>
+      <p>I want a brief report of Google Maps reviews.</p>
+      <aside class="notes">
+        Use this to make it concrete: the goal is not “use AI”, it’s “get a weekly brief and take action”.
+      </aside>
+    </section>
+
+    <section>
+      <h2>The pain</h2>
+      <ul>
+        <li>Reviews are scattered and noisy</li>
+        <li>Reading every review takes time</li>
+        <li>You still need a human decision at the end</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>What are “AI Skills”?</h2>
+      <ul>
+        <li>Reusable micro-workflows</li>
+        <li>A capability with a clear input/output contract</li>
+        <li>Helps you get consistent results, not random answers</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>AI skills ≠ prompting</h2>
+      <ul>
+        <li>Prompting: one-off conversation</li>
+        <li>Skills: repeatable building blocks</li>
+        <li>Better for teams: easier to reuse and review</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>Why use AI skills?</h2>
+      <ul>
+        <li>Consistency: same format every time</li>
+        <li>Delegation: you provide goal + constraints</li>
+        <li>Speed: less time on repetitive work</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>Good model: human + AI</h2>
+      <ul>
+        <li>Human: sets the goal and decides</li>
+        <li>AI: drafts, summarizes, structures</li>
+        <li>Human: verifies, edits, ships</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>Guardrails (important for HR)</h2>
+      <ul>
+        <li>Privacy: don’t paste secrets, keys, or private personal data</li>
+        <li>Accuracy: treat output as draft, verify sources</li>
+        <li>Bias: ask for assumptions and blind spots</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>From skills → systems</h2>
+      <p>If a workflow is repeatable, automate it.</p>
+    </section>
+
+    <section>
+      <h2>TRAE SOLO mental model</h2>
+      <ul>
+        <li>Agent session: understands your task</li>
+        <li>Skills: plug-in capabilities</li>
+        <li>Automation: schedule it to run without you</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>Better results = better inputs</h2>
+      <ul>
+        <li>Context: who, what, where, why</li>
+        <li>Constraints: tone, length, format, audience</li>
+        <li>Review loop: assumptions, edge cases, “what could be wrong?”</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>Demo goal</h2>
+      <p>Weekly Google Maps review brief for Parsley bakery (Yogyakarta)</p>
+      <ul>
+        <li>Short and actionable</li>
+        <li>Written for a busy owner</li>
+        <li>Ends with a checklist</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>Demo: the skill</h2>
+      <p>Google Maps scraper skill</p>
+      <p><small>https://skills.sh/gosom/google-maps-scraper/google-maps-scraper</small></p>
+      <aside class="notes">
+        Explain what a skill is: someone packaged a capability into a reusable unit.
+      </aside>
+    </section>
+
+    <section>
+      <h2>Demo: prompt pattern</h2>
+      <pre><code>
+Context: I run Parsley bakery in Yogyakarta.
+Goal: Generate a weekly brief from the latest Google Maps reviews.
+Constraints: 1 page max, bullet-driven, actionable, non-technical.
+Output sections:
+1) Summary (3 bullets)
+2) Themes: praise & complaints
+3) Notable quotes
+4) Action checklist (this week / next month)
+      </code></pre>
+      <aside class="notes">
+        Point out: this is reusable. The structure is the “skill” you’re building as a habit.
+      </aside>
+    </section>
+
+    <section>
+      <h2>Demo: make it automation</h2>
+      <ul>
+        <li>Schedule: weekly</li>
+        <li>Same report format each run</li>
+        <li>Only review + decide (human stays in control)</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>What the report looks like</h2>
+      <ul>
+        <li>Summary: what changed since last week</li>
+        <li>Top complaints: what to fix</li>
+        <li>Top praise: what to preserve</li>
+        <li>Action list: do this week, plan next month</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>CTA</h2>
+      <p>Try 1 automation this week.</p>
+      <ul>
+        <li>Review brief (business)</li>
+        <li>Hiring pipeline snapshot (HR)</li>
+        <li>Meeting recap + action items (product)</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>Closing</h2>
+      <ul>
+        <li>Build AI skills as habits</li>
+        <li>Automate the repetitive</li>
+        <li>Keep the human decision-making</li>
+      </ul>
+      <p><small>Q&amp;A</small></p>
+    </section>
+  </div>
+</div>

@@ -144,6 +144,12 @@ header .logo-wrapper {
   position: relative;
   margin: 0 0 1rem 0;
   border: 0.2rem solid #424874;
+  box-shadow: 0.35rem 0.35rem 0 #424874;
+  transition: transform 120ms ease, box-shadow 120ms ease;
+}
+header .logo-wrapper:hover {
+  transform: translate(-2px, -2px);
+  box-shadow: 0.45rem 0.45rem 0 #424874;
 }
 header .logo-wrapper:before {
   content: " ";
@@ -186,6 +192,65 @@ main .postlist-wrapper .postlist .postlist-descriptions {
   color: #a6b1e1;
 }
 
+.slides-list {
+  padding: 0;
+  margin: 1.5rem 0 0 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.slides-card {
+  position: relative;
+  padding: 1.25rem;
+  border: 0.2rem solid #424874;
+  border-radius: 15px;
+  background-color: #dcd6f7;
+  box-shadow: 0.35rem 0.35rem 0 #424874;
+  transition: transform 120ms ease, box-shadow 120ms ease;
+}
+.slides-card:hover {
+  transform: translate(-2px, -2px);
+  box-shadow: 0.45rem 0.45rem 0 #424874;
+}
+
+.slides-card__title {
+  font-family: "Crimson Pro", serif;
+  font-size: 1.6rem;
+  line-height: 1.2;
+  margin-bottom: 0.5rem;
+}
+.slides-card__title a {
+  text-decoration: none;
+  color: #312c51;
+}
+.slides-card__title a:visited {
+  color: #312c51;
+}
+.slides-card__title a:hover {
+  color: #424874;
+  text-decoration: underline;
+}
+
+.slides-card__presented {
+  font-size: 0.95rem;
+  color: #424874;
+  margin-bottom: 0.75rem;
+}
+.slides-card__presented span {
+  font-weight: 600;
+}
+
+.slides-card__description {
+  color: #312c51;
+}
+
+@media screen and (max-width: 500px) {
+  .slides-card {
+    padding: 1rem;
+  }
+}
 #header-bank-transfer {
   flex-direction: column;
   margin-bottom: 2rem;

@@ -1,0 +1,24 @@
+---
+layout: layouts/base.njk
+title: Slides
+---
+
+<h1>Slides</h1>
+
+<p>A list of slide decks (presentations) that I made.</p>
+
+<ul class="slides-list">
+  {% for deck in slides %}
+  <li class="slides-card">
+    <div class="slides-card__title">
+      <a href="{{ deck.url | url }}">{{ deck.title }}</a>
+    </div>
+    <div class="slides-card__presented">
+      Presented On : <span>{{ deck.presentedOn }}</span>
+    </div>
+    <div class="slides-card__description">
+      {{ deck.description }}
+    </div>
+  </li>
+  {% endfor %}
+</ul>

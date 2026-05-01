@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{ renderData.title or title or metadata.title }}</title>
+  <meta name="description" content="{{ renderData.description or description or metadata.description }}">
+  <link rel="shortcut icon" href="{{ metadata.favicon }}" type="image/x-icon">
+  <link rel="icon" href="{{ metadata.favicon }}" type="image/x-icon">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5/dist/reveal.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5/dist/theme/white.css">
+  <style>
+    html, body {
+      height: 100%;
+    }
+    body {
+      margin: 0;
+    }
+  </style>
+</head>
+<body>
+  {{ content | safe }}
+
+  <script src="https://cdn.jsdelivr.net/npm/reveal.js@5/dist/reveal.js"></script>
+  <script>
+    Reveal.initialize({
+      hash: true
+    });
+  </script>
+</body>
+</html>
