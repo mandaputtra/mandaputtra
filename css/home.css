@@ -62,17 +62,12 @@ h1, h2, h3, h4, h5, h6 {
   justify-content: center;
   position: relative;
   margin: 0 0 1rem 0;
+  box-shadow: 0.45rem 0.45rem 0 #424874;
+  transition: transform 120ms ease, box-shadow 120ms ease;
 }
-.homepage .logo-wrapper:before {
-  content: " ";
-  position: absolute;
-  top: 0;
-  width: 7rem;
-  height: 3.6rem;
-  border-radius: 15px;
-  background-color: #a6b1e1;
-  z-index: -1;
-  border: 0.3rem solid #424874;
+.homepage .logo-wrapper:hover {
+  transform: translate(-2px, -2px);
+  box-shadow: 0.55rem 0.55rem 0 #424874;
 }
 .homepage .logo-wrapper .logo {
   text-align: center;
@@ -93,15 +88,10 @@ h1, h2, h3, h4, h5, h6 {
   position: relative;
   margin: 0.5rem;
   font-weight: 500;
+  box-shadow: 0.35rem 0.35rem 0 #424874;
+  transition: transform 120ms ease, box-shadow 120ms ease;
 }
-.homepage .button-cartoon:before {
-  content: " ";
-  position: absolute;
-  top: 0;
-  width: 5rem;
-  height: 2.2rem;
-  border-radius: 8px;
-  background-color: #a6b1e1;
-  z-index: -1;
-  border: 0.2rem solid #424874;
+.homepage .button-cartoon:hover {
+  transform: translate(-2px, -2px);
+  box-shadow: 0.45rem 0.45rem 0 #424874;
 }
