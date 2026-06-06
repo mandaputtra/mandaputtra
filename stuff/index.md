@@ -48,4 +48,18 @@ But here some list :
 - Everything Aaron Mahnke, [Lore](https://www.lorepodcast.com/), and others podcast he do.
 - And all show on the [Changelog Podcast](https://changelog.com/)
 
+## AI
+
+I've been experimenting with AI-powered workflows. Here are some skills I use with AI coding agents like OpenCode and Claude Code. Each skill is a prompt template that tells the AI how to help with a specific task.
+
+### AI Skills
+
+- [Create a Resume](skills/create-a-resume/SKILL.md) — Tailor your CV PDF to a job description and get a polished one-page resume back.
+- [Code Review](skills/code-review/SKILL.md) — Get fast, actionable feedback on diffs and pull requests.
+
+### Tools I Use
+
+- **[OpenCode](https://github.com/nicepkg/opencode)** — Terminal-first AI coding agent with multi-model support.
+- **[Paseo](https://paseo.sh/)** — Agent orchestration for OpenCode, spinning up subagents for research, building, and review.
+
 And I think just that other random stuff maybe I'll, update again later.
