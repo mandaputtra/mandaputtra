@@ -3,9 +3,10 @@
   "version": "5.0.0",
   "description": "A starter repository for a blog web site using the Eleventy static site generator.",
   "scripts": {
-    "build": "npx gulp build-sass & npx eleventy",
+    "build": "npx gulp build-sass && npx eleventy",
     "start": "concurrently \"npx eleventy --serve\" \"npx gulp watch-sass\" ",
-    "debug": "DEBUG=* npx eleventy"
+    "debug": "DEBUG=* npx eleventy",
+    "format": "prettier --write ."
   },
   "engines": {
     "node": "26.x"
@@ -28,14 +29,14 @@
     "gulp-sass": "^6.0.1"
   },
   "devDependencies": {
-    "@11ty/eleventy": "^3.1.5",
+    "@11ty/eleventy": "^3.1.6",
     "@11ty/eleventy-plugin-rss": "^3.0.0",
     "@11ty/eleventy-plugin-syntaxhighlight": "^5.0.2",
     "concurrently": "^9.2.1",
     "luxon": "^3.7.2",
-    "markdown-it": "^14.1.1",
+    "markdown-it": "^14.2.0",
     "markdown-it-anchor": "^9.2.0",
     "push-dir": "^0.4.1",
-    "sass": "^1.99.0"
+    "sass": "^1.100.0"
   }
 }
