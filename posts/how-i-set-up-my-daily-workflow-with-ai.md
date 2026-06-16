@@ -50,7 +50,7 @@ paseo schedule create \
 
 It ranks my issues for the day and I pick them off in order. One-line issues get a worktree; the heavier ones need real context.
 
-I skim it on my phone — there's a complexity/priority breakdown, so I pick the easy one first. While the AI is grinding, I read the PRD and figure out the business logic in my head: what it should look like, which existing functions I can reuse. So my prompts stay mostly technical.
+I skim it on my phone — there's a complexity/priority breakdown, so I pick the easy one first. While the AI is grinding, I read the PRD for more complex task and figure out the business logic in my head: what it should look like, which existing functions I can reuse. So my prompts stay mostly technical.
 
 I always review the diff. Paseo has a decent phone diff viewer, but on desktop I stick to Neovim.
 
@@ -71,3 +71,7 @@ How I keep my AI from doing something dumb and irreversible:
 ## I want to go cheaper
 
 Next: move from OpenCode Go to OpenCode Zen or OpenRouter's pay-as-you-go pricing.
+
+## Drawbacks
+
+AI start fresh every sessions, so I got a skills to gather the context before it executes fix/feature
