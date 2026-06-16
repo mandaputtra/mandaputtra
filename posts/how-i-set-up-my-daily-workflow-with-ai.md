@@ -37,7 +37,7 @@ All cheap. I can't even burn through my $10 sub each month. I use MiniMax M3 for
 
 First, I set up my GitHub and GitLab API tokens (read-only) — just to read issues assigned to me. With Paseo, I schedule that as a daily task.
 
-```
+```bash
 paseo schedule create \
   --cron "0 0 0 0" \
   --timezone UTC \
