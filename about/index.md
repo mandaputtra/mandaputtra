@@ -1,25 +1,23 @@
 ---
 layout: layouts/post.njk
-title: Some Stories About Me
+title: Tell Me About Myself
 tags:
   - nav
 navtitle: Me
 templateClass: tmpl-post
 ---
 
-Manda Putra is Software Engineer (Web Development) without _degree_ to proof it. Help many companies to do software engineering and also became the part of it. His company right now call him Product Engineer, although he admit doesn't do well with front-end development.
+I'm Manda Putra, a Software Engineer focused on web development — self-taught, no degree, just real-world experience helping companies build and ship software. My current role titles me "Senior Product Engineer," though I'll be upfront: front-end isn't my strong suit.
 
-He always interested in technical low level stuff, realtime apps, esoteric programming languages, and databases!. Probably the best way to describe his passion is with this motto "If you don't understand the beginning, you wont able to make a better future".
+I'm drawn to the low-level stuff — how things actually work under the hood. Realtime applications, esoteric programming languages, databases. That's where I get excited. I believe if you don't understand the beginning, you can't build a better future.
 
-You may want to contact him via [email](mailto:mandaputra@gmail.com) if you had some problem with your software, or you need some companion to dip your toes on these complicated software stuff.
+Right now my runtime looks like this:
 
-But before that lest talk about his runtime right now :
+- Senior Product Engineer at [ZeroOneGroup](https://zero-one-group.com/)
+- Maintaining the Vue.js ID community on [GitHub](https://github.com/vuejs-id) and Telegram
+- Tinkering with my (still unreleased) ten-billion-dollar idea
+- Writing a programming book, blogging about tech and daily life
 
-- Work at [ZeroOneGroup](https://zero-one-group.com/) as Product Engineer.
-- Mantain Vue.js ID Group on [github](vuejs.id) and telegram.
-- Tinkering with his idea of 10 Billion Dollars software that hadn't released yet.
-- Made a book about programming, blogging about programming and daily life.
+Reach me at [mandaputra@gmail.com](mailto:mandaputra@gmail.com) — whether you're stuck on a software problem or just want someone to explore the complicated side of tech with.
 
-Thats it for now, I will update this page if necessary.
-
-You may want to look his [CV](https://docs.google.com/document/d/1u0HUed_PquAmJDqzSFCkIgMJwnE_Fvq4cu9MAstP-5Q/) for more _proofed_ reason.
+Still updating this page. For the more formal version: here's my [CV](https://docs.google.com/document/d/1u0HUed_PquAmJDqzSFCkIgMJwnE_Fvq4cu9MAstP-5Q/).
