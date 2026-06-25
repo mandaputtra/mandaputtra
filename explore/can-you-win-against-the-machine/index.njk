@@ -1,0 +1,141 @@
+---
+layout: layouts/explore-toy.njk
+title: Can You Beat The Machine?
+description: A simple 0-or-1 betting toy to show why online gambling is a joke.
+permalink: /explore/can-you-win-against-the-machine/
+toyCss: /css/explore-can-you-win-against-the-machine.css
+toyJs: /js/explore-can-you-win-against-the-machine.js
+---
+
+<section class="toy" id="toy">
+  <header class="toy-hero">
+    <h1 data-i18n="t.title">Can You Beat The Machine?</h1>
+    <p class="toy-subtitle" data-i18n="t.subtitle">Pick 0 or 1. Bet your money. Try to grow $10.</p>
+    <p class="toy-mini" data-i18n="t.disclaimerMini">This is a toy. The reveal happens at the end.</p>
+    <div class="toy-lang">
+      <button type="button" data-lang="en">EN</button>
+      <button type="button" data-lang="id">ID</button>
+    </div>
+  </header>
+
+  <section class="toy-card toy-top" aria-label="Top">
+    <div class="toy-status-row">
+      <div class="toy-stat">
+        <div class="toy-label" data-i18n="ui.balance">Balance</div>
+        <div class="toy-balance-value" id="balance">$10</div>
+      </div>
+
+      <div class="toy-stat">
+        <label for="mode" data-i18n="ui.mode">Mode</label>
+        <select id="mode" name="mode">
+          <option value="friendly" data-i18n="ui.modeFriendly">Friendly</option>
+          <option value="normal" data-i18n="ui.modeNormal">Normal</option>
+          <option value="brutal" data-i18n="ui.modeBrutal">Brutal</option>
+        </select>
+        <p class="toy-mini" id="mode-desc" data-i18n="modeDesc.normal">Looks fair. Quietly tilted.</p>
+      </div>
+    </div>
+
+    <div class="toy-inline-meta" id="meta-row" hidden>
+      <div class="toy-label" data-i18n="ui.winRate">Win rate</div>
+      <div class="toy-winrate" id="winrate">??%</div>
+    </div>
+  </section>
+
+  <section class="toy-card toy-controls" aria-label="Controls">
+    <div class="toy-field">
+      <label for="bet" data-i18n="ui.bet">Your bet</label>
+      <input id="bet" name="bet" type="number" min="1" step="1" inputmode="numeric" autocomplete="off">
+      <p class="toy-mini" id="bet-hint" data-i18n="hint.betRules">Whole dollars only. Minimum $1.</p>
+    </div>
+    <div class="toy-picks">
+      <button type="button" id="pick-0" data-pick="0" data-i18n="ui.head">Head</button>
+      <button type="button" id="pick-1" data-pick="1" data-i18n="ui.tail">Tail</button>
+    </div>
+    <button type="button" id="cash-out" class="toy-cashout" data-i18n="ui.cashOut">Cash out</button>
+
+    <p class="toy-error" id="error" aria-live="polite"></p>
+
+    <section class="toy-result" id="result" aria-live="polite" hidden>
+      <div class="toy-result-title" id="result-title"></div>
+      <div class="toy-mini" id="result-detail"></div>
+      <div class="toy-mini" id="round-detail"></div>
+    </section>
+  </section>
+
+  <section class="toy-card" id="chart-card" aria-label="Chart" hidden>
+    <h2 class="toy-h2" data-i18n="ui.chartTitle">Your balance over time</h2>
+    <div class="toy-chart">
+      <canvas id="balance-chart"></canvas>
+    </div>
+  </section>
+
+  <section class="toy-card" id="history-card" aria-label="History" hidden>
+    <h2 class="toy-h2" data-i18n="ui.historyTitle">Recent rounds</h2>
+    <div class="toy-table-wrap">
+      <table class="toy-table">
+        <thead>
+          <tr>
+            <th data-i18n="ui.round">Round</th>
+            <th data-i18n="ui.bet">Your bet</th>
+            <th data-i18n="ui.youPicked">You picked</th>
+            <th data-i18n="ui.result">Result</th>
+            <th data-i18n="ui.balance">Balance</th>
+          </tr>
+        </thead>
+        <tbody id="history"></tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="toy-end" id="end" hidden>
+    <div class="toy-card">
+      <h2 class="toy-h2" data-i18n="end.title">It felt like 50/50. It wasn't.</h2>
+      <p data-i18n="end.subtitle">The machine had an edge the whole time.</p>
+
+      <h3 class="toy-h3" data-i18n="end.statTitle">Your run</h3>
+      <dl class="toy-stats">
+        <div>
+          <dt data-i18n="end.roundsPlayed">Rounds played</dt>
+          <dd id="stat-rounds"></dd>
+        </div>
+        <div>
+          <dt data-i18n="end.wins">Wins</dt>
+          <dd id="stat-wins"></dd>
+        </div>
+        <div>
+          <dt data-i18n="end.losses">Losses</dt>
+          <dd id="stat-losses"></dd>
+        </div>
+        <div>
+          <dt data-i18n="end.maxBalance">Highest balance</dt>
+          <dd id="stat-max"></dd>
+        </div>
+        <div>
+          <dt data-i18n="end.finalBalance">Final balance</dt>
+          <dd id="stat-final"></dd>
+        </div>
+        <div>
+          <dt data-i18n="end.hiddenWinRate">Your real win rate</dt>
+          <dd id="stat-hidden-win"></dd>
+        </div>
+        <div>
+          <dt data-i18n="end.observedWinRate">Your observed win rate</dt>
+          <dd id="stat-observed-win"></dd>
+        </div>
+        <div>
+          <dt data-i18n="end.expectedValue">Expected value (per $1 bet)</dt>
+          <dd id="stat-ev"></dd>
+        </div>
+      </dl>
+
+      <p data-i18n="end.explain1">A tiny disadvantage is enough. If you keep playing, the machine only needs time.</p>
+      <p data-i18n="end.explain2">This is why online gambling is a joke: the game is designed to outlast you.</p>
+      <p class="toy-mini" data-i18n="end.note">You can win sometimes and still be expected to lose overall.</p>
+
+      <div class="toy-actions">
+        <button type="button" id="again" data-i18n="ui.again">Play again</button>
+      </div>
+    </div>
+  </section>
+</section>

@@ -2,8 +2,8 @@
 layout: layouts/base.njk
 ---
 
-# Still On Development
+# Explore
 
-Go <a href="{{ '/' | url }}">home</a>.
+Some experimental toys and mini-projects.
 
-I want to do some experimental stuff here, some exploration project like graphic, math, but with the twits of programming. But this page are still empty. So ~ maybe you can comeback later. I'm sorry :((
+- [Can You Beat The Machine?](/explore/can-you-win-against-the-machine/)
