@@ -1,0 +1,112 @@
+---
+layout: layouts/explore-toy.njk
+title: Game Geometri Kelas 6
+description: Game pola geometri untuk membantu siswa kelas 6 SD memahami urutan bentuk, warna, ukuran, dan rotasi.
+permalink: /game-geometri/
+toyCss: /css/game-geometri.css
+toyJs: /js/game-geometri.js
+---
+
+<section class="toy toy-geometry" id="geometry-game">
+  <header class="toy-hero">
+    <p class="toy-kicker">Game belajar mandiri</p>
+    <h1>Game Geometri: Tebak Pola Objek</h1>
+    <p class="toy-subtitle">
+      Amati urutan bentuk geometri, lalu pilih objek berikutnya yang paling tepat.
+    </p>
+  </header>
+
+  <section class="toy-card geo-intro">
+    <div class="geo-intro-grid">
+      <div>
+        <h2 class="toy-h2">Cara bermain</h2>
+        <ul class="geo-list">
+          <li>Perhatikan pola bentuk, warna, ukuran, atau arah putaran.</li>
+          <li>Pilih satu jawaban yang paling cocok untuk melanjutkan urutan.</li>
+          <li>Kumpulkan skor setinggi mungkin sampai 10 soal selesai.</li>
+        </ul>
+      </div>
+      <div>
+        <h2 class="toy-h2">Tingkat soal</h2>
+        <ul class="geo-list">
+          <li><strong>Dasar</strong> untuk pola tunggal yang mudah dikenali.</li>
+          <li><strong>Menengah</strong> untuk pola gabungan dua aturan.</li>
+          <li><strong>Campuran</strong> untuk latihan acak yang lebih menantang.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="toy-card geo-toolbar">
+    <div class="geo-stats" aria-label="Statistik permainan">
+      <div class="geo-stat">
+        <span class="geo-stat-label">Soal</span>
+        <strong id="round-value">1/10</strong>
+      </div>
+      <div class="geo-stat">
+        <span class="geo-stat-label">Skor</span>
+        <strong id="score-value">0</strong>
+      </div>
+      <div class="geo-stat">
+        <span class="geo-stat-label">Benar Beruntun</span>
+        <strong id="streak-value">0</strong>
+      </div>
+    </div>
+
+    <div class="geo-controls">
+      <label class="geo-level" for="level-select">
+        <span class="geo-stat-label">Tingkat</span>
+        <select id="level-select" name="level-select">
+          <option value="dasar">Dasar</option>
+          <option value="menengah">Menengah</option>
+          <option value="campuran">Campuran</option>
+        </select>
+      </label>
+
+      <button type="button" id="reset-game">Acak Ulang</button>
+    </div>
+  </section>
+
+  <section class="toy-card geo-problem" aria-live="polite">
+    <h2 class="toy-h2">Pola Saat Ini</h2>
+    <p class="toy-mini" id="question-text">Pilih objek berikutnya yang paling tepat untuk melanjutkan pola.</p>
+    <div class="geo-track" id="pattern-track"></div>
+  </section>
+
+  <section class="toy-card">
+    <h2 class="toy-h2">Pilihan Jawaban</h2>
+    <div class="geo-options" id="options"></div>
+
+    <p class="toy-error" id="error-text" aria-live="polite"></p>
+
+    <section class="geo-feedback" id="feedback" hidden>
+      <h3 class="toy-h3" id="feedback-title"></h3>
+      <p id="feedback-text"></p>
+      <p class="toy-mini" id="feedback-answer"></p>
+    </section>
+
+    <div class="geo-actions">
+      <button type="button" id="next-round" hidden>Soal Berikutnya</button>
+      <button type="button" id="play-again" hidden>Main Lagi</button>
+    </div>
+  </section>
+
+  <section class="toy-card geo-summary" id="summary" hidden>
+    <h2 class="toy-h2">Hasil Akhir</h2>
+    <p id="summary-text"></p>
+    <div class="geo-summary-grid">
+      <div class="geo-stat">
+        <span class="geo-stat-label">Jawaban Benar</span>
+        <strong id="summary-correct">0</strong>
+      </div>
+      <div class="geo-stat">
+        <span class="geo-stat-label">Nilai</span>
+        <strong id="summary-score">0</strong>
+      </div>
+      <div class="geo-stat">
+        <span class="geo-stat-label">Akurasi</span>
+        <strong id="summary-accuracy">0%</strong>
+      </div>
+    </div>
+  </section>
+</section>

@@ -7,3 +7,4 @@ layout: layouts/base.njk
 Some experimental toys and mini-projects.
 
 - [Can You Beat The Machine?](/explore/can-you-win-against-the-machine/)
+- [Game Geometri](/game-geometri/)
