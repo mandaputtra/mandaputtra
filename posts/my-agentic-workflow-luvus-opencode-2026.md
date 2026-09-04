@@ -135,6 +135,7 @@ job_searching  running   ~/.luvus/sessions/job_searching
 Detaching doesn't kill agents: they keep grinding. That's the whole "work from the dentist's chair" bit from the last post, but actually reliable now. And without a VPS to babysit, there's nothing to update, patch, or pay for when idle.
 
 ## Memory: why owning context beats bigger models
+
 Hot take: **owning your context and memory is the best thing you can do right now**. With it, cheap models beat expensive ones.
 
 I run [mem0](https://mem0.ai) locally:
@@ -231,9 +232,6 @@ flowchart LR
 ```
 
 ## FAQ
-
-**Can I run this without a VPS?**
-Yes. That is the point: $10 for OpenCode Go, no dev server. VPS is for `netlify.toml` deploys to `_site/` only.
 
 **How does local mem0 compare to cloud memory?**
 Local is zero retention policy, zero latency, and cheap models reuse context. Cloud is convenient but you rent back your own decisions.
