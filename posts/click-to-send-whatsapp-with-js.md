@@ -1,25 +1,25 @@
 ---
 tags: ["javascript", "tips"]
-title: "Click to send whatsapp with javascript"
+title: "Click to send WhatsApp with JavaScript"
 description: "Make a link that triggers send whatsapp from javascript"
 date: 2018-09-29
 ---
 
-> TL;DR You can use link below and place it on your button, or whatever. Its simply will open up whatsapp on user phone. But it isn't automatically send. https://api.whatsapp.com/send?phone=+<YOURNUMBER>&text=%20<YOURMESSAGE>. use encodeURIComponent('your text here')
+> TL;DR You can use the link below and place it on your button, or whatever. It will open WhatsApp on the user’s phone, but it does not send automatically. Use the [WhatsApp click-to-chat link](https://api.whatsapp.com/send?phone=+<YOURNUMBER>&text=%20<YOURMESSAGE>) with `encodeURIComponent('your text here')`.
 
-What we were built here it is a dynamic send to WhatsApp link with JavaScript approach you can use the link above and give it a try
+What we build here is a dynamic “send to WhatsApp” link with JavaScript. You can use the link above and give it a try.
 
-Okay I'll use JSBin with this, first open up then its just easy you will use `split()` and `join()` string property on JavaScript here my script.
+I’ll use JSBin for this. First, open it, then you will use `split()` and `join()` string methods in JavaScript. Here is my script.
 
 ```js
-// https://api.whatsapp.com/send?phone=+{{ YOURNUMBER }}&text=%20{{ YOURMESSAGE }}
+// https://api.whatsapp.com/send
+// ?phone=+{{ YOURNUMBER }}&text=%20{{ YOURMESSAGE }}
 
 var yourNumber = "your number in string";
 var yourMessage = "your message in string";
 
-// %20 mean space in link
-// If you already had an array then you just join them with '%20'
-// easy right
+// %20 means space in link
+// If you already have an array, join the items with '%20'
 
 function getLinkWhastapp(number, message) {
   number = yourNumber;
@@ -33,18 +33,16 @@ function getLinkWhastapp(number, message) {
 getLinkWhastapp();
 ```
 
-Copy that on jsbin, give phone number and message do you want, make sure you use WhatsApp, It will open up WhatsApp on your phone with the message you wrote.
+Copy that to JSBin, set the phone number and message you want, and make sure you use WhatsApp. It will open WhatsApp on your phone with the message you wrote.
 
-Further reading :
+Further reading:
 
 - [split()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/split)
 - [join()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/join)
 
----
+## Use encodeURIComponent in production
 
-## Important
-
-This post was made to learn JS `split` and `join` for production purpose you should use `encodeURIComponent()`
+This post was made to learn JS `split` and `join`. For production, use `encodeURIComponent()`:
 
 ```js
 function getLinkWhastapp(number, message) {

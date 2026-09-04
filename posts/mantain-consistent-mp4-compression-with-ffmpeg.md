@@ -1,58 +1,51 @@
 ---
 tags: ["javascript", "ffmpeg"]
-title: "Mantain consistent .mp4 video compression with FFmpeg"
+title: "Maintain consistent .mp4 video compression with FFmpeg"
 description: "Make your compression with bitrate smooth"
 date: 2019-12-31
 ---
 
-So you maybe already know [`ffmpeg`](https://www.ffmpeg.org/) the popular library for video compression, stream, and they had many though you can check that on their website.
+You probably know [`ffmpeg`](https://www.ffmpeg.org/), the popular toolkit for video compression and streaming. It does much more, check the website for details.
 
-Recently I found nice article about [compressing using FFmpeg](https://dev.to/benjaminblack/use-ffmpeg-to-compress-and-convert-videos-458l)
+I found a useful article on [compressing video with FFmpeg](https://dev.to/benjaminblack/use-ffmpeg-to-compress-and-convert-videos-458l). It uses bitrate to compress `.mp4` files. When I applied that script to files from 1 MB to 10 MB, the output grew larger instead of smaller.
 
-on that article this guy using bitrate to compress the `.mp4` file. But to compress files that had size 1Mb to 10Mb that script makes it bigger ~ not make the video smaller.
+In an earlier project I compressed video by scaling, which runs faster than bitrate tuning, as described in this [StackOverflow answer](https://unix.stackexchange.com/a/447521/362526). That approach worked until I needed to preserve the original dimensions.
 
-I had some project that requires video compression back then I do that with scaling (cause it's faster than bitrate compression) found on this [StackOverflow answer](https://unix.stackexchange.com/a/447521/362526):
+I adapted the bitrate approach to scale with file size. The script below chooses a bitrate based on input size and keeps dimensions intact.
 
-My old project usually uses it, but now I had a use case when I can't scale the video to maintain its original size, so after found that guy answer I just want to share some script here.
+## Choosing a bitrate that scales with file size
+
+The constants `28` and `1.1` worked well for my case, which caps at about 1 GB. Adjust them to fit your constraints.
+
+## Compressing video with fluent-ffmpeg
+
+Set up `fluent-ffmpeg` with static binaries and define a helper to read metadata:
 
 ```js
-/* eslint-disable no-new */
 const ffmpeg = require("fluent-ffmpeg");
 const ffmpegPath = require("ffmpeg-static").path;
 const ffprobePath = require("ffprobe-static").path;
 const path = require("path");
 const uuid = require("uuid/v3");
 
-// video path
 const videoPath = path.join(__dirname, "video", "output.mp4");
-// set ffmpeg path
+
 ffmpeg.setFfmpegPath(ffmpegPath);
 ffmpeg.setFfprobePath(ffprobePath);
 
-/**
- * Extract Metadata from a video
- * @param {String} path
- */
 function metadata(path) {
   return new Promise((resolve, reject) => {
-    ffmpeg.ffprobe(path, (err, metadata) => {
-      if (err) {
-        reject(err);
-      }
-      resolve(metadata);
+    ffmpeg.ffprobe(path, (err, data) => {
+      if (err) reject(err);
+      else resolve(data);
     });
   });
 }
+```
 
-/**
- * FFmpeg commaand to compress video
- * @param {String} input
- * Path to input file
- * @param {String} output
- * Path to output file
- * @param {Number} bitrate
- * The bitrate you specify to compress video in bytes
- */
+Configure the `ffmpeg` command. This applies `libx264` for video and `aac` for audio with the chosen bitrate:
+
+```js
 function command(input, output, bitrate) {
   return new Promise((resolve, reject) => {
     ffmpeg(input)
@@ -63,42 +56,35 @@ function command(input, output, bitrate) {
         "-b:a 58k",
       ])
       .output(output)
-      .on("start", (command) => {
-        console.log("TCL: command -> command", command);
-      })
-      .on("error", (error) => reject(error))
-      .on("end", () => resolve())
+      .on("start", (cmd) => console.log(cmd))
+      .on("error", reject)
+      .on("end", resolve)
       .run();
   });
 }
 
-/**
- * Choose the right bitrate for video based on Size
- * @param {Number} bytes
- */
 function whatBitrate(bytes) {
   const ONE_MB = 1000000;
-  const BIT = 28; // i found that 28 are good point fell free to change it as you feel right
+  const BIT = 28; // 28 is a good baseline, adjust as needed
   const diff = Math.floor(bytes / ONE_MB);
-  if (diff < 5) {
-    return 128;
-  } else {
-    return Math.floor(diff * BIT * 1.1);
-  }
+  if (diff < 5) return 128;
+  return Math.floor(diff * BIT * 1.1);
 }
+```
 
-// this compress video based on bitrate
+Run the compression and compare input and output sizes:
+
+```js
 async function compress() {
   const name = uuid(videoPath, "1b671a64-40d5-491e-99b0-da01ff1f3341");
-  const outputPath = path.join(__dirname, "video", `${name}.mp4`);
-  const inputMetadata = await metadata(videoPath);
-  const bitrate = whatBitrate(inputMetadata.format.size);
-  await command(videoPath, outputPath, bitrate);
-  const outputMetadata = await metadata(outputPath);
-
+  const out = path.join(__dirname, "video", `${name}.mp4`);
+  const inputMeta = await metadata(videoPath);
+  const bitrate = whatBitrate(inputMeta.format.size);
+  await command(videoPath, out, bitrate);
+  const outputMeta = await metadata(out);
   return {
-    old_size: inputMetadata.format.size,
-    new_size: outputMetadata.format.size,
+    old_size: inputMeta.format.size,
+    new_size: outputMeta.format.size,
   };
 }
 
@@ -107,13 +93,21 @@ compress()
   .catch((err) => console.log(err));
 ```
 
-the `28` and `1.1` are the one that works for me, you can change it, I know that my app would not handle more than 1GB so here is the list
+The equivalent direct `ffmpeg` command looks like this:
+
+```bash
+# compress with libx264 at 308k video bitrate, keep audio at 58k
+ffmpeg -i input.mp4 -c:v libx264 -b:v 308k -c:a aac -b:a 58k output.mp4
+```
+
+Tune `-b:v` to match the bitrate returned by `whatBitrate`. Lower values reduce size further but soften detail.
+
+## Measured results
 
 | Original | Compressed | Bitrate |
 | -------- | ---------- | ------- |
-| 2.1Mb    | 1.4Mb      | 128k    |
-| 10.2Mb   | 5.6Mb      | 308k    |
-| 51Mb     | 31Mb       | 1570k   |
+| 2.1 MB   | 1.4 MB     | 128k    |
+| 10.2 MB  | 5.6 MB     | 308k    |
+| 51 MB    | 31 MB      | 1570k   |
 
-The audio is fine though.
-
+Audio remains clear at 58k in these tests.

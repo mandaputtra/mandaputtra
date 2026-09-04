@@ -1,42 +1,33 @@
 ---
 tags: ["errand", "opinion"]
 title: "My Rules When Creating A Product"
-description: "Think twice, the boring solution could lead to better one"
+description: "Think twice, the boring solution could lead to a better one"
 date: 2023-07-17
 ---
 
-Had spent my 5 year IT career on some agencies, I develop a lot of software in different business. Customer service, finance, manufacture and many others. I realize that all the software that I build are not rocket science in many cases, it uses boring technology and boring infrastructure.
+Five years in agencies taught me one thing: the software that lasts is not rocket science. It runs on boring technology and boring infrastructure. Once I saw that, a few opinions hardened.
 
-I tried new infrastructure so called Microservice, and I hate It. It's too complex for a 1 - 5 developer software. But if you have 6 developer should you use it? No, lol.
+### What I tried and dropped
 
-I tried so called new Design Pattern, and I hate it. It slows me down. Creating `.controller.js`, `.odt.js`, `.service.js` , apply the dependency injection, and start writing my code. Oh god, I realize I dont like it now.
+I tried microservices for a team of one to five. It added complexity without payoff, and I hated it. Even with six developers, I would still skip it.
 
-I tried to accept all of the client request, because they have the domain knowledge, and I hate it. Because of flawled bussines flow, the one that not represent the truth. Sometimes, it got unnecessary step. Talk with your client, is it realy necessary? or you just want it to be there?
+I tried strict design patterns with `.controller.js`, `.dto.js`, `.service.js` and dependency injection before writing a single line of business logic. It slowed me down, and I dropped it.
 
-Turns out, there are also many fruitless decission that I made. Right now for me, I develop some rules whenever It comes to choosing new feature, building product, or bug fixing.
+I tried accepting every client request at face value because clients own domain knowledge. Flawed flows slipped in: steps that misrepresent reality or add no value. Now I ask, is this step necessary, or do you want it there because it feels safer?
 
-And I realize that these rules are just a common sense, a sense of human nature, that want everything to be lazy, fast to develop, and enough for current usage.
+### The rules I keep
 
-So what are the rules?
+These are not frameworks. They are common sense for shipping with a small team that wants to move fast and stay lazy in the right way.
 
-1. Use monorepo for the get go, it's simple for me since I wrote everything in JS and only use another programming language if needed. It's nice I can share my code, and CI/CD
+1. Start with a monorepo. I write in JavaScript and add another language only when required. Shared code and a single CI/CD pipeline compound.
+2. You likely need three endpoints: frontend, backend, and scheduler or job queue. No microservices. Better yet, keep frontend and backend in one codebase when you can.
+3. Use what exists. Auth providers, chat SDKs, and other ready-made products save time I would spend rebuilding them.
+4. Every bug has a root cause. Find the real source before you patch the symptom.
+5. Test your own work. I write integration tests. Good engineers verify their craft.
+6. On UI and UX, a programmer should know a solid approach. For most products that are not design-heavy, a good programmer makes good design calls without a dedicated designer.
+7. Use boring programming languages. When problems arise, answers are everywhere.
+8. Performance matters when it matters. My line: keep client interactions under 800ms unless the work genuinely requires more.
+9. Respect constraints when you implement requirements. Name them before you code.
+10. Write procedural code first. Split files or functions when they earn it.
 
-2. Your product might only need 3 endpoint, it's always frontend, backend, and scheduler/job queue. So why creating microservice? Heck, even better when you got backend and frontend in the same code!
-
-3. Use already made product, for me whenever possible I use auth provider, chat sdk, etc that already made for me. Saving me time, than by implementing it myself.
-
-4. Every bug had its root cause, think twice. Find it's real source.
-
-5. Do automation test yourself - write integration test. In my opinion good engineer always test their craft.
-
-6. On UI/UX, a programmer should know what are the better approach. You don't need a designer for your not so complex product. A good programmer know better design.
-
-7. Use boring programming language, when you got a problem the chance you find a solution is anywhere.
-
-8. Performance matters when it matters. My rule is, client should interact less than 800ms everytime - unless it necessary.
-
-9. When implementing requirements please be aware of it's constrains.
-
-10. Save your time by writing procedural code, split the file pr function when it's needed.
-
-That's it.
+That is the set. Boring, opinionated, and enough for what I build now.
