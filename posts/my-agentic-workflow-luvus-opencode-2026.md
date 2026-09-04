@@ -22,6 +22,7 @@ Here's the stack I actually use every day, how it's wired, and how I use it.
 - **[omp (oh-my-pi)](https://github.com/mandaputtra/oh-my-pi)** — the harness glue on this blog's repo. Load-bearing changes, safe defaults.
 - **Local memory via [mem0](https://mem0.ai) + Ollama** — owns my context. No cloud lock-in.
 - **[pen.dev](https://pen.dev)** — design, then hand it to agents via MCP.
+
 Total cost: $10/mo — just OpenCode Go. My old $6 VPS got cut from the workflow, now it's only for project deployments. No more paying to keep a dev server warm. Everything runs local — cheaper than my old smoking budget, and the budget's actually dead this time.
 
 ## Models: DeepSeek V4 Flash for everything
