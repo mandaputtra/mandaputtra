@@ -118,6 +118,64 @@ article {
   ol li {
     margin-bottom: 0.5rem;
   }
+
+  table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    margin: 1.5rem 0;
+    font-size: 0.92rem;
+    line-height: 1.5;
+    border: 0.15rem solid variables.$dark-blue;
+    border-radius: variables.$border-radius-medium;
+    overflow: hidden;
+    box-shadow: 0.25rem 0.25rem 0 variables.$dark-blue;
+    display: table;
+  }
+
+  thead {
+    background-color: variables.$dark-blue;
+    color: variables.$white;
+  }
+
+  thead th {
+    font-weight: 600;
+    font-size: 0.82rem;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    padding: 0.75rem 1rem;
+    text-align: left;
+    white-space: nowrap;
+  }
+
+  tbody td {
+    padding: 0.75rem 1rem;
+    text-align: left;
+    vertical-align: top;
+    border-bottom: 0.08rem solid rgba(variables.$dark-blue, 0.12);
+  }
+
+  tbody tr:last-child td {
+    border-bottom: none;
+  }
+
+  tbody tr:nth-child(even) {
+    background-color: variables.$bright-blue;
+  }
+
+  tbody tr:hover {
+    background-color: rgba(variables.$blue, 0.35);
+  }
+
+  tbody td:first-child {
+    font-weight: 600;
+    white-space: nowrap;
+  }
+
+  tbody td code {
+    font-size: 0.85em;
+    white-space: nowrap;
+  }
 }
 
 header {
