@@ -10,47 +10,121 @@
 </head>
 
 <body>
+  <header class="topbar">
+    <a class="back" href="/explore/">&larr; Explore</a>
+    <div class="lang" role="group" aria-label="Language">
+      <button type="button" data-lang="en">EN</button>
+      <button type="button" data-lang="id">ID</button>
+    </div>
+  </header>
 
-  <!-- App Idea:
-    - an interactive blog with bahasa indonesia and english, that demonstrate the online gambling is just a fraud and pyscho games
-    - using GSAP as animation engine
-    - black background
-  -->
+  <main>
+    <section id="welcome-screen" class="screen">
+      <h1 data-i18n="t.title">Can you beat the machine?</h1>
+      <p class="lead" data-i18n="t.subtitle"></p>
+      <p>
+        I told my friends: you will not win. Some ran out of money to top up. Some went to jail.
+        Some took their own lives out of shame. At least 20 million people in Indonesia are caught in this.
+      </p>
+      <p>
+        Everyone wants the big win. Money makes every problem go away, if you have none.
+        The machine knows that. So try it yourself. Here is $10.
+      </p>
+      <button id="start" class="btn primary" type="button">Start</button>
+    </section>
 
-  <!-- Welcome screen sections idea:
-    A title, cartoony fonts with a bit of animation using GSAP
-    -->
-  <section id="welcome-screen">
-    <h1>Can you beat the machine?</h1>
-    <p>
-      Countless time I tell my friends that you have 0.00000001%. Of winning a lottery machine game.
-      Some of them got stressed because didnt have any money to top up their balance again,
-      Some of them go to jail,
-      Some of them kill themself, ought of shame.
-      There at least 20million people like this in Indonesia
-    </p>
-    <p>
-      Everybody wants go big or go home scenario, dreaming of countless luck that tupple one by one to them
-    </p>
-    <p>
-      A nonsense
-    </p>
-    <p>
-      Everybody wants that lucky money, cause money makes every problem goes away (if you dont have any)</p>
-    <p>
-      Why? That question will be answered here, the strategy, the pyscologhy, and why you are a part of the game too
-    </p>
-    <button type="submit">Start</button>
-  </section>
+    <section id="game" class="screen" hidden>
+      <div class="hud">
+        <div class="stat">
+          <span class="label" data-i18n="ui.balance"></span>
+          <strong id="balance" class="big">$10</strong>
+        </div>
+        <div class="stat">
+          <span class="label" data-i18n="ui.winRate"></span>
+          <strong id="winrate" class="big">??%</strong>
+        </div>
+        <label class="stat">
+          <span class="label" data-i18n="ui.mode"></span>
+          <select id="mode">
+            <option value="friendly" data-i18n="ui.modeFriendly"></option>
+            <option value="normal" data-i18n="ui.modeNormal" selected></option>
+            <option value="brutal" data-i18n="ui.modeBrutal"></option>
+          </select>
+          <small id="mode-desc"></small>
+        </label>
+      </div>
+      <div id="meta-row" hidden></div>
 
-  <section>
-    <h1>Background about me?</h1>
+      <div class="panel">
+        <label class="label" for="bet" data-i18n="ui.bet"></label>
+        <input id="bet" type="number" inputmode="numeric" min="1" step="1" placeholder="$1">
+        <small class="hint" data-i18n="hint.betRules"></small>
 
-    <p>I was person that believed in that too, playing gambling</p>
-    <p>but my kind of gambling is not something this easy</p>
-    <p>there is a lot of money games in billiard, you can see lot of videos on youtube</p>
-  </section>
+        <span class="label" data-i18n="ui.pick"></span>
+        <div class="picks">
+          <button id="pick-0" class="btn coin" type="button"><img src="/img/coin-head.png" alt="" width="96" height="96"><span data-i18n="ui.head"></span></button>
+          <button id="pick-1" class="btn coin" type="button"><img src="/img/coin-tail.png" alt="" width="96" height="96"><span data-i18n="ui.tail"></span></button>
+        </div>
+        <p id="error" class="error" role="alert"></p>
 
+        <div id="result" class="result" hidden>
+          <strong id="result-title"></strong>
+          <span id="result-detail"></span>
+          <small id="round-detail"></small>
+        </div>
+
+        <button id="cash-out" class="btn ghost" type="button" data-i18n="ui.cashOut"></button>
+      </div>
+
+      <div id="chart-card" class="panel" hidden>
+        <h2 data-i18n="ui.chartTitle"></h2>
+        <canvas id="balance-chart"></canvas>
+      </div>
+
+      <div id="history-card" class="panel" hidden>
+        <h2 data-i18n="ui.historyTitle"></h2>
+        <table>
+          <thead>
+            <tr>
+              <th data-i18n="ui.round"></th>
+              <th data-i18n="ui.bet"></th>
+              <th data-i18n="ui.youPicked"></th>
+              <th data-i18n="ui.result"></th>
+              <th data-i18n="ui.balance"></th>
+            </tr>
+          </thead>
+          <tbody id="history"></tbody>
+        </table>
+      </div>
+
+      <div id="end" class="panel reveal" hidden>
+        <h2 data-i18n="end.title"></h2>
+        <p data-i18n="end.subtitle"></p>
+        <dl>
+          <div><dt data-i18n="end.roundsPlayed"></dt><dd id="stat-rounds"></dd></div>
+          <div><dt data-i18n="end.wins"></dt><dd id="stat-wins"></dd></div>
+          <div><dt data-i18n="end.losses"></dt><dd id="stat-losses"></dd></div>
+          <div><dt data-i18n="end.maxBalance"></dt><dd id="stat-max"></dd></div>
+          <div><dt data-i18n="end.finalBalance"></dt><dd id="stat-final"></dd></div>
+          <div><dt data-i18n="end.hiddenWinRate"></dt><dd id="stat-hidden-win"></dd></div>
+          <div><dt data-i18n="end.observedWinRate"></dt><dd id="stat-observed-win"></dd></div>
+          <div><dt data-i18n="end.expectedValue"></dt><dd id="stat-ev"></dd></div>
+        </dl>
+        <p data-i18n="end.explain1"></p>
+        <p data-i18n="end.explain2"></p>
+        <p class="note" data-i18n="end.note"></p>
+        <button id="again" class="btn primary" type="button" data-i18n="ui.again"></button>
+      </div>
+    </section>
+  </main>
+
+  <script src="/js/explore-can-you-win-against-the-machine.js"></script>
+  <script>
+    document.getElementById("start").addEventListener("click", function () {
+      document.getElementById("welcome-screen").hidden = true;
+      document.getElementById("game").hidden = false;
+    });
+  </script>
 </body>
 
 </html>

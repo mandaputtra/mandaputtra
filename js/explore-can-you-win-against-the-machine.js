@@ -11,7 +11,7 @@
     en: {
       t: {
         title: "Can You Beat The Machine?",
-        subtitle: "Pick 0 or 1. Bet your money. Try to grow $10.",
+        subtitle: "Pick head or tail. Bet your money. Try to grow $10.",
         disclaimerMini: "This is a toy. The reveal happens at the end.",
       },
       ui: {
@@ -42,14 +42,14 @@
       hint: {
         betRules: "Whole dollars only. Minimum $1.",
         betMax: "Max bet is your current balance.",
-        chooseFirst: "Pick 0 or 1 first.",
+        chooseFirst: "Pick head or tail first.",
       },
       error: {
         betRequired: "Enter a bet amount.",
         betInteger: "Bet must be a whole number (no decimals).",
         betMin: "Minimum bet is $1.",
         betTooHigh: "You can't bet more than your balance.",
-        pickRequired: "Pick 0 or 1.",
+        pickRequired: "Pick head or tail.",
       },
       modeDesc: {
         friendly: "Feels fair. Slightly tilted.",
@@ -79,7 +79,7 @@
     id: {
       t: {
         title: "Bisa Ngalahin Mesin?",
-        subtitle: "Pilih 0 atau 1. Pasang taruhan. Coba kembangin $10.",
+        subtitle: "Pilih kepala atau ekor. Pasang taruhan. Coba kembangin $10.",
         disclaimerMini: "Ini cuma permainan. Rahasianya kebuka di akhir.",
       },
       ui: {
@@ -110,14 +110,14 @@
       hint: {
         betRules: "Harus angka bulat. Minimal $1.",
         betMax: "Taruhan maksimal = saldo kamu.",
-        chooseFirst: "Pilih 0 atau 1 dulu.",
+        chooseFirst: "Pilih kepala atau ekor dulu.",
       },
       error: {
         betRequired: "Masukkan jumlah taruhan.",
         betInteger: "Taruhan harus angka bulat (tanpa desimal).",
         betMin: "Taruhan minimal $1.",
         betTooHigh: "Taruhan tidak boleh lebih dari saldo.",
-        pickRequired: "Pilih 0 atau 1.",
+        pickRequired: "Pilih kepala atau ekor.",
       },
       modeDesc: {
         friendly: "Terasa adil. Sedikit miring.",
@@ -473,7 +473,7 @@
     els.mode.disabled = state.ended || state.round > 0;
 
     if (els.metaRow) els.metaRow.hidden = !state.ended;
-    if (els.winrate) els.winrate.textContent = state.ended ? formatPercent(getPWin()) : "??%";
+    if (els.winrate) els.winrate.textContent = hasRounds ? formatPercent(state.wins / state.round) : "??%";
     if (els.result) els.result.hidden = !hasRounds;
     if (els.chartCard) els.chartCard.hidden = !hasRounds;
     if (els.historyCard) els.historyCard.hidden = !hasRounds;
