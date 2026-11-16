@@ -119,6 +119,9 @@ global.Tone = {
   Synth: function () {
     return fakeInstrument("synth");
   },
+  PluckSynth: function () {
+    return fakeInstrument("pluck");
+  },
 };
 
 function fakeContext({
@@ -649,7 +652,7 @@ test("stop releases every instrument at the cut time and sets the cut end", asyn
   core.tick();
   assert.ok(scheduled().length > 0);
   core.stopAll();
-  assert.equal(releases().length, 6);
+  assert.equal(releases().length, 13);
   for (const release of releases()) assert.ok(approx(release.time, 10 + K.STOP_FADE));
   assert.deepEqual(snapshot().state.active, [-1, -1, -1, -1]);
   assert.ok(approx(runtime().muteUntil, 10 + K.STOP_RESTORE + K.RESTORE_RAMP));
@@ -809,8 +812,23 @@ test("every instrument feeds the master bus and the master reaches the destinati
   core.tick();
   const master = runtime().master;
   assert.equal(master.destinations, 1);
-  assert.equal(toneLog.instruments.length, 6);
+  assert.equal(toneLog.instruments.length, 13);
   for (const instrument of toneLog.instruments) assert.deepEqual(instrument.connections, [master]);
+});
+
+test("a chord step strums its root, third and fifth on the chord instrument", async () => {
+  core.__reset();
+  const ctx = fakeContext({ state: "running", clock: 0 });
+  installEnv({ AudioContext: contextFactory(ctx) });
+  await core.onSessionTap({ t: 2, c: 0 });
+  core.tick();
+  const chords = toneLog.instruments.filter((inst) => inst.kind === "pluck").flatMap((inst) => inst.calls);
+  assert.equal(chords.length, 3);
+  const [root, third, fifth] = chords.map((call) => call.args[0]);
+  assert.ok(approx(third / root, 2 ** (3 / 12)));
+  assert.ok(approx(fifth / root, 2 ** (7 / 12)));
+  assert.ok(fifth > third && third > root);
+  for (let i = 1; i < chords.length; i++) assert.ok(approx(chords[i].time - chords[0].time, i * K.STRUM));
 });
 
 test("drum and bass notes are scheduled on their own instruments with time, pitch and velocity", async () => {

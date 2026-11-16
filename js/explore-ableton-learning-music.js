@@ -16,6 +16,9 @@ const SHOW_RAMP = 0.4;
 const DUR = [STEP, STEP * 2, STEP * 4, STEP * 2];
 const ROOT_HZ = 220;
 const OCTAVE = [0, -1, 0, 1];
+const CHORD_STEPS = [0, 2, 4];
+const STRUM = 0.025;
+const STRING_COUNT = 6;
 const SCALES = {
   soft: [0, 2, 3, 5, 7, 10, 10, 12],
   minor: [0, 2, 3, 5, 7, 8, 10, 12],
@@ -69,7 +72,7 @@ const TEXT = {
 const K = {
   BPM, STEPS_PER_BAR, STEP, BAR, TICK_MS, LOOKAHEAD, CATCHUP_SLACK, MASTER_CAP,
   STOP_FADE, STOP_RESTORE, RESTORE_RAMP, UNLOCK_SETTLE_MS, HIDE_RAMP, SHOW_RAMP,
-  DUR, ROOT_HZ, OCTAVE,
+  DUR, ROOT_HZ, OCTAVE, STRUM,
 };
 
 const bar = (pattern) =>
@@ -178,8 +181,12 @@ function initialRuntime() {
   };
 }
 
+function semitones(scale, deg) {
+  return SCALES[scale][deg % 8] + 12 * Math.floor(deg / 8);
+}
+
 function pitch(track, deg, scale) {
-  return ROOT_HZ * 2 ** (OCTAVE[track] + SCALES[scale][deg] / 12);
+  return ROOT_HZ * 2 ** (OCTAVE[track] + semitones(scale, deg) / 12);
 }
 
 function tap(s, p) {
@@ -246,9 +253,10 @@ function commitBoundary(s) {
 }
 
 function drumLane(step) {
-  if (step % 8 === 0) return "kick";
-  if (step % 8 === 4) return "snare";
-  return "hat";
+  if (step % 8 === 0) return step === 0 ? "kick" : "kick2";
+  if (step % 8 === 4) return "clap";
+  if (step % 2 === 0) return "openHat";
+  return "closedHat";
 }
 
 function notesForStep(s, step, time) {
@@ -260,6 +268,7 @@ function notesForStep(s, step, time) {
     if (deg === null) continue;
     const note = { time, track: t, dur: DUR[t], gain: TRACKS[t].gain };
     if (t === 0) note.lane = drumLane(step);
+    else if (t === 2) note.pitches = CHORD_STEPS.map((step) => pitch(t, deg + step, s.scale));
     else note.pitch = pitch(t, deg, s.scale);
     notes.push(note);
   }
@@ -337,11 +346,23 @@ function createInstruments(out) {
       octaves: 6,
       envelope: { attack: 0.001, decay: 0.35, sustain: 0, release: 0.2 },
     }).connect(out),
-    snare: new Tone.NoiseSynth({
-      noise: { type: "white" },
-      envelope: { attack: 0.001, decay: 0.16, sustain: 0, release: 0.05 },
+    kick2: new Tone.MembraneSynth({
+      pitchDecay: 0.03,
+      octaves: 4,
+      envelope: { attack: 0.001, decay: 0.25, sustain: 0, release: 0.2 },
     }).connect(out),
-    hat: new Tone.MetalSynth({
+    clap: new Tone.NoiseSynth({
+      noise: { type: "pink" },
+      envelope: { attack: 0.001, decay: 0.2, sustain: 0, release: 0.05 },
+    }).connect(out),
+    openHat: new Tone.MetalSynth({
+      envelope: { attack: 0.001, decay: 0.3, release: 0.05 },
+      harmonicity: 5.1,
+      modulationIndex: 24,
+      resonance: 4000,
+      octaves: 1.5,
+    }).connect(out),
+    closedHat: new Tone.MetalSynth({
       envelope: { attack: 0.001, decay: 0.06, release: 0.01 },
       harmonicity: 5.1,
       modulationIndex: 24,
@@ -355,32 +376,42 @@ function createInstruments(out) {
     envelope: { attack: 0.005, decay: 0.2, sustain: 0.5, release: 0.15 },
     filterEnvelope: { attack: 0.005, decay: 0.15, sustain: 0.3, release: 0.15, baseFrequency: 120, octaves: 2.5 },
   }).connect(out);
-  const chords = new Tone.Synth({
-    oscillator: { type: "fatsawtooth", count: 3, spread: 12 },
-    envelope: { attack: 0.04, decay: 0.3, sustain: 0.4, release: 0.5 },
-  }).connect(out);
+  const strings = Array.from({ length: STRING_COUNT }, () =>
+    new Tone.PluckSynth({ attackNoise: 1, dampening: 3500, resonance: 0.9 }).connect(out),
+  );
   const melody = new Tone.Synth({
     oscillator: { type: "triangle" },
     envelope: { attack: 0.005, decay: 0.2, sustain: 0.25, release: 0.25 },
   }).connect(out);
-  return { drums, tracks: [null, bass, chords, melody] };
+  return { drums, bass, strings, cursor: 0, melody };
 }
 
 const voices = {
   play(instruments, n) {
-    if (n.lane === undefined) {
-      instruments.tracks[n.track].triggerAttackRelease(n.pitch, n.dur, n.time, n.gain);
+    if (n.pitches !== undefined) {
+      n.pitches.forEach((hz, i) => {
+        const string = instruments.strings[instruments.cursor];
+        instruments.cursor = (instruments.cursor + 1) % instruments.strings.length;
+        string.triggerAttackRelease(hz, n.dur, n.time + i * STRUM, n.gain);
+      });
+    } else if (n.lane === undefined) {
+      const single = n.track === 1 ? instruments.bass : instruments.melody;
+      single.triggerAttackRelease(n.pitch, n.dur, n.time, n.gain);
     } else if (n.lane === "kick") {
       instruments.drums.kick.triggerAttackRelease("A1", n.dur, n.time, n.gain);
-    } else if (n.lane === "snare") {
-      instruments.drums.snare.triggerAttackRelease(n.dur, n.time, n.gain);
+    } else if (n.lane === "kick2") {
+      instruments.drums.kick2.triggerAttackRelease("E1", n.dur, n.time, n.gain);
+    } else if (n.lane === "clap") {
+      instruments.drums.clap.triggerAttackRelease(n.dur, n.time, n.gain);
     } else {
-      instruments.drums.hat.triggerAttackRelease(n.dur, n.time, n.gain);
+      instruments.drums[n.lane].triggerAttackRelease(n.dur, n.time, n.gain);
     }
   },
   releaseAll(instruments, t) {
     for (const drum of Object.values(instruments.drums)) drum.triggerRelease(t);
-    for (const track of instruments.tracks.slice(1)) track.triggerRelease(t);
+    for (const instrument of [instruments.bass, instruments.melody, ...instruments.strings]) {
+      instrument.triggerRelease(t);
+    }
   },
 };
 
