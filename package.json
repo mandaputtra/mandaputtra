@@ -6,6 +6,7 @@
     "build": "npx gulp build-sass && npx eleventy",
     "start": "concurrently \"npx eleventy --serve\" \"npx gulp watch-sass\" ",
     "debug": "DEBUG=* npx eleventy",
+    "test:alm": "node --test projects/ableton-learning-music/tests/alm.test.js",
     "format": "prettier --write ."
   },
   "engines": {
