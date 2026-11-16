@@ -3,64 +3,61 @@ layout: false
 title: Make a Song
 ---
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>{{ title }}</title>
+<title>Buat Lagu / Make a Song</title>
 <link rel="stylesheet" href="/css/reset.css">
 <link rel="stylesheet" href="/css/explore-ableton-learning-music.css">
 <script defer src="/js/explore-ableton-learning-music.js"></script>
 </head>
 <body>
-<header class="alm-top"><button type="button" id="menu" aria-controls="chapters" aria-expanded="false">Menu</button></header>
-<nav id="chapters" class="chapters" aria-label="Pages" hidden>
-<button type="button" id="menu-close">Close</button>
-<ul>
-<li><a href="/explore/">Explore</a></li>
-<li><a href="/">Blog home</a></li>
-<li><a href="#about">About this page</a></li>
-</ul>
-</nav>
+<header class="topbar">
+<a class="back" href="/explore/">&larr; <span data-i18n="back">Explore</span></a>
+<div class="lang" role="group" aria-label="Bahasa / Language">
+<button type="button" data-lang="id" aria-pressed="true">ID</button>
+<button type="button" data-lang="en" aria-pressed="false">EN</button>
+</div>
+</header>
 <main id="alm">
-<h1>Make a Song</h1>
-<p class="alm-intro">Pick a box in each column.</p>
-<p id="hint-tap">Tap a box to start it. Tap again to stop.</p>
-<p id="hint-noaudio" hidden>This browser cannot play the sounds.</p>
-<section id="session" role="group" aria-labelledby="session-h">
-<h2 id="session-h">Your song</h2>
+<h1 data-i18n="title">Buat Lagu</h1>
+<p class="alm-intro" data-i18n="intro">Pilih satu kotak di setiap kolom.</p>
+<p id="hint-tap" data-i18n="tap">Ketuk kotak untuk memulai. Ketuk lagi untuk berhenti.</p>
+<p id="hint-noaudio" data-i18n="noAudio" hidden>Browser ini tidak bisa memutar suara.</p>
+<section id="session" role="group" aria-label="Lagu kamu">
 <div class="grid">
-<div class="col-head t-0" aria-hidden="true"><svg class="icon"><use href="#i-circle"/></svg><span>Drums</span></div>
-<button type="button" class="clip t-0 is-off" data-t="0" data-c="0" aria-pressed="false"><svg class="icon" aria-hidden="true"><use href="#i-circle"/></svg><svg class="pad-glyph glyph-wait" aria-hidden="true"><use href="#i-hourglass"/></svg><svg class="pad-glyph glyph-stop" aria-hidden="true"><use href="#i-stop"/></svg><span class="vh pad-label">Drums 1</span><span class="vh pad-state"></span><span class="progress" aria-hidden="true"></span></button>
-<button type="button" class="clip t-0 is-off" data-t="0" data-c="1" aria-pressed="false"><svg class="icon" aria-hidden="true"><use href="#i-circle"/></svg><svg class="pad-glyph glyph-wait" aria-hidden="true"><use href="#i-hourglass"/></svg><svg class="pad-glyph glyph-stop" aria-hidden="true"><use href="#i-stop"/></svg><span class="vh pad-label">Drums 2</span><span class="vh pad-state"></span><span class="progress" aria-hidden="true"></span></button>
-<button type="button" class="clip t-0 is-off" data-t="0" data-c="2" aria-pressed="false"><svg class="icon" aria-hidden="true"><use href="#i-circle"/></svg><svg class="pad-glyph glyph-wait" aria-hidden="true"><use href="#i-hourglass"/></svg><svg class="pad-glyph glyph-stop" aria-hidden="true"><use href="#i-stop"/></svg><span class="vh pad-label">Drums 3</span><span class="vh pad-state"></span><span class="progress" aria-hidden="true"></span></button>
-<button type="button" class="clip t-0 is-off" data-t="0" data-c="3" aria-pressed="false"><svg class="icon" aria-hidden="true"><use href="#i-circle"/></svg><svg class="pad-glyph glyph-wait" aria-hidden="true"><use href="#i-hourglass"/></svg><svg class="pad-glyph glyph-stop" aria-hidden="true"><use href="#i-stop"/></svg><span class="vh pad-label">Drums 4</span><span class="vh pad-state"></span><span class="progress" aria-hidden="true"></span></button>
-<div class="col-head t-1" aria-hidden="true"><svg class="icon"><use href="#i-square"/></svg><span>Bass</span></div>
-<button type="button" class="clip t-1 is-off" data-t="1" data-c="0" aria-pressed="false"><svg class="icon" aria-hidden="true"><use href="#i-square"/></svg><svg class="pad-glyph glyph-wait" aria-hidden="true"><use href="#i-hourglass"/></svg><svg class="pad-glyph glyph-stop" aria-hidden="true"><use href="#i-stop"/></svg><span class="vh pad-label">Bass 1</span><span class="vh pad-state"></span><span class="progress" aria-hidden="true"></span></button>
-<button type="button" class="clip t-1 is-off" data-t="1" data-c="1" aria-pressed="false"><svg class="icon" aria-hidden="true"><use href="#i-square"/></svg><svg class="pad-glyph glyph-wait" aria-hidden="true"><use href="#i-hourglass"/></svg><svg class="pad-glyph glyph-stop" aria-hidden="true"><use href="#i-stop"/></svg><span class="vh pad-label">Bass 2</span><span class="vh pad-state"></span><span class="progress" aria-hidden="true"></span></button>
-<button type="button" class="clip t-1 is-off" data-t="1" data-c="2" aria-pressed="false"><svg class="icon" aria-hidden="true"><use href="#i-square"/></svg><svg class="pad-glyph glyph-wait" aria-hidden="true"><use href="#i-hourglass"/></svg><svg class="pad-glyph glyph-stop" aria-hidden="true"><use href="#i-stop"/></svg><span class="vh pad-label">Bass 3</span><span class="vh pad-state"></span><span class="progress" aria-hidden="true"></span></button>
-<button type="button" class="clip t-1 is-off" data-t="1" data-c="3" aria-pressed="false"><svg class="icon" aria-hidden="true"><use href="#i-square"/></svg><svg class="pad-glyph glyph-wait" aria-hidden="true"><use href="#i-hourglass"/></svg><svg class="pad-glyph glyph-stop" aria-hidden="true"><use href="#i-stop"/></svg><span class="vh pad-label">Bass 4</span><span class="vh pad-state"></span><span class="progress" aria-hidden="true"></span></button>
-<div class="col-head t-2" aria-hidden="true"><svg class="icon"><use href="#i-triangle"/></svg><span>Chords</span></div>
-<button type="button" class="clip t-2 is-off" data-t="2" data-c="0" aria-pressed="false"><svg class="icon" aria-hidden="true"><use href="#i-triangle"/></svg><svg class="pad-glyph glyph-wait" aria-hidden="true"><use href="#i-hourglass"/></svg><svg class="pad-glyph glyph-stop" aria-hidden="true"><use href="#i-stop"/></svg><span class="vh pad-label">Chords 1</span><span class="vh pad-state"></span><span class="progress" aria-hidden="true"></span></button>
-<button type="button" class="clip t-2 is-off" data-t="2" data-c="1" aria-pressed="false"><svg class="icon" aria-hidden="true"><use href="#i-triangle"/></svg><svg class="pad-glyph glyph-wait" aria-hidden="true"><use href="#i-hourglass"/></svg><svg class="pad-glyph glyph-stop" aria-hidden="true"><use href="#i-stop"/></svg><span class="vh pad-label">Chords 2</span><span class="vh pad-state"></span><span class="progress" aria-hidden="true"></span></button>
-<button type="button" class="clip t-2 is-off" data-t="2" data-c="2" aria-pressed="false"><svg class="icon" aria-hidden="true"><use href="#i-triangle"/></svg><svg class="pad-glyph glyph-wait" aria-hidden="true"><use href="#i-hourglass"/></svg><svg class="pad-glyph glyph-stop" aria-hidden="true"><use href="#i-stop"/></svg><span class="vh pad-label">Chords 3</span><span class="vh pad-state"></span><span class="progress" aria-hidden="true"></span></button>
-<button type="button" class="clip t-2 is-off" data-t="2" data-c="3" aria-pressed="false"><svg class="icon" aria-hidden="true"><use href="#i-triangle"/></svg><svg class="pad-glyph glyph-wait" aria-hidden="true"><use href="#i-hourglass"/></svg><svg class="pad-glyph glyph-stop" aria-hidden="true"><use href="#i-stop"/></svg><span class="vh pad-label">Chords 4</span><span class="vh pad-state"></span><span class="progress" aria-hidden="true"></span></button>
-<div class="col-head t-3" aria-hidden="true"><svg class="icon"><use href="#i-star"/></svg><span>Melody</span></div>
-<button type="button" class="clip t-3 is-off" data-t="3" data-c="0" aria-pressed="false"><svg class="icon" aria-hidden="true"><use href="#i-star"/></svg><svg class="pad-glyph glyph-wait" aria-hidden="true"><use href="#i-hourglass"/></svg><svg class="pad-glyph glyph-stop" aria-hidden="true"><use href="#i-stop"/></svg><span class="vh pad-label">Melody 1</span><span class="vh pad-state"></span><span class="progress" aria-hidden="true"></span></button>
-<button type="button" class="clip t-3 is-off" data-t="3" data-c="1" aria-pressed="false"><svg class="icon" aria-hidden="true"><use href="#i-star"/></svg><svg class="pad-glyph glyph-wait" aria-hidden="true"><use href="#i-hourglass"/></svg><svg class="pad-glyph glyph-stop" aria-hidden="true"><use href="#i-stop"/></svg><span class="vh pad-label">Melody 2</span><span class="vh pad-state"></span><span class="progress" aria-hidden="true"></span></button>
-<button type="button" class="clip t-3 is-off" data-t="3" data-c="2" aria-pressed="false"><svg class="icon" aria-hidden="true"><use href="#i-star"/></svg><svg class="pad-glyph glyph-wait" aria-hidden="true"><use href="#i-hourglass"/></svg><svg class="pad-glyph glyph-stop" aria-hidden="true"><use href="#i-stop"/></svg><span class="vh pad-label">Melody 3</span><span class="vh pad-state"></span><span class="progress" aria-hidden="true"></span></button>
-<button type="button" class="clip t-3 is-off" data-t="3" data-c="3" aria-pressed="false"><svg class="icon" aria-hidden="true"><use href="#i-star"/></svg><svg class="pad-glyph glyph-wait" aria-hidden="true"><use href="#i-hourglass"/></svg><svg class="pad-glyph glyph-stop" aria-hidden="true"><use href="#i-stop"/></svg><span class="vh pad-label">Melody 4</span><span class="vh pad-state"></span><span class="progress" aria-hidden="true"></span></button>
+<div class="col-head t-0" aria-hidden="true"><svg class="icon"><use href="#i-circle"/></svg><span data-i18n="track0">Drum</span></div>
+<button type="button" class="clip t-0 is-off" data-t="0" data-c="0" aria-pressed="false"><svg class="icon" aria-hidden="true"><use href="#i-circle"/></svg><span class="vh pad-label"></span><span class="vh pad-state"></span><span class="progress" aria-hidden="true"></span></button>
+<button type="button" class="clip t-0 is-off" data-t="0" data-c="1" aria-pressed="false"><svg class="icon" aria-hidden="true"><use href="#i-circle"/></svg><span class="vh pad-label"></span><span class="vh pad-state"></span><span class="progress" aria-hidden="true"></span></button>
+<button type="button" class="clip t-0 is-off" data-t="0" data-c="2" aria-pressed="false"><svg class="icon" aria-hidden="true"><use href="#i-circle"/></svg><span class="vh pad-label"></span><span class="vh pad-state"></span><span class="progress" aria-hidden="true"></span></button>
+<button type="button" class="clip t-0 is-off" data-t="0" data-c="3" aria-pressed="false"><svg class="icon" aria-hidden="true"><use href="#i-circle"/></svg><span class="vh pad-label"></span><span class="vh pad-state"></span><span class="progress" aria-hidden="true"></span></button>
+<div class="col-head t-1" aria-hidden="true"><svg class="icon"><use href="#i-square"/></svg><span data-i18n="track1">Bass</span></div>
+<button type="button" class="clip t-1 is-off" data-t="1" data-c="0" aria-pressed="false"><svg class="icon" aria-hidden="true"><use href="#i-square"/></svg><span class="vh pad-label"></span><span class="vh pad-state"></span><span class="progress" aria-hidden="true"></span></button>
+<button type="button" class="clip t-1 is-off" data-t="1" data-c="1" aria-pressed="false"><svg class="icon" aria-hidden="true"><use href="#i-square"/></svg><span class="vh pad-label"></span><span class="vh pad-state"></span><span class="progress" aria-hidden="true"></span></button>
+<button type="button" class="clip t-1 is-off" data-t="1" data-c="2" aria-pressed="false"><svg class="icon" aria-hidden="true"><use href="#i-square"/></svg><span class="vh pad-label"></span><span class="vh pad-state"></span><span class="progress" aria-hidden="true"></span></button>
+<button type="button" class="clip t-1 is-off" data-t="1" data-c="3" aria-pressed="false"><svg class="icon" aria-hidden="true"><use href="#i-square"/></svg><span class="vh pad-label"></span><span class="vh pad-state"></span><span class="progress" aria-hidden="true"></span></button>
+<div class="col-head t-2" aria-hidden="true"><svg class="icon"><use href="#i-triangle"/></svg><span data-i18n="track2">Akord</span></div>
+<button type="button" class="clip t-2 is-off" data-t="2" data-c="0" aria-pressed="false"><svg class="icon" aria-hidden="true"><use href="#i-triangle"/></svg><span class="vh pad-label"></span><span class="vh pad-state"></span><span class="progress" aria-hidden="true"></span></button>
+<button type="button" class="clip t-2 is-off" data-t="2" data-c="1" aria-pressed="false"><svg class="icon" aria-hidden="true"><use href="#i-triangle"/></svg><span class="vh pad-label"></span><span class="vh pad-state"></span><span class="progress" aria-hidden="true"></span></button>
+<button type="button" class="clip t-2 is-off" data-t="2" data-c="2" aria-pressed="false"><svg class="icon" aria-hidden="true"><use href="#i-triangle"/></svg><span class="vh pad-label"></span><span class="vh pad-state"></span><span class="progress" aria-hidden="true"></span></button>
+<button type="button" class="clip t-2 is-off" data-t="2" data-c="3" aria-pressed="false"><svg class="icon" aria-hidden="true"><use href="#i-triangle"/></svg><span class="vh pad-label"></span><span class="vh pad-state"></span><span class="progress" aria-hidden="true"></span></button>
+<div class="col-head t-3" aria-hidden="true"><svg class="icon"><use href="#i-star"/></svg><span data-i18n="track3">Melodi</span></div>
+<button type="button" class="clip t-3 is-off" data-t="3" data-c="0" aria-pressed="false"><svg class="icon" aria-hidden="true"><use href="#i-star"/></svg><span class="vh pad-label"></span><span class="vh pad-state"></span><span class="progress" aria-hidden="true"></span></button>
+<button type="button" class="clip t-3 is-off" data-t="3" data-c="1" aria-pressed="false"><svg class="icon" aria-hidden="true"><use href="#i-star"/></svg><span class="vh pad-label"></span><span class="vh pad-state"></span><span class="progress" aria-hidden="true"></span></button>
+<button type="button" class="clip t-3 is-off" data-t="3" data-c="2" aria-pressed="false"><svg class="icon" aria-hidden="true"><use href="#i-star"/></svg><span class="vh pad-label"></span><span class="vh pad-state"></span><span class="progress" aria-hidden="true"></span></button>
+<button type="button" class="clip t-3 is-off" data-t="3" data-c="3" aria-pressed="false"><svg class="icon" aria-hidden="true"><use href="#i-star"/></svg><span class="vh pad-label"></span><span class="vh pad-state"></span><span class="progress" aria-hidden="true"></span></button>
 </div>
 <div class="controls">
-<button type="button" id="stop"><svg class="icon" aria-hidden="true"><use href="#i-stop"/></svg><span>Stop</span></button>
-<button type="button" id="resume" hidden>Tap to keep playing</button>
+<button type="button" id="stop"><svg class="icon" aria-hidden="true"><use href="#i-stop"/></svg><span data-i18n="stop">Berhenti</span></button>
+<button type="button" id="resume" data-i18n="resume" hidden>Ketuk untuk lanjut bermain</button>
 </div>
 </section>
-<p id="hint-silent">No sound? Ask a grown-up to check the sound.</p>
+<p id="hint-silent" data-i18n="silent">Tidak ada suara? Minta orang dewasa memeriksa suaranya.</p>
 <footer id="about">
-<p class="alm-grownups">Grown-ups: keep the volume low, especially with headphones.</p>
-<p class="alm-unofficial">Unofficial. Not made by or affiliated with Ableton.</p>
-<a class="alm-inspired" href="https://learningmusic.ableton.com/" rel="noopener noreferrer">Inspired by Ableton Learning Music</a>
+<p class="alm-grownups" data-i18n="grownUps">Untuk orang dewasa: pelankan volume, terutama saat memakai headphone.</p>
+<p class="alm-unofficial" data-i18n="unofficial">Tidak resmi. Tidak dibuat oleh atau berafiliasi dengan Ableton.</p>
+<a class="alm-inspired" href="https://learningmusic.ableton.com/" rel="noopener noreferrer" data-i18n="inspired">Terinspirasi dari Ableton Learning Music</a>
 </footer>
 </main>
 <svg hidden aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
@@ -68,9 +65,8 @@ title: Make a Song
 <symbol id="i-square" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/></symbol>
 <symbol id="i-triangle" viewBox="0 0 24 24"><path d="M12 3 22 21H2z"/></symbol>
 <symbol id="i-star" viewBox="0 0 24 24"><path d="M12 2l3 7 7 .6-5.3 4.7 1.7 7.2L12 17.8 5.6 21.5l1.7-7.2L2 9.6 9 9z"/></symbol>
-<symbol id="i-hourglass" viewBox="0 0 24 24"><path d="M6 2h12v5l-4 5 4 5v5H6v-5l4-5-4-5z"/></symbol>
 <symbol id="i-stop" viewBox="0 0 24 24"><rect x="5" y="5" width="14" height="14"/></symbol>
 </svg>
-<noscript>This page needs JavaScript to play sounds.</noscript>
+<noscript>Halaman ini butuh JavaScript untuk memutar suara. / This page needs JavaScript to play sounds.</noscript>
 </body>
 </html>

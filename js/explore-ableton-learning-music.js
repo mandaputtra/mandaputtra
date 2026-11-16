@@ -23,9 +23,50 @@ const SCALES = {
   minor: [0, 2, 3, 5, 7, 8, 10, 12],
 };
 const KINDS = ["drum", "bass", "chords", "melody"];
-const STATE_TEXT = {
-  en: { starting: ", starting", stopping: ", stopping" },
-  id: { starting: ", akan mulai", stopping: ", akan berhenti" },
+const LANGS = ["id", "en"];
+const TEXT = {
+  id: {
+    back: "Explore",
+    title: "Buat Lagu",
+    intro: "Pilih satu kotak di setiap kolom.",
+    tap: "Ketuk kotak untuk memulai. Ketuk lagi untuk berhenti.",
+    noAudio: "Browser ini tidak bisa memutar suara.",
+    song: "Lagu kamu",
+    stop: "Berhenti",
+    resume: "Ketuk untuk lanjut bermain",
+    silent: "Tidak ada suara? Minta orang dewasa memeriksa suaranya.",
+    grownUps: "Untuk orang dewasa: pelankan volume, terutama saat memakai headphone.",
+    unofficial: "Tidak resmi. Tidak dibuat oleh atau berafiliasi dengan Ableton.",
+    inspired: "Terinspirasi dari Ableton Learning Music",
+    noscript: "Halaman ini butuh JavaScript untuk memutar suara.",
+    track0: "Drum",
+    track1: "Bass",
+    track2: "Akord",
+    track3: "Melodi",
+    starting: ", akan mulai",
+    stopping: ", akan berhenti",
+  },
+  en: {
+    back: "Explore",
+    title: "Make a Song",
+    intro: "Pick a box in each column.",
+    tap: "Tap a box to start it. Tap again to stop.",
+    noAudio: "This browser cannot play the sounds.",
+    song: "Your song",
+    stop: "Stop",
+    resume: "Tap to keep playing",
+    silent: "No sound? Ask a grown-up to check the sound.",
+    grownUps: "Grown-ups: keep the volume low, especially with headphones.",
+    unofficial: "Unofficial. Not made by or affiliated with Ableton.",
+    inspired: "Inspired by Ableton Learning Music",
+    noscript: "This page needs JavaScript to play sounds.",
+    track0: "Drums",
+    track1: "Bass",
+    track2: "Chords",
+    track3: "Melody",
+    starting: ", starting",
+    stopping: ", stopping",
+  },
 };
 const OSCILLATOR_TYPES = [null, "square", "sawtooth", "triangle"];
 const DRUM_SHAPES = {
@@ -123,11 +164,10 @@ function initialView(reducedMotion, noAudio) {
     shownScale: "soft",
     boundaryTime: 0,
     events: [],
-    drawerOpen: false,
     audio: "none",
     noAudio,
     reducedMotion,
-    lang: "en",
+    lang: "id",
     restored: false,
     glowShown: false,
     hintDismissed: false,
@@ -189,8 +229,8 @@ function audioBlocked(v, s) {
 }
 
 function stateText(d, lang) {
-  if (d === "pending-on") return STATE_TEXT[lang].starting;
-  if (d === "pending-off") return STATE_TEXT[lang].stopping;
+  if (d === "pending-on") return TEXT[lang].starting;
+  if (d === "pending-off") return TEXT[lang].stopping;
   return "";
 }
 
@@ -573,9 +613,7 @@ function queryDom(doc) {
   }
   return {
     body: doc.body,
-    menu: required("menu"),
-    nav: required("chapters"),
-    menuClose: required("menu-close"),
+    langButtons: Array.from(doc.querySelectorAll(".lang button")),
     main: required("alm"),
     session: required("session"),
     pads,
@@ -605,18 +643,37 @@ function onResumeClick() {
   ensureAudio().then(startIfIdle);
 }
 
-function setOpen(open) {
-  els.nav.hidden = !open;
-  els.menu.setAttribute("aria-expanded", String(open));
-  view = { ...view, drawerOpen: open };
+function applyText(dom, lang) {
+  const text = TEXT[lang];
+  document.documentElement.lang = lang;
+  document.title = text.title;
+  for (const node of document.querySelectorAll("[data-i18n]")) {
+    node.textContent = text[node.dataset.i18n];
+  }
+  dom.session.setAttribute("aria-label", text.song);
+  for (let t = 0; t < 4; t++) {
+    for (let c = 0; c < 4; c++) {
+      dom.pads[t][c].querySelector(".pad-label").textContent = text["track" + t] + " " + (c + 1);
+    }
+  }
+  for (const button of dom.langButtons) {
+    button.setAttribute("aria-pressed", String(button.dataset.lang === lang));
+  }
+}
+
+function setLang(lang) {
+  view = { ...view, lang };
+  applyText(els, lang);
+  render(view, state, 0);
 }
 
 function bindListeners(dom) {
   dom.session.addEventListener("click", onSessionClick);
   dom.stop.addEventListener("click", stopAll);
   dom.resume.addEventListener("click", onResumeClick);
-  dom.menu.addEventListener("click", () => setOpen(true));
-  dom.menuClose.addEventListener("click", () => setOpen(false));
+  for (const button of dom.langButtons) {
+    button.addEventListener("click", () => setLang(button.dataset.lang));
+  }
   document.addEventListener("visibilitychange", onVisibility);
   window.addEventListener("pageshow", onPageShow);
   if (typeof matchMedia === "function") {
@@ -630,7 +687,7 @@ function init() {
   els = queryDom(document);
   view = initialView(env.reducedMotion(), typeof env.AudioContext !== "function");
   bindListeners(els);
-  setOpen(false);
+  applyText(els, view.lang);
   render(view, state, 0);
 }
 

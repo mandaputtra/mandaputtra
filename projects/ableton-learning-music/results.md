@@ -4,7 +4,7 @@ GAINS: 0.35,0.3,0.2,0.25
 MASTER_CAP: 0.8
 TOKENS: --a->--t0, --c->--t2, --d->--t1, --e->--t3
 DEF-CLIPS: all own
-C-HASH: 6a3a871f0bcfccd9a9b3e982ea655d4267b01b0692c23403726cc364abf576d1
+C-HASH: 2fd171794900b578e162b9357f9883e3e7472cb042d4f10bdc7f3de210f93419
 AC-1: PASS 2026-11-16 unit and engine cases pass
 AC-2: PASS 2026-11-16 source checks pass
 AC-3: PASS 2026-11-16 built checks run and pass

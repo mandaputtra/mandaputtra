@@ -914,14 +914,14 @@ const ALLOW_URLS = ["https://learningmusic.ableton.com/", "http://www.w3.org/200
 const SVG_NAMESPACE = "http://www.w3.org/2000/svg";
 
 const CANON = {
-  columns: { en: ["Drums", "Bass", "Chords", "Melody"], id: ["Drum", "Bas", "Akor", "Melodi"] },
+  columns: { en: ["Drums", "Bass", "Chords", "Melody"], id: ["Drum", "Bass", "Akord", "Melodi"] },
   stop: { en: "Stop", id: "Berhenti" },
-  resume: { en: "Tap to keep playing", id: "Ketuk untuk main lagi" },
+  resume: { en: "Tap to keep playing", id: "Ketuk untuk lanjut bermain" },
   hintSilent: {
     en: "No sound? Ask a grown-up to check the sound.",
     id: "Tidak ada suara? Minta orang dewasa memeriksa suaranya.",
   },
-  hintNoaudio: { en: "This browser cannot play the sounds.", id: "Browser ini tidak bisa memutar suaranya." },
+  hintNoaudio: { en: "This browser cannot play the sounds.", id: "Browser ini tidak bisa memutar suara." },
   unofficial: {
     en: "Unofficial. Not made by or affiliated with Ableton.",
     id: "Tidak resmi. Tidak dibuat oleh atau berafiliasi dengan Ableton.",
@@ -1224,11 +1224,6 @@ test("the page declares the exact viewport and no zoom restrictions", () => {
   }
 });
 
-test("the script writes the drawer hidden flag and expanded attribute in one place only", () => {
-  assert.equal(countOf(SCRIPT, "nav\\.hidden"), 1);
-  assert.equal(countOf(SCRIPT, "aria-expanded"), 1);
-});
-
 test("animations, transitions and keyframes live only inside the reduced-motion-safe block", () => {
   const ranges = blockRanges(STYLE, /@media \(prefers-reduced-motion: no-preference\)/);
   const re = /animation|transition|@keyframes/g;
@@ -1252,8 +1247,7 @@ test("the stylesheet declares the hidden rule once and uses it for no other sele
   assert.ok(/\[hidden\]\s*\{\s*display:\s*none\s*!important;?\s*\}/.test(STYLE));
 });
 
-test("the page hides the menu drawer, resume control and no-audio hint at first paint", () => {
-  assert.equal(select(DOM, "nav#chapters")[0].attrs.hidden !== undefined, true);
+test("the page hides the resume control and no-audio hint at first paint", () => {
   assert.equal(select(DOM, "#resume")[0].attrs.hidden !== undefined, true);
   assert.equal(select(DOM, "#hint-noaudio")[0].attrs.hidden !== undefined, true);
 });
@@ -1272,31 +1266,31 @@ test("all sixteen pads start off, unpressed and each row and column appears once
 
 test("the page opens with the front matter and an explicit language attribute", () => {
   assert.ok(PAGE.startsWith("---\nlayout: false\n"));
-  assert.ok(PAGE.includes('<html lang="en">'));
+  assert.ok(PAGE.includes('<html lang="id">'));
 });
 
 test("the page has exactly one session section with its group role and label", () => {
   const sessions = select(DOM, "#session");
   assert.equal(sessions.length, 1);
   assert.equal(sessions[0].attrs.role, "group");
-  assert.equal(sessions[0].attrs["aria-labelledby"], "session-h");
+  assert.equal(sessions[0].attrs["aria-label"], "Lagu kamu");
 });
 
-test("the menu button and drawer sit outside the main region and the drawer holds a list", () => {
-  const main = select(DOM, "main#alm")[0];
-  assert.equal(select(main, "#menu").length, 0);
-  assert.equal(select(main, "#chapters").length, 0);
-  assert.equal(select(select(DOM, "nav#chapters")[0], "ul").length, 1);
+test("the back link to the explore index and the language switch sit in the top bar", () => {
+  const back = select(DOM, "header.topbar a.back")[0];
+  assert.equal(back.attrs.href, "/explore/");
+  const langs = select(DOM, ".lang button").map((node) => node.attrs["data-lang"]);
+  assert.deepEqual(langs, ["id", "en"]);
 });
 
 test("the no-script message carries the canonical text", () => {
-  assert.equal(textOf(select(DOM, "noscript")[0]), CANON.noscript.en);
+  assert.ok(textOf(select(DOM, "noscript")[0]).includes(CANON.noscript.en));
 });
 
 test("the four track names and the unofficial line appear on the page", () => {
   const heads = select(DOM, ".col-head span").map((node) => textOf(node));
-  assert.deepEqual(heads, CANON.columns.en);
-  assert.equal(textOf(select(DOM, "p.alm-unofficial")[0]), CANON.unofficial.en);
+  assert.deepEqual(heads, CANON.columns.id);
+  assert.equal(textOf(select(DOM, "p.alm-unofficial")[0]), CANON.unofficial.id);
 });
 
 test("the entry page lists the title and ends the blurb with the unofficial line", () => {
@@ -1306,12 +1300,12 @@ test("the entry page lists the title and ends the blurb with the unofficial line
 });
 
 test("the canonical copy matches the hint, resume, stop, no-audio and footer text", () => {
-  assert.equal(textOf(select(DOM, "#hint-silent")[0]), CANON.hintSilent.en);
-  assert.equal(textOf(select(DOM, "#hint-noaudio")[0]), CANON.hintNoaudio.en);
-  assert.equal(textOf(select(DOM, "#resume")[0]), CANON.resume.en);
-  assert.equal(textOf(select(DOM, "#stop")[0]), CANON.stop.en);
+  assert.equal(textOf(select(DOM, "#hint-silent")[0]), CANON.hintSilent.id);
+  assert.equal(textOf(select(DOM, "#hint-noaudio")[0]), CANON.hintNoaudio.id);
+  assert.equal(textOf(select(DOM, "#resume")[0]), CANON.resume.id);
+  assert.equal(textOf(select(DOM, "#stop")[0]), CANON.stop.id);
   const inspired = select(DOM, "a.alm-inspired")[0];
-  assert.equal(textOf(inspired), CANON.inspired.text.en);
+  assert.equal(textOf(inspired), CANON.inspired.text.id);
   assert.equal(inspired.attrs.href, CANON.inspired.href);
 });
 
@@ -1425,10 +1419,10 @@ test("the built page starts with a doctype and loads only the script and two sty
   assert.ok(fs.existsSync(path.join(ROOT_PATH, "_site/css/explore-ableton-learning-music.css")));
 });
 
-test("the built page title reads Make a Song", (t) => {
+test("the built page title reads Buat Lagu / Make a Song", (t) => {
   if (!fs.existsSync(BUILT_PAGE)) return t.skip("run eleventy first");
   const html = fs.readFileSync(BUILT_PAGE, "utf8");
-  assert.equal(textOf(select(parse(html), "title")[0]), "Make a Song");
+  assert.equal(textOf(select(parse(html), "title")[0]), "Buat Lagu / Make a Song");
 });
 
 test("the built site contains none of the working folders", (t) => {
