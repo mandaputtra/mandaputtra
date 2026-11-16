@@ -652,7 +652,7 @@ test("stop releases every instrument at the cut time and sets the cut end", asyn
   core.tick();
   assert.ok(scheduled().length > 0);
   core.stopAll();
-  assert.equal(releases().length, 13);
+  assert.equal(releases().length, 12);
   for (const release of releases()) assert.ok(approx(release.time, 10 + K.STOP_FADE));
   assert.deepEqual(snapshot().state.active, [-1, -1, -1, -1]);
   assert.ok(approx(runtime().muteUntil, 10 + K.STOP_RESTORE + K.RESTORE_RAMP));
@@ -812,7 +812,7 @@ test("every instrument feeds the master bus and the master reaches the destinati
   core.tick();
   const master = runtime().master;
   assert.equal(master.destinations, 1);
-  assert.equal(toneLog.instruments.length, 13);
+  assert.equal(toneLog.instruments.length, 12);
   for (const instrument of toneLog.instruments) assert.deepEqual(instrument.connections, [master]);
 });
 

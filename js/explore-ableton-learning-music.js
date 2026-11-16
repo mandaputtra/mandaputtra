@@ -253,7 +253,7 @@ function commitBoundary(s) {
 }
 
 function drumLane(step) {
-  if (step % 8 === 0) return step === 0 ? "kick" : "kick2";
+  if (step % 8 === 0) return "kick";
   if (step % 8 === 4) return "clap";
   if (step % 2 === 0) return "openHat";
   return "closedHat";
@@ -346,11 +346,6 @@ function createInstruments(out) {
       octaves: 6,
       envelope: { attack: 0.001, decay: 0.35, sustain: 0, release: 0.2 },
     }).connect(out),
-    kick2: new Tone.MembraneSynth({
-      pitchDecay: 0.03,
-      octaves: 4,
-      envelope: { attack: 0.001, decay: 0.25, sustain: 0, release: 0.2 },
-    }).connect(out),
     clap: new Tone.NoiseSynth({
       noise: { type: "pink" },
       envelope: { attack: 0.001, decay: 0.2, sustain: 0, release: 0.05 },
@@ -399,8 +394,6 @@ const voices = {
       single.triggerAttackRelease(n.pitch, n.dur, n.time, n.gain);
     } else if (n.lane === "kick") {
       instruments.drums.kick.triggerAttackRelease("A1", n.dur, n.time, n.gain);
-    } else if (n.lane === "kick2") {
-      instruments.drums.kick2.triggerAttackRelease("E1", n.dur, n.time, n.gain);
     } else if (n.lane === "clap") {
       instruments.drums.clap.triggerAttackRelease(n.dur, n.time, n.gain);
     } else {
