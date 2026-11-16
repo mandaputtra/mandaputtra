@@ -19,3 +19,5 @@ Pad colour contrast was computed from token values; measurement in a browser and
 Loudness measurement not recorded: the headless browser did not return offline render results, so no loudness value is recorded.
 String diff not run: reference text absent.
 Device scenarios, the kid test and the manual checks still need a person.
+
+TONE: tone@15.5.66 (MIT, published 2026-10-31), vendored at js/vendor/tone-15.5.66.js; voices are Tone.js instruments (membrane kick, noise snare, metal hat, mono square bass, fat sawtooth chords, triangle melody).

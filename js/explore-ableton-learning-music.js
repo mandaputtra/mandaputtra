@@ -13,8 +13,6 @@ const RESTORE_RAMP = 0.01;
 const UNLOCK_SETTLE_MS = 1500;
 const HIDE_RAMP = 0.3;
 const SHOW_RAMP = 0.4;
-const ATTACK = 0.005;
-const RELEASE_TAIL = 0.05;
 const DUR = [STEP, STEP * 2, STEP * 4, STEP * 2];
 const ROOT_HZ = 220;
 const OCTAVE = [0, -1, 0, 1];
@@ -68,16 +66,10 @@ const TEXT = {
     stopping: ", stopping",
   },
 };
-const OSCILLATOR_TYPES = [null, "square", "sawtooth", "triangle"];
-const DRUM_SHAPES = {
-  kick: { type: "sine", from: 150, to: 50, span: 0.1 },
-  snare: { type: "triangle", from: 220, to: 160, span: 0.08 },
-  hat: { type: "square", from: 7000, to: 7000, span: 0 },
-};
 const K = {
   BPM, STEPS_PER_BAR, STEP, BAR, TICK_MS, LOOKAHEAD, CATCHUP_SLACK, MASTER_CAP,
   STOP_FADE, STOP_RESTORE, RESTORE_RAMP, UNLOCK_SETTLE_MS, HIDE_RAMP, SHOW_RAMP,
-  ATTACK, RELEASE_TAIL, DUR, ROOT_HZ, OCTAVE,
+  DUR, ROOT_HZ, OCTAVE,
 };
 
 const bar = (pattern) =>
@@ -178,7 +170,7 @@ function initialRuntime() {
   return {
     ctx: null,
     master: null,
-    live: new Set(),
+    instruments: null,
     timer: null,
     rafId: null,
     muteUntil: 0,
@@ -309,10 +301,8 @@ function restoreTarget(hidden) {
 }
 
 const bus = {
-  create(ctx) {
-    rt.master = ctx.createGain();
-    rt.master.gain.value = MASTER_CAP;
-    rt.master.connect(ctx.destination);
+  create() {
+    rt.master = new Tone.Gain(MASTER_CAP).toDestination();
   },
   gainParam() {
     return rt.master.gain;
@@ -340,40 +330,57 @@ const bus = {
   },
 };
 
+function createInstruments(out) {
+  const drums = {
+    kick: new Tone.MembraneSynth({
+      pitchDecay: 0.05,
+      octaves: 6,
+      envelope: { attack: 0.001, decay: 0.35, sustain: 0, release: 0.2 },
+    }).connect(out),
+    snare: new Tone.NoiseSynth({
+      noise: { type: "white" },
+      envelope: { attack: 0.001, decay: 0.16, sustain: 0, release: 0.05 },
+    }).connect(out),
+    hat: new Tone.MetalSynth({
+      envelope: { attack: 0.001, decay: 0.06, release: 0.01 },
+      harmonicity: 5.1,
+      modulationIndex: 24,
+      resonance: 4000,
+      octaves: 1.5,
+    }).connect(out),
+  };
+  const bass = new Tone.MonoSynth({
+    oscillator: { type: "square" },
+    filter: { Q: 1, type: "lowpass" },
+    envelope: { attack: 0.005, decay: 0.2, sustain: 0.5, release: 0.15 },
+    filterEnvelope: { attack: 0.005, decay: 0.15, sustain: 0.3, release: 0.15, baseFrequency: 120, octaves: 2.5 },
+  }).connect(out);
+  const chords = new Tone.Synth({
+    oscillator: { type: "fatsawtooth", count: 3, spread: 12 },
+    envelope: { attack: 0.04, decay: 0.3, sustain: 0.4, release: 0.5 },
+  }).connect(out);
+  const melody = new Tone.Synth({
+    oscillator: { type: "triangle" },
+    envelope: { attack: 0.005, decay: 0.2, sustain: 0.25, release: 0.25 },
+  }).connect(out);
+  return { drums, tracks: [null, bass, chords, melody] };
+}
+
 const voices = {
-  play(ctx, master, n) {
-    const osc = ctx.createOscillator();
-    const g = ctx.createGain();
-    g.gain.setValueAtTime(0, n.time);
-    g.gain.linearRampToValueAtTime(n.gain, n.time + ATTACK);
-    g.gain.setTargetAtTime(0, n.time + n.dur * 0.7, n.dur * 0.1);
-    osc.connect(g);
-    g.connect(master);
+  play(instruments, n) {
     if (n.lane === undefined) {
-      osc.type = OSCILLATOR_TYPES[n.track];
-      osc.frequency.setValueAtTime(n.pitch, n.time);
+      instruments.tracks[n.track].triggerAttackRelease(n.pitch, n.dur, n.time, n.gain);
+    } else if (n.lane === "kick") {
+      instruments.drums.kick.triggerAttackRelease("A1", n.dur, n.time, n.gain);
+    } else if (n.lane === "snare") {
+      instruments.drums.snare.triggerAttackRelease(n.dur, n.time, n.gain);
     } else {
-      const shape = DRUM_SHAPES[n.lane];
-      osc.type = shape.type;
-      osc.frequency.setValueAtTime(shape.from, n.time);
-      if (shape.span > 0) osc.frequency.exponentialRampToValueAtTime(shape.to, n.time + shape.span);
+      instruments.drums.hat.triggerAttackRelease(n.dur, n.time, n.gain);
     }
-    osc.start(n.time);
-    osc.stop(n.time + n.dur + RELEASE_TAIL);
-    rt.live.add(osc);
-    osc.onended = () => rt.live.delete(osc);
   },
-  cutAll(t) {
-    for (const node of rt.live) {
-      try {
-        node.stop(t);
-      } catch {
-        try {
-          node.disconnect();
-        } catch {}
-      }
-    }
-    rt.live.clear();
+  releaseAll(instruments, t) {
+    for (const drum of Object.values(instruments.drums)) drum.triggerRelease(t);
+    for (const track of instruments.tracks.slice(1)) track.triggerRelease(t);
   },
 };
 
@@ -420,7 +427,7 @@ function tick() {
       if (stopIfIdle()) return;
     }
     for (const note of notesForStep(state, state.step, state.nextBar)) {
-      voices.play(rt.ctx, rt.master, note);
+      voices.play(rt.instruments, note);
     }
     state.nextBar += STEP;
     state.step = (state.step + 1) % STEPS_PER_BAR;
@@ -475,6 +482,7 @@ function ensureAudio() {
   if (rt.ctx === null) {
     try {
       rt.ctx = new env.AudioContext();
+      Tone.setContext(rt.ctx);
     } catch {
       view = { ...view, noAudio: true };
       state = initialState();
@@ -483,7 +491,8 @@ function ensureAudio() {
     }
     const session = env.audioSession();
     if (session) session.type = "playback";
-    bus.create(rt.ctx);
+    bus.create();
+    rt.instruments = createInstruments(rt.master);
     rt.ctx.onstatechange = onStateChange;
   }
   if (rt.ctx.state === "running") return Promise.resolve();
@@ -531,7 +540,7 @@ function stopAll() {
     if (rt.ctx !== null) {
       const t0 = rt.ctx.currentTime;
       rt.muteUntil = t0 + STOP_RESTORE + RESTORE_RAMP;
-      voices.cutAll(t0 + STOP_FADE);
+      voices.releaseAll(rt.instruments, t0 + STOP_FADE);
       bus.fadeOutIn(t0, restoreTarget(env.hidden()));
     }
   } finally {

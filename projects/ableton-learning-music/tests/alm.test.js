@@ -54,56 +54,77 @@ function fakeParam(value = 0, { cancelAndHold = false } = {}) {
   return param;
 }
 
-function fakeGain() {
-  const node = {
-    gain: fakeParam(0),
+const toneLog = { contexts: [], instruments: [], gains: [] };
+
+function fakeInstrument(kind) {
+  const instrument = {
+    kind,
+    calls: [],
     connections: [],
-    disconnected: 0,
     connect(target) {
-      node.connections.push(target);
-      return target;
+      instrument.connections.push(target);
+      return instrument;
     },
-    disconnect() {
-      node.disconnected += 1;
+    triggerAttackRelease(...args) {
+      const time = args[kind === "noise" || kind === "metal" ? 1 : 2];
+      instrument.calls.push({ method: "triggerAttackRelease", args, time });
+      return instrument;
+    },
+    triggerRelease(time) {
+      instrument.calls.push({ method: "triggerRelease", time });
+      return instrument;
     },
   };
+  toneLog.instruments.push(instrument);
+  return instrument;
+}
+
+function fakeToneGain(value) {
+  const node = {
+    gain: fakeParam(value),
+    connections: [],
+    destinations: 0,
+    connect(target) {
+      node.connections.push(target);
+      return node;
+    },
+    toDestination() {
+      node.destinations += 1;
+      return node;
+    },
+  };
+  toneLog.gains.push(node);
   return node;
 }
 
-function fakeOscillator({ secondStopThrows = false } = {}) {
-  let stopCalls = 0;
-  const osc = {
-    type: "sine",
-    frequency: fakeParam(0),
-    starts: [],
-    stops: [],
-    connections: [],
-    disconnected: 0,
-    onended: null,
-    connect(target) {
-      osc.connections.push(target);
-      return target;
-    },
-    disconnect() {
-      osc.disconnected += 1;
-    },
-    start(t) {
-      osc.starts.push(t);
-    },
-    stop(t) {
-      stopCalls += 1;
-      if (secondStopThrows && stopCalls > 1) throw new Error("already stopped");
-      osc.stops.push(t);
-    },
-  };
-  return osc;
-}
+global.Tone = {
+  setContext(ctx) {
+    toneLog.contexts.push(ctx);
+  },
+  Gain: function (value) {
+    return fakeToneGain(value);
+  },
+  MembraneSynth: function () {
+    return fakeInstrument("membrane");
+  },
+  NoiseSynth: function () {
+    return fakeInstrument("noise");
+  },
+  MetalSynth: function () {
+    return fakeInstrument("metal");
+  },
+  MonoSynth: function () {
+    return fakeInstrument("mono");
+  },
+  Synth: function () {
+    return fakeInstrument("synth");
+  },
+};
 
 function fakeContext({
   state = "suspended",
   resume = "resolve-running",
   clock = 0,
-  oscillatorOptions = {},
 } = {}) {
   const ctx = {
     state,
@@ -112,19 +133,7 @@ function fakeContext({
     outputLatency: 0,
     destination: { label: "destination" },
     onstatechange: null,
-    gains: [],
-    oscillators: [],
     resumeCalls: 0,
-    createGain() {
-      const gain = fakeGain();
-      ctx.gains.push(gain);
-      return gain;
-    },
-    createOscillator() {
-      const osc = fakeOscillator(oscillatorOptions);
-      ctx.oscillators.push(osc);
-      return osc;
-    },
     resume() {
       ctx.resumeCalls += 1;
       if (resume === "reject") return Promise.reject(new Error("blocked"));
@@ -136,7 +145,13 @@ function fakeContext({
   return ctx;
 }
 
+const scheduled = () => toneLog.instruments.flatMap((inst) => inst.calls.filter((c) => c.method === "triggerAttackRelease"));
+const releases = () => toneLog.instruments.flatMap((inst) => inst.calls.filter((c) => c.method === "triggerRelease"));
+
 function installEnv({ hidden = false, session = null, AudioContext } = {}) {
+  toneLog.contexts.length = 0;
+  toneLog.instruments.length = 0;
+  toneLog.gains.length = 0;
   const env = { hidden, session, frames: [], intervals: [], timeouts: [], cleared: [], cancelled: [] };
   core.__setEnv({
     raf: (callback) => {
@@ -584,8 +599,7 @@ test("stop ramps the master gain to silence within thirty milliseconds and resto
   installEnv({ AudioContext: contextFactory(ctx) });
   await core.onSessionTap({ t: 0, c: 0 });
   core.tick();
-  const live = [...runtime().live];
-  assert.ok(live.length > 0);
+  assert.ok(scheduled().length > 0);
   const master = runtime().master;
   const t0 = 10.5;
   ctx.currentTime = t0;
@@ -598,9 +612,8 @@ test("stop ramps the master gain to silence within thirty milliseconds and resto
   for (const entry of master.gain.log) {
     if (entry.value !== undefined) assert.ok(entry.value >= 0 && entry.value <= K.MASTER_CAP);
   }
-  for (const osc of live) {
-    assert.ok(osc.stops[osc.stops.length - 1] <= t0 + 0.03 + EPSILON);
-  }
+  assert.equal(releases().length, toneLog.instruments.length);
+  for (const release of releases()) assert.ok(release.time <= t0 + 0.03 + EPSILON);
 });
 
 test("a second stop repeats safely and a stop while suspended does not throw", async () => {
@@ -628,17 +641,16 @@ test("a stop while hidden restores the master gain to zero", async () => {
   assert.equal(ramps[ramps.length - 1].value, 0);
 });
 
-test("a voice whose second stop throws is disconnected and the cut still completes", async () => {
+test("stop releases every instrument at the cut time and sets the cut end", async () => {
   core.__reset();
-  const ctx = fakeContext({ state: "running", clock: 10, oscillatorOptions: { secondStopThrows: true } });
+  const ctx = fakeContext({ state: "running", clock: 10 });
   installEnv({ AudioContext: contextFactory(ctx) });
   await core.onSessionTap({ t: 0, c: 0 });
   core.tick();
-  const live = [...runtime().live];
-  assert.ok(live.length > 0);
+  assert.ok(scheduled().length > 0);
   core.stopAll();
-  assert.equal(runtime().live.size, 0);
-  for (const osc of live) assert.ok(osc.disconnected >= 1);
+  assert.equal(releases().length, 6);
+  for (const release of releases()) assert.ok(approx(release.time, 10 + K.STOP_FADE));
   assert.deepEqual(snapshot().state.active, [-1, -1, -1, -1]);
   assert.ok(approx(runtime().muteUntil, 10 + K.STOP_RESTORE + K.RESTORE_RAMP));
 });
@@ -788,7 +800,7 @@ test("the active clips change only on bar boundaries across ten bars", async () 
   for (let i = 1; i < times.length; i++) assert.ok(approx(times[i] - times[i - 1], K.BAR));
 });
 
-test("every voice output connects only to the master bus and the destination is connected once", async () => {
+test("every instrument feeds the master bus and the master reaches the destination once", async () => {
   core.__reset();
   const ctx = fakeContext({ state: "running", clock: 0 });
   installEnv({ AudioContext: contextFactory(ctx) });
@@ -796,26 +808,24 @@ test("every voice output connects only to the master bus and the destination is 
   await core.onSessionTap({ t: 2, c: 0 });
   core.tick();
   const master = runtime().master;
-  assert.deepEqual(master.connections, [ctx.destination]);
-  const voiceGains = ctx.gains.filter((gain) => gain !== master);
-  assert.ok(voiceGains.length > 0);
-  for (const gain of voiceGains) assert.deepEqual(gain.connections, [master]);
+  assert.equal(master.destinations, 1);
+  assert.equal(toneLog.instruments.length, 6);
+  for (const instrument of toneLog.instruments) assert.deepEqual(instrument.connections, [master]);
 });
 
-test("every source node created is held live until its ended callback fires", () => {
+test("drum and bass notes are scheduled on their own instruments with time, pitch and velocity", async () => {
   core.__reset();
   const ctx = fakeContext({ state: "running", clock: 0 });
   installEnv({ AudioContext: contextFactory(ctx) });
-  core.bus.create(ctx);
-  const voiceMaster = runtime().master;
-  core.voices.play(ctx, voiceMaster, { time: 1, track: 0, dur: K.STEP, gain: 0.3, lane: "kick" });
-  core.voices.play(ctx, voiceMaster, { time: 1, track: 0, dur: K.STEP, gain: 0.3, lane: "snare" });
-  core.voices.play(ctx, voiceMaster, { time: 1, track: 0, dur: K.STEP, gain: 0.3, lane: "hat" });
-  const oscillators = ctx.oscillators;
-  assert.equal(oscillators.length, 3);
-  for (const osc of oscillators) assert.ok(runtime().live.has(osc));
-  oscillators[0].onended();
-  assert.equal(runtime().live.has(oscillators[0]), false);
+  await core.onSessionTap({ t: 0, c: 0 });
+  await core.onSessionTap({ t: 1, c: 0 });
+  core.tick();
+  const kick = toneLog.instruments.find((inst) => inst.kind === "membrane").calls;
+  assert.equal(kick[0].args[0], "A1");
+  assert.ok(kick[0].time >= 0);
+  const bass = toneLog.instruments.find((inst) => inst.kind === "mono").calls;
+  assert.ok(bass[0].args[0] > 0);
+  assert.ok(bass[0].args[3] > 0 && bass[0].args[3] <= 1);
 });
 
 test("no note is scheduled before the clock after the clock jumps forward", async () => {
@@ -825,16 +835,15 @@ test("no note is scheduled before the clock after the clock jumps forward", asyn
   await core.onSessionTap({ t: 0, c: 0 });
   await core.onSessionTap({ t: 3, c: 2 });
   core.tick();
-  const beforeJump = ctx.oscillators.length;
+  const beforeJump = new Set(scheduled());
   ctx.currentTime = 5;
   for (let i = 0; i < 100; i++) {
     core.tick();
     ctx.currentTime += 0.05;
   }
-  assert.ok(ctx.oscillators.length > beforeJump);
-  for (const osc of ctx.oscillators.slice(beforeJump)) {
-    for (const start of osc.starts) assert.ok(start >= 5);
-  }
+  const afterJump = scheduled().filter((call) => !beforeJump.has(call));
+  assert.ok(afterJump.length > 0);
+  for (const call of afterJump) assert.ok(call.time >= 5);
 });
 
 test("stop inside the lookahead window silences everything and ramps are scheduled after the cut", async () => {
@@ -846,7 +855,7 @@ test("stop inside the lookahead window silences everything and ramps are schedul
   ctx.currentTime = 10.1;
   core.stopAll();
   assert.deepEqual(snapshot().state.active, [-1, -1, -1, -1]);
-  assert.equal(runtime().live.size, 0);
+  for (const release of releases()) assert.ok(approx(release.time, 10.1 + K.STOP_FADE));
 });
 
 test("hiding then stopping then showing ends with a ramp back to the master cap", async () => {
@@ -1203,8 +1212,8 @@ test("the inspired-by link opens without a target and with a safe rel", () => {
 });
 
 test("the script wires exactly one destination connection and two master gain touches", () => {
-  assert.equal(countOf(SCRIPT, "ctx\\.destination"), 1);
-  assert.equal(countOf(SCRIPT, "master\\.gain"), 2);
+  assert.equal(countOf(SCRIPT, "toDestination\\(\\)"), 1);
+  assert.equal(countOf(SCRIPT, "ctx\\.destination"), 0);
   assert.ok(/try\s*\{\s*rt\.ctx = new env\.AudioContext\(\)/.test(SCRIPT));
 });
 
@@ -1406,7 +1415,8 @@ test("the built page starts with a doctype and loads only the script and two sty
   if (!fs.existsSync(BUILT_PAGE)) return t.skip("run eleventy first");
   const html = fs.readFileSync(BUILT_PAGE, "utf8");
   assert.ok(html.trimStart().toLowerCase().startsWith("<!doctype html>"));
-  assert.equal(countOf(html, "<script"), 1);
+  assert.equal(countOf(html, "<script"), 2);
+  assert.ok(html.includes('src="/js/vendor/tone-15.5.66.js"'));
   assert.ok(html.includes('src="/js/explore-ableton-learning-music.js"'));
   assert.equal(countOf(html, "<link"), 2);
   const root = parse(html);
@@ -1432,6 +1442,8 @@ test("the built site contains none of the working folders", (t) => {
   }
 });
 
+const TONE_FILES = ["js/vendor/tone-15.5.66.js", "js/vendor/tone-15.5.66.LICENSE.txt"];
+
 function listSite(dir, prefix = "") {
   const out = [];
   for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
@@ -1449,6 +1461,7 @@ test("the built site file listing matches the recorded baseline", (t) => {
   if (!match) return t.skip("SITE-BEFORE absent");
   const files = listSite(path.join(ROOT_PATH, "_site"))
     .filter((file) => !SITE_IGNORED.some((dir) => file.startsWith(dir + "/")))
+    .filter((file) => !TONE_FILES.includes(file))
     .sort();
   const digest = crypto.createHash("sha256");
   for (const file of files) digest.update(file + "\n");
