@@ -24,7 +24,6 @@ const SCALES = {
   minor: [0, 2, 3, 5, 7, 8, 10, 12],
 };
 const KINDS = ["drum", "bass", "chords", "melody"];
-const LANGS = ["id", "en"];
 const TEXT = {
   id: {
     back: "Explore",
