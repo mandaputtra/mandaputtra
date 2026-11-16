@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Clone of Ableton's Learning Music landing page. Click boxes to switch small musical patterns on or off.">
+  <title>Get started | Learning Music (clone)</title>
+  <link href="/css/reset.css" rel="stylesheet">
+  <link href="/css/explore-ableton-learning-music.css" rel="stylesheet">
+</head>
+
+<body>
+  <header class="top">
+    <button id="menu-open" class="menu" type="button" aria-expanded="false" aria-controls="chapters">&#9776; Chapters</button>
+    <span class="title">Get started.</span>
+    <a class="back" href="/explore/">&larr; Explore</a>
+  </header>
+
+  <nav id="chapters" class="chapters" hidden>
+    <button id="menu-close" class="close" type="button" aria-label="Close">&times;</button>
+    <ol>
+      <li><a href="#" aria-current="page">Get started</a></li>
+      <li>Beats <small>10 lessons</small></li>
+      <li>Notes and scales <small>6 lessons</small></li>
+      <li>Chords <small>7 lessons</small></li>
+      <li>Basslines <small>7 lessons</small></li>
+      <li>Melodies <small>7 lessons</small></li>
+      <li>Song structure <small>4 lessons</small></li>
+      <li>The playground</li>
+      <li>Advanced topics <small>15 lessons</small></li>
+      <li>Where to go from here</li>
+    </ol>
+    <p class="note">Clone for learning. Only the first page is built.</p>
+  </nav>
+
+  <main>
+    <h1>Get started making&nbsp;music</h1>
+    <p>In these lessons, you'll learn the basics of music making. No prior experience or equipment is required; you'll do everything right here in your browser.</p>
+    <p>To get started, check out the boxes below. Each one contains a small piece of music. Click a box to turn it on or off.</p>
+
+    <div id="session" class="session" aria-label="Session"></div>
+
+    <p>After playing with these boxes for a while, you'll discover certain combinations that you like. Many types of music are created in exactly this way &mdash; by mixing and matching small musical ideas to make interesting combinations.</p>
+    <p>Now you've combined pre-made musical patterns. Next, you'll make some patterns of your own.</p>
+
+    <a class="next" href="#">Next<span>: Make beats</span>&nbsp;&rsaquo;</a>
+  </main>
+
+  <footer>
+    <a href="mailto:learning@ableton.com?subject=learningmusic.ableton.com">Send us your feedback!</a>
+    <button id="reset" type="button">Reset all lessons</button>
+    <a href="https://learningmusic.ableton.com/">Original site &rsaquo;</a>
+  </footer>
+
+  <script src="/js/explore-ableton-learning-music.js"></script>
+</body>
+
+</html>
