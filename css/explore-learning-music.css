@@ -365,3 +365,72 @@ footer#about p {
     margin-top: 0;
   }
 }
+
+.lm-vh {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
+.lm-lesson-check {
+  display: none;
+}
+
+[data-done="1"] .lm-lesson-check {
+  display: inline;
+}
+
+.lm-lesson-star {
+  display: none;
+}
+
+[data-star="1"] .lm-lesson-star {
+  display: inline;
+}
+
+.lm-lesson-link,
+.lm-lesson-link:link,
+.lm-lesson-link:visited {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-block-size: 44px;
+  padding: 10px 0;
+  color: var(--fg);
+  text-decoration: none;
+}
+
+.lm-lesson-title {
+  min-inline-size: 0;
+  overflow-wrap: anywhere;
+}
+
+.lm-lesson-link:focus-visible {
+  outline: 2px solid var(--ring);
+  outline-offset: 2px;
+}
+
+.lm-lesson + .lm-lesson {
+  border-top: 1px solid #333;
+}
+
+.lm-lesson-state {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  flex: none;
+  margin-inline-start: auto;
+}
+
+.lm-lesson-state svg {
+  inline-size: 1em;
+  block-size: 1em;
+  flex: none;
+}
