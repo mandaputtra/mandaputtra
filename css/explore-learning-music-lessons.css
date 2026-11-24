@@ -1,0 +1,302 @@
+body[data-lesson] {
+  margin: 0;
+  padding: 12px;
+  background: #111111;
+  color: #e8e8e8;
+  font-family:
+    system-ui,
+    -apple-system,
+    'Segoe UI',
+    sans-serif;
+  line-height: 1.5;
+  overflow-wrap: anywhere;
+}
+
+body[data-lesson] :focus-visible {
+  outline: 2px solid #ffffff;
+  outline-offset: 2px;
+}
+
+.lm-step[hidden],
+.lm-complete[hidden],
+.lm-silent[hidden] {
+  display: none;
+}
+
+.lm-vh,
+#live {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
+.lm-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 16px;
+  margin-block-end: 16px;
+}
+
+.lm-head h1 {
+  flex-basis: 100%;
+  margin: 0;
+  font-size: 1.5rem;
+  line-height: 1.25;
+}
+
+.lm-crumb {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-block-size: 44px;
+  color: inherit;
+  text-decoration: none;
+}
+
+.lm-crumb svg {
+  inline-size: 1em;
+  block-size: 1em;
+}
+
+.lm-lang {
+  display: flex;
+  gap: 4px;
+  margin-inline-start: auto;
+}
+
+.lm-lang button {
+  min-inline-size: 44px;
+  min-block-size: 44px;
+  border: 2px solid #555;
+  border-radius: 8px;
+  background: #1a1a1a;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+}
+
+.lm-lang [aria-pressed='true'] {
+  border-color: #ffffff;
+  box-shadow: inset 0 0 0 2px #ffffff;
+  font-weight: 600;
+}
+
+.lm-indicator {
+  margin: 0;
+  color: #b8b8b8;
+  font-variant-numeric: tabular-nums;
+}
+
+.lm-step {
+  margin-block: 24px;
+}
+
+.lm-step h2 {
+  margin: 0 0 8px;
+  font-size: 1.125rem;
+  line-height: 1.3;
+}
+
+.lm-step img {
+  inline-size: 64px;
+  block-size: 64px;
+}
+
+.lm-try {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  margin-block: 12px 0;
+}
+
+.lm-try svg {
+  inline-size: 1em;
+  block-size: 1em;
+  flex: none;
+}
+
+body[data-lesson] [data-nav] {
+  min-inline-size: 60px;
+  min-block-size: 44px;
+  padding: 8px 16px;
+  border: 2px solid #555;
+  border-radius: 8px;
+  background: #1a1a1a;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+}
+
+body[data-lesson] [data-nav]:disabled {
+  border-style: dashed;
+  color: #b8b8b8;
+  cursor: default;
+}
+
+.lm-toy {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(60px, 1fr));
+  grid-auto-rows: minmax(60px, auto);
+  gap: 8px;
+  margin-block: 16px;
+}
+
+body[data-lesson='song-structure'] .lm-toy {
+  grid-template-columns: minmax(60px, 1fr);
+}
+
+.lm-toy > :last-child {
+  grid-column: 1 / -1;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.lm-toy button,
+.lm-toy label {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-inline-size: 60px;
+  min-block-size: 60px;
+  padding: 8px;
+  border: 2px solid #555;
+  border-radius: 8px;
+  background: #1a1a1a;
+  color: inherit;
+  font: inherit;
+  text-align: center;
+  cursor: pointer;
+}
+
+.lm-toy > :last-child button {
+  min-block-size: 44px;
+}
+
+.lm-toy input[type='radio'] {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
+.lm-toy input[type='radio']:focus-visible + label {
+  outline: 2px solid #ffffff;
+  outline-offset: 2px;
+}
+
+.lm-toy button[aria-pressed='true'],
+.lm-toy input:checked + label {
+  border-color: #ffffff;
+  background: #2f2f2f;
+  box-shadow: inset 0 0 0 2px #ffffff;
+  font-weight: 600;
+}
+
+.lm-toy button[aria-pressed='false'] {
+  background: #1a1a1a;
+}
+
+.lm-toy button[data-value='off'] {
+  border-color: #888888;
+  border-style: dashed;
+  color: #b8b8b8;
+}
+
+.lm-toy button[data-value='root'] {
+  border-color: #ff7a59;
+  border-style: solid;
+}
+
+.lm-toy button[data-value='fifth'] {
+  border-color: #ffd23f;
+  border-style: dotted;
+}
+
+.lm-toy button[data-value='octave'] {
+  border-color: #4fd1c5;
+  border-style: double;
+  border-width: 5px;
+}
+
+.lm-slots,
+.lm-chords,
+.lm-chordmap {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+}
+
+.lm-slots li,
+.lm-chords li,
+.lm-chordmap li {
+  padding: 4px 8px;
+  border: 1px solid #555;
+  border-radius: 8px;
+  color: #b8b8b8;
+  text-align: center;
+}
+
+.lm-complete {
+  margin-block: 24px;
+}
+
+.lm-star {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.lm-cta {
+  display: inline-flex;
+  align-items: center;
+  min-block-size: 44px;
+  color: inherit;
+}
+
+.lm-foot {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 16px;
+  margin-block-start: 24px;
+  padding-block-start: 12px;
+  border-top: 1px solid #333333;
+  color: #b8b8b8;
+}
+
+.lm-foot a {
+  min-block-size: 44px;
+  color: inherit;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  body[data-lesson] *,
+  body[data-lesson] *::before,
+  body[data-lesson] *::after {
+    transform: none;
+    transition-duration: 100ms;
+  }
+}
+
+body[data-motion='reduce'] *,
+body[data-motion='reduce'] *::before,
+body[data-motion='reduce'] *::after {
+  transform: none;
+  transition-duration: 100ms;
+}
