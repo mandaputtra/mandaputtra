@@ -528,7 +528,9 @@
       apply(document, value);
       try {
         window.localStorage.setItem(KEY_LANG, value);
-      } catch {}
+      } catch {
+        void 0;
+      }
       langListeners.forEach(function (fn) {
         fn(value);
       });
@@ -673,7 +675,9 @@
       try {
         const area = window.localStorage;
         if (event.storageArea && area && event.storageArea !== area) return;
-      } catch {}
+      } catch {
+        void 0;
+      }
       read();
       notifyProgress(cloneProgress(memory));
     });
@@ -701,8 +705,12 @@
     const secure = window.location.protocol === "https:" || window.location.hostname === "127.0.0.1";
     if (!secure) return;
     try {
-      navigator.serviceWorker.register("/sw.js").catch(function () {});
-    } catch {}
+      navigator.serviceWorker.register("/sw.js").catch(function () {
+        void 0;
+      });
+    } catch {
+      void 0;
+    }
   }
 
   window.addEventListener("load", registerWorker);
