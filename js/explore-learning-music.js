@@ -1,8 +1,10 @@
 (function () {
-const BPM = 102;
-const STEPS_PER_BAR = 16;
+const BPM = 112;
+const BAR_STEPS = 16;
+const PHRASE_BARS = 4;
 const STEP = 60 / BPM / 4;
-const BAR = STEP * STEPS_PER_BAR;
+const SWING = 0.16;
+const STRUM = 0.012;
 const TICK_MS = 25;
 const LOOKAHEAD = 0.2;
 const CATCHUP_SLACK = 0.05;
@@ -13,17 +15,6 @@ const RESTORE_RAMP = 0.01;
 const UNLOCK_SETTLE_MS = 1500;
 const HIDE_RAMP = 0.3;
 const SHOW_RAMP = 0.4;
-const DUR = [STEP, STEP * 2, STEP * 4, STEP * 2];
-const ROOT_HZ = 220;
-const OCTAVE = [0, -1, 0, 1];
-const CHORD_STEPS = [0, 2, 4];
-const STRUM = 0.025;
-const STRING_COUNT = 6;
-const SCALES = {
-  soft: [0, 2, 3, 5, 7, 10, 10, 12],
-  minor: [0, 2, 3, 5, 7, 8, 10, 12],
-};
-const KINDS = ["drum", "bass", "chords", "melody"];
 const TEXT = {
   id: {
     back: "Explore",
@@ -68,72 +59,115 @@ const TEXT = {
     stopping: ", stopping",
   },
 };
-const K = {
-  BPM, STEPS_PER_BAR, STEP, BAR, TICK_MS, LOOKAHEAD, CATCHUP_SLACK, MASTER_CAP,
-  STOP_FADE, STOP_RESTORE, RESTORE_RAMP, UNLOCK_SETTLE_MS, HIDE_RAMP, SHOW_RAMP,
-  DUR, ROOT_HZ, OCTAVE, STRUM,
-};
 
-const bar = (pattern) =>
-  [...pattern].map((ch) => (ch === "." ? null : ch === "x" ? 0 : Number(ch)));
-
-const TRACKS = [
-  {
-    kind: KINDS[0],
-    gain: 0.35,
-    clips: [
-      { bars: [bar("x...x...x...x...")] },
-      { bars: [bar("x.x.x.x.x.x.x.x."), bar("x...x...x.x.x...")] },
-      { bars: [bar("x..xx..xx..xx..x")] },
-      { bars: [bar("x...x...x...x..."), bar("..x...x...x...x."), bar("x.x.x.x.x.x.x.x.")] },
-    ],
-  },
-  {
-    kind: KINDS[1],
-    gain: 0.3,
-    clips: [
-      { bars: [bar("0...0...3...3..."), bar("5...5...3...3...")] },
-      { bars: [bar("0.0.0.0.3.3.3.3.")] },
-      { bars: [bar("0..0..0.3..3..3."), bar("5..5..5.3..3..3.")] },
-      { bars: [bar("0.....0.3.....3.")] },
-    ],
-  },
-  {
-    kind: KINDS[2],
-    gain: 0.2,
-    clips: [
-      { bars: [bar("0..............."), bar("3...............")] },
-      { bars: [bar("0...3...0...3...")] },
-      { bars: [bar("0.......4......."), bar("3.......5.......")] },
-      { bars: [bar("2.......5......."), bar("4...2...5.......")] },
-    ],
-  },
-  {
-    kind: KINDS[3],
-    gain: 0.25,
-    clips: [
-      { bars: [bar("4...5...6...4..."), bar("7...6...5...4...")] },
-      { bars: [bar("4.5.6.7.6.5.4.5.")] },
-      { bars: [bar("4...5.6.7...6..."), bar("5...4...2...4...")] },
-      { bars: [bar("7.......6......."), bar("5.......4.......")] },
-    ],
-  },
+// Every clip follows one 4-bar progression (Am7 | Fmaj7 | C | Gadd9),
+// so any mix of clips stays in key.
+const PROGRESSION = [
+  { bass: { R: "A1", P: "E2", O: "A2" }, keys: ["A3", "C4", "E4", "G4"] },
+  { bass: { R: "F1", P: "C2", O: "F2" }, keys: ["A3", "C4", "E4", "F4"] },
+  { bass: { R: "C2", P: "G2", O: "C3" }, keys: ["G3", "C4", "E4", "G4"] },
+  { bass: { R: "G1", P: "D2", O: "G2" }, keys: ["G3", "B3", "D4", "A4"] },
 ];
 
-const defaultEnv = {
-  AudioContext: undefined,
-  raf: () => 0,
-  caf() {},
-  setInterval: () => 0,
-  clearInterval() {},
-  setTimeout: () => 0,
-  clearTimeout() {},
-  hidden: () => false,
-  audioSession: () => null,
-  reducedMotion: () => false,
-};
+// A bar is 16 tokens: a note starts a hit, "-" holds it, "." rests.
+function melodicBar(line, pick) {
+  const list = line.trim().split(/\s+/);
+  if (list.length !== BAR_STEPS) throw new Error("alm: bar needs 16 steps: " + line);
+  return list.map((tok, i) => {
+    if (tok === "-" || tok === ".") return [];
+    let len = 1;
+    while (list[i + len] === "-") len++;
+    return [{ notes: pick(tok), len, vel: i % 4 === 0 ? 0.9 : 0.7 }];
+  });
+}
 
-let env = defaultEnv;
+// R = root, P = fifth, O = octave of the current chord.
+const bassClip = (line) => PROGRESSION.map((ch) => melodicBar(line, (tok) => [ch.bass[tok] || tok]));
+// x = whole chord, 1-4 = one chord tone.
+const chordClip = (line) =>
+  PROGRESSION.map((ch) => melodicBar(line, (tok) => (tok === "x" ? ch.keys : [ch.keys[Number(tok) - 1]])));
+const melodyClip = (...lines) => lines.map((line) => melodicBar(line, (tok) => [tok]));
+
+// Drum lanes: X accent, x hit, o ghost. A lane is one bar, or four bars for fills.
+const DRUM_VEL = { X: 1, x: 0.75, o: 0.35 };
+function drumClip(lanes) {
+  return Array.from({ length: PHRASE_BARS }, (_, b) =>
+    Array.from({ length: BAR_STEPS }, (_, step) =>
+      Object.entries(lanes).flatMap(([lane, bars]) => {
+        const list = [].concat(bars);
+        const vel = DRUM_VEL[list[b % list.length][step]];
+        return vel ? [{ lane, vel }] : [];
+      }),
+    ),
+  );
+}
+
+const CLIPS = [
+  [
+    drumClip({
+      kick: "X.....x...X.....",
+      snare: "....X.......X...",
+      closed: "x.x.x.x.x.x.x.x.",
+    }),
+    drumClip({
+      kick: "X...X...X...X...",
+      snare: "....X.......X...",
+      closed: "xo.oxo.oxo.oxo.o",
+      open: "..x...x...x...x.",
+    }),
+    drumClip({
+      kick: ["X..x......X.....", "X..x......X.....", "X..x......X.....", "X..x......X..x.x"],
+      snare: "....X..o.o..X...",
+      closed: "x.xxx.x.x.xxx.x.",
+    }),
+    drumClip({
+      kick: "X.........X..x..",
+      snare: ["........X.......", "........X.......", "........X.......", "........X..oX.XX"],
+      closed: "x.x.x.x.x.x.x...",
+      open: "..............x.",
+    }),
+  ],
+  [
+    bassClip("R - - - - - - - - - - - - - . ."),
+    bassClip("R . R . O . R . R . O . R . P ."),
+    bassClip("R - - R . . O . . R . . P - . ."),
+    bassClip("R - . R - . R - . . R - O - . ."),
+  ],
+  [
+    chordClip("x - - - - - - - - - - - - - - -"),
+    chordClip(". . x . . . x . . . x . . . x ."),
+    chordClip("x - - x - - x - - - x - . . . ."),
+    chordClip("1 . 2 . 3 . 4 . 3 . 2 . 1 . 2 ."),
+  ],
+  [
+    melodyClip(
+      "E5 - - . E5 . D5 . C5 - - . A4 - - .",
+      "C5 - - . C5 . A4 . C5 - - - . . . .",
+      "E5 - - . E5 . G5 . E5 - - . D5 - C5 -",
+      "D5 - - - - - - - . . B4 . D5 . . .",
+    ),
+    melodyClip(
+      "A4 . C5 . . E5 . . G5 - . E5 . . . .",
+      "A4 . C5 . . E5 . . F5 - . E5 . . . .",
+      "G4 . C5 . . E5 . . G5 - . E5 . . . .",
+      "G4 . B4 . . D5 . . A5 - - - G5 - . .",
+    ),
+    melodyClip(
+      ". . . . . . A5 - G5 - E5 - - - . .",
+      ". . . . . . A5 - G5 - E5 - C5 - - -",
+      ". . . . . . G5 - E5 - D5 - - - . .",
+      ". . . . . . D5 - E5 - D5 - B4 - - -",
+    ),
+    melodyClip(
+      "A4 C5 E5 A5 G5 E5 C5 E5 A4 C5 E5 A5 G5 E5 D5 C5",
+      "A4 C5 F5 A5 G5 F5 C5 F5 A4 C5 F5 A5 G5 F5 E5 C5",
+      "G4 C5 E5 G5 E5 C5 G4 C5 E5 G5 C6 G5 E5 D5 C5 D5",
+      "G4 B4 D5 G5 D5 B4 G4 B4 D5 G5 A5 G5 D5 B4 A4 G4",
+    ),
+  ],
+];
+
+let env = null;
 let els = null;
 let state = initialState();
 let view = initialView(false, false);
@@ -143,28 +177,22 @@ function initialState() {
   return {
     active: [-1, -1, -1, -1],
     queued: [null, null, null, null],
-    age: [0, 0, 0, 0],
+    bar: -1,
     step: 0,
     nextBar: 0,
-    scale: "soft",
-    pendingScale: null,
   };
 }
 
 function initialView(reducedMotion, noAudio) {
   return {
     shownActive: [-1, -1, -1, -1],
-    shownAge: [0, 0, 0, 0],
-    shownScale: "soft",
+    shownBar: 0,
     boundaryTime: 0,
     events: [],
     audio: "none",
     noAudio,
     reducedMotion,
     lang: "id",
-    restored: false,
-    glowShown: false,
-    hintDismissed: false,
   };
 }
 
@@ -178,14 +206,6 @@ function initialRuntime() {
     muteUntil: 0,
     settleTimer: null,
   };
-}
-
-function semitones(scale, deg) {
-  return SCALES[scale][deg % 8] + 12 * Math.floor(deg / 8);
-}
-
-function pitch(track, deg, scale) {
-  return ROOT_HZ * 2 ** (OCTAVE[track] + semitones(scale, deg) / 12);
 }
 
 function tap(s, p) {
@@ -214,10 +234,6 @@ function displayQueued(v, s, t) {
   return null;
 }
 
-function pressed(v, t, c) {
-  return String(v.shownActive[t] === c);
-}
-
 function anyActive(s) {
   return s.active.some((a) => a >= 0) || s.queued.some((q) => q !== null && q >= 0);
 }
@@ -233,49 +249,19 @@ function stateText(d, lang) {
 }
 
 function commitBoundary(s) {
-  const active = s.active.slice();
-  const queued = s.queued.slice();
-  const age = s.age.slice();
-  for (let t = 0; t < 4; t++) {
-    let launched = false;
-    if (queued[t] !== null) {
-      active[t] = queued[t];
-      queued[t] = null;
-      if (active[t] >= 0) {
-        age[t] = 0;
-        launched = true;
-      }
-    }
-    if (!launched) age[t] = age[t] + 1;
-  }
-  return { ...s, active, queued, age };
-}
-
-function drumLane(step) {
-  if (step % 8 === 0) return "kick";
-  if (step % 8 === 4) return "clap";
-  if (step % 2 === 0) return "openHat";
-  return "closedHat";
+  const active = s.active.map((a, t) => (s.queued[t] === null ? a : s.queued[t]));
+  return { ...s, active, queued: [null, null, null, null], bar: s.bar + 1 };
 }
 
 function notesForStep(s, step, time) {
+  const b = s.bar % PHRASE_BARS;
+  const at = time + (step % 2 ? SWING * STEP : 0);
   const notes = [];
   for (let t = 0; t < 4; t++) {
     if (s.active[t] < 0) continue;
-    const clip = TRACKS[t].clips[s.active[t]];
-    const deg = clip.bars[s.age[t] % clip.bars.length][step];
-    if (deg === null) continue;
-    const note = { time, track: t, dur: DUR[t], gain: TRACKS[t].gain };
-    if (t === 0) note.lane = drumLane(step);
-    else if (t === 2) note.pitches = CHORD_STEPS.map((step) => pitch(t, deg + step, s.scale));
-    else note.pitch = pitch(t, deg, s.scale);
-    notes.push(note);
+    for (const ev of CLIPS[t][s.active[t]][b][step]) notes.push({ ...ev, track: t, time: at });
   }
   return notes;
-}
-
-function catchUp(nextBar, now) {
-  return nextBar < now ? now + CATCHUP_SLACK : nextBar;
 }
 
 function drainEvents(v, now) {
@@ -286,35 +272,23 @@ function drainEvents(v, now) {
   return {
     ...v,
     shownActive: last.active.slice(),
-    shownAge: last.age.slice(),
-    shownScale: last.scale,
+    shownBar: last.bar,
     boundaryTime: last.time,
     events: v.events.slice(count),
   };
 }
 
-function progress(v, t, now, barsLen, reducedMotion) {
-  let stepNow = Math.min(Math.max(Math.floor((now - v.boundaryTime) / STEP), 0), 15);
-  if (reducedMotion) stepNow = Math.floor(stepNow / 4) * 4;
-  const bar = v.shownAge[t] % barsLen;
-  return (bar * 16 + stepNow) / (barsLen * 16);
+function progress(v, now) {
+  let stepNow = Math.min(Math.max(Math.floor((now - v.boundaryTime) / STEP), 0), BAR_STEPS - 1);
+  if (v.reducedMotion) stepNow = Math.floor(stepNow / 4) * 4;
+  return ((v.shownBar % PHRASE_BARS) * BAR_STEPS + stepNow) / (PHRASE_BARS * BAR_STEPS);
 }
 
 function clampGain(x) {
   return Math.min(Math.max(x, 0), MASTER_CAP);
 }
 
-function restoreTarget(hidden) {
-  return hidden ? 0 : MASTER_CAP;
-}
-
 const bus = {
-  create() {
-    rt.master = new Tone.Gain(MASTER_CAP).toDestination();
-  },
-  gainParam() {
-    return rt.master.gain;
-  },
   anchor(p, t0) {
     if (p.cancelAndHoldAtTime) {
       p.cancelAndHoldAtTime(t0);
@@ -324,13 +298,13 @@ const bus = {
     }
   },
   rampTo(target, dur) {
-    const p = bus.gainParam();
+    const p = rt.master.gain;
     const t0 = rt.ctx.currentTime;
     bus.anchor(p, t0);
     p.linearRampToValueAtTime(clampGain(target), t0 + dur);
   },
   fadeOutIn(t0, target) {
-    const p = bus.gainParam();
+    const p = rt.master.gain;
     bus.anchor(p, t0);
     p.linearRampToValueAtTime(0, t0 + STOP_FADE);
     p.setValueAtTime(0, t0 + STOP_RESTORE);
@@ -339,71 +313,98 @@ const bus = {
 };
 
 function createInstruments(out) {
-  const drums = {
-    kick: new Tone.MembraneSynth({
-      pitchDecay: 0.05,
-      octaves: 6,
-      envelope: { attack: 0.001, decay: 0.35, sustain: 0, release: 0.2 },
-    }).connect(out),
-    clap: new Tone.NoiseSynth({
-      noise: { type: "pink" },
-      envelope: { attack: 0.001, decay: 0.2, sustain: 0, release: 0.05 },
-    }).connect(out),
-    openHat: new Tone.MetalSynth({
-      envelope: { attack: 0.001, decay: 0.3, release: 0.05 },
-      harmonicity: 5.1,
-      modulationIndex: 24,
-      resonance: 4000,
-      octaves: 1.5,
-    }).connect(out),
-    closedHat: new Tone.MetalSynth({
-      envelope: { attack: 0.001, decay: 0.06, release: 0.01 },
-      harmonicity: 5.1,
-      modulationIndex: 24,
-      resonance: 4000,
-      octaves: 1.5,
-    }).connect(out),
+  const glue = new Tone.Compressor({ threshold: -18, ratio: 3, attack: 0.01, release: 0.2 }).connect(out);
+  const reverb = new Tone.Reverb({ decay: 3, preDelay: 0.02, wet: 1 }).connect(glue);
+  const echo = new Tone.FeedbackDelay({ delayTime: STEP * 3, feedback: 0.35, wet: 1 });
+  echo.chain(new Tone.Filter(2500, "lowpass"), glue);
+  const wire = (node, verb = 0, delay = 0) => {
+    node.connect(glue);
+    if (verb) node.connect(new Tone.Gain(verb).connect(reverb));
+    if (delay) node.connect(new Tone.Gain(delay).connect(echo));
+    return node;
   };
-  const bass = new Tone.MonoSynth({
+
+  const kick = wire(new Tone.MembraneSynth({
+    pitchDecay: 0.04,
+    octaves: 5,
+    envelope: { attack: 0.001, decay: 0.45, sustain: 0, release: 0.1 },
+    volume: -2,
+  }));
+  const snare = new Tone.NoiseSynth({
+    noise: { type: "white" },
+    envelope: { attack: 0.001, decay: 0.18, sustain: 0 },
+    volume: -8,
+  });
+  snare.connect(wire(new Tone.Filter({ type: "bandpass", frequency: 2000, Q: 0.8 }), 0.2));
+  const snareBody = wire(new Tone.MembraneSynth({
+    pitchDecay: 0.02,
+    octaves: 2,
+    envelope: { attack: 0.001, decay: 0.12, sustain: 0, release: 0.05 },
+    volume: -10,
+  }));
+  const hatFilter = wire(new Tone.Filter(7500, "highpass"), 0.1);
+  const closed = new Tone.NoiseSynth({ envelope: { attack: 0.001, decay: 0.035, sustain: 0 }, volume: -14 }).connect(hatFilter);
+  const open = new Tone.NoiseSynth({ envelope: { attack: 0.001, decay: 0.28, sustain: 0 }, volume: -17 }).connect(hatFilter);
+
+  const bass = wire(new Tone.MonoSynth({
+    oscillator: { type: "sawtooth" },
+    filter: { type: "lowpass", rolloff: -24, Q: 2 },
+    envelope: { attack: 0.005, decay: 0.3, sustain: 0.6, release: 0.08 },
+    filterEnvelope: { attack: 0.005, decay: 0.25, sustain: 0.25, release: 0.1, baseFrequency: 90, octaves: 3.2 },
+    volume: -6,
+  }));
+  const keys = new Tone.PolySynth(Tone.FMSynth, {
+    harmonicity: 3,
+    modulationIndex: 8,
+    oscillator: { type: "sine" },
+    modulation: { type: "sine" },
+    envelope: { attack: 0.004, decay: 1.6, sustain: 0.15, release: 1.2 },
+    modulationEnvelope: { attack: 0.002, decay: 0.4, sustain: 0.05, release: 0.4 },
+    volume: -14,
+  });
+  keys.connect(wire(new Tone.Chorus(3, 2.5, 0.4).start(), 0.3, 0.12));
+  const lead = wire(new Tone.MonoSynth({
     oscillator: { type: "square" },
-    filter: { Q: 1, type: "lowpass" },
-    envelope: { attack: 0.005, decay: 0.2, sustain: 0.5, release: 0.15 },
-    filterEnvelope: { attack: 0.005, decay: 0.15, sustain: 0.3, release: 0.15, baseFrequency: 120, octaves: 2.5 },
-  }).connect(out);
-  const strings = Array.from({ length: STRING_COUNT }, () =>
-    new Tone.PluckSynth({ attackNoise: 1, dampening: 3500, resonance: 0.9 }).connect(out),
-  );
-  const melody = new Tone.Synth({
-    oscillator: { type: "triangle" },
-    envelope: { attack: 0.005, decay: 0.2, sustain: 0.25, release: 0.25 },
-  }).connect(out);
-  return { drums, bass, strings, cursor: 0, melody };
+    filter: { type: "lowpass", rolloff: -12, Q: 1 },
+    envelope: { attack: 0.01, decay: 0.2, sustain: 0.4, release: 0.3 },
+    filterEnvelope: { attack: 0.01, decay: 0.2, sustain: 0.3, release: 0.3, baseFrequency: 700, octaves: 2 },
+    volume: -12,
+  }), 0.25, 0.3);
+
+  return {
+    drums: {
+      kick: (time, vel) => kick.triggerAttackRelease("A1", 0.3, time, vel),
+      snare: (time, vel) => {
+        snare.triggerAttackRelease(0.15, time, vel);
+        snareBody.triggerAttackRelease("G3", 0.08, time, vel * 0.6);
+      },
+      closed: (time, vel) => closed.triggerAttackRelease(0.03, time, vel),
+      open: (time, vel) => open.triggerAttackRelease(0.2, time, vel),
+    },
+    bass,
+    keys,
+    lead,
+    mono: [kick, snare, snareBody, closed, open, bass, lead],
+  };
 }
 
 const voices = {
-  play(instruments, n) {
-    if (n.pitches !== undefined) {
-      n.pitches.forEach((hz, i) => {
-        const string = instruments.strings[instruments.cursor];
-        instruments.cursor = (instruments.cursor + 1) % instruments.strings.length;
-        string.triggerAttackRelease(hz, n.dur, n.time + i * STRUM, n.gain);
-      });
-    } else if (n.lane === undefined) {
-      const single = n.track === 1 ? instruments.bass : instruments.melody;
-      single.triggerAttackRelease(n.pitch, n.dur, n.time, n.gain);
-    } else if (n.lane === "kick") {
-      instruments.drums.kick.triggerAttackRelease("A1", n.dur, n.time, n.gain);
-    } else if (n.lane === "clap") {
-      instruments.drums.clap.triggerAttackRelease(n.dur, n.time, n.gain);
+  play(inst, n) {
+    const vel = n.vel * (0.9 + Math.random() * 0.1);
+    if (n.track === 0) {
+      inst.drums[n.lane](n.time, vel);
+      return;
+    }
+    const dur = n.len * STEP;
+    if (n.track === 2) {
+      n.notes.forEach((note, i) => inst.keys.triggerAttackRelease(note, dur, n.time + i * STRUM, vel));
     } else {
-      instruments.drums[n.lane].triggerAttackRelease(n.dur, n.time, n.gain);
+      (n.track === 1 ? inst.bass : inst.lead).triggerAttackRelease(n.notes[0], dur - 0.01, n.time, vel);
     }
   },
-  releaseAll(instruments, t) {
-    for (const drum of Object.values(instruments.drums)) drum.triggerRelease(t);
-    for (const instrument of [instruments.bass, instruments.melody, ...instruments.strings]) {
-      instrument.triggerRelease(t);
-    }
+  releaseAll(inst, t) {
+    for (const synth of inst.mono) synth.triggerRelease(t);
+    inst.keys.releaseAll(t);
   },
 };
 
@@ -412,6 +413,7 @@ function start() {
   const lastEvent = view.events.length ? view.events[view.events.length - 1].time : 0;
   state.nextBar = Math.max(now + CATCHUP_SLACK, rt.muteUntil, lastEvent);
   state.step = 0;
+  state.bar = -1;
   rt.timer = env.setInterval(tick, TICK_MS);
   ensureFrame();
 }
@@ -437,23 +439,18 @@ function stopIfIdle() {
 
 function tick() {
   const now = rt.ctx.currentTime;
-  state.nextBar = catchUp(state.nextBar, now);
+  if (state.nextBar < now) state.nextBar = now + CATCHUP_SLACK;
   while (state.nextBar < now + LOOKAHEAD) {
     if (state.step === 0) {
       state = commitBoundary(state);
-      view.events.push({
-        time: state.nextBar,
-        active: state.active.slice(),
-        age: state.age.slice(),
-        scale: state.scale,
-      });
+      view.events.push({ time: state.nextBar, active: state.active.slice(), bar: state.bar });
       if (stopIfIdle()) return;
     }
     for (const note of notesForStep(state, state.step, state.nextBar)) {
       voices.play(rt.instruments, note);
     }
     state.nextBar += STEP;
-    state.step = (state.step + 1) % STEPS_PER_BAR;
+    state.step = (state.step + 1) % BAR_STEPS;
   }
 }
 
@@ -477,18 +474,16 @@ function frame() {
 
 function render(v, s, now) {
   if (els === null) return;
+  const done = progress(v, now) * 100 + "%";
   for (let t = 0; t < 4; t++) {
     for (let c = 0; c < 4; c++) {
       const d = displayState(v.shownActive[t], displayQueued(v, s, t), c);
       const pad = els.pads[t][c];
       pad.className = "clip t-" + t + " is-" + d;
-      pad.setAttribute("aria-pressed", pressed(v, t, c));
+      pad.setAttribute("aria-pressed", String(v.shownActive[t] === c));
       if (v.noAudio) pad.setAttribute("aria-disabled", "true");
       els.padState[t][c].textContent = stateText(d, v.lang);
-      els.progress[t][c].style.width =
-        v.shownActive[t] === c
-          ? progress(v, t, now, TRACKS[t].clips[c].bars.length, v.reducedMotion) * 100 + "%"
-          : "0%";
+      els.progress[t][c].style.width = v.shownActive[t] === c ? done : "0%";
     }
   }
   const blocked = audioBlocked(v, s);
@@ -514,7 +509,7 @@ function ensureAudio() {
     }
     const session = env.audioSession();
     if (session) session.type = "playback";
-    bus.create();
+    rt.master = new Tone.Gain(MASTER_CAP).toDestination();
     rt.instruments = createInstruments(rt.master);
     rt.ctx.onstatechange = onStateChange;
   }
@@ -549,7 +544,7 @@ function onSessionTap(p) {
 }
 
 function stopAll() {
-  state = { ...state, active: [-1, -1, -1, -1], queued: [null, null, null, null], age: [0, 0, 0, 0] };
+  state = { ...state, active: [-1, -1, -1, -1], queued: [null, null, null, null], bar: -1 };
   view = { ...view, shownActive: [-1, -1, -1, -1], events: [] };
   if (rt.timer !== null) {
     env.clearInterval(rt.timer);
@@ -564,7 +559,7 @@ function stopAll() {
       const t0 = rt.ctx.currentTime;
       rt.muteUntil = t0 + STOP_RESTORE + RESTORE_RAMP;
       voices.releaseAll(rt.instruments, t0 + STOP_FADE);
-      bus.fadeOutIn(t0, restoreTarget(env.hidden()));
+      bus.fadeOutIn(t0, env.hidden() ? 0 : MASTER_CAP);
     }
   } finally {
     render(view, state, 0);
@@ -644,9 +639,7 @@ function queryDom(doc) {
     }
   }
   return {
-    body: doc.body,
     langButtons: Array.from(doc.querySelectorAll(".lang button")),
-    main: required("alm"),
     session: required("session"),
     pads,
     padState,
@@ -664,15 +657,6 @@ function readPad(target) {
   const c = element.dataset.c;
   if (!/^[0-3]$/.test(t) || !/^[0-3]$/.test(c)) return null;
   return { t: Number(t), c: Number(c) };
-}
-
-function onSessionClick(event) {
-  const p = readPad(event.target);
-  if (p !== null) onSessionTap(p);
-}
-
-function onResumeClick() {
-  ensureAudio().then(startIfIdle);
 }
 
 function applyText(dom, lang) {
@@ -700,9 +684,12 @@ function setLang(lang) {
 }
 
 function bindListeners(dom) {
-  dom.session.addEventListener("click", onSessionClick);
+  dom.session.addEventListener("click", (event) => {
+    const p = readPad(event.target);
+    if (p !== null) onSessionTap(p);
+  });
   dom.stop.addEventListener("click", stopAll);
-  dom.resume.addEventListener("click", onResumeClick);
+  dom.resume.addEventListener("click", () => ensureAudio().then(startIfIdle));
   for (const button of dom.langButtons) {
     button.addEventListener("click", () => setLang(button.dataset.lang));
   }
@@ -723,56 +710,5 @@ function init() {
   render(view, state, 0);
 }
 
-const core = {
-  K,
-  TRACKS,
-  SCALES,
-  KINDS,
-  tap,
-  tapGate,
-  displayState,
-  displayQueued,
-  pressed,
-  anyActive,
-  audioBlocked,
-  stateText,
-  commitBoundary,
-  notesForStep,
-  catchUp,
-  drainEvents,
-  progress,
-  clampGain,
-  restoreTarget,
-  pitch,
-  initialState,
-  initialView,
-  tick,
-  frame,
-  start,
-  startIfIdle,
-  stopIfIdle,
-  stopAll,
-  ensureAudio,
-  onSessionTap,
-  onStateChange,
-  onVisibility,
-  onPageShow,
-  bus,
-  voices,
-  __setEnv(partial) {
-    env = { ...env, ...partial };
-  },
-  __getState() {
-    return { state, view, rt };
-  },
-  __reset() {
-    state = initialState();
-    view = initialView(false, false);
-    rt = initialRuntime();
-    env = defaultEnv;
-  },
-};
-
-if (typeof module !== "undefined" && module.exports) module.exports = core;
-else if (typeof document !== "undefined") document.addEventListener("DOMContentLoaded", init);
+document.addEventListener("DOMContentLoaded", init);
 })();
