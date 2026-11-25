@@ -1,0 +1,144 @@
+---
+layout: false
+permalink: /explore/learning-music/chords/
+eleventyExcludeFromCollections: true
+---
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title data-i18n-title="lesson.chords.title">Akord</title>
+<link rel="stylesheet" href="/css/reset.css">
+<link rel="stylesheet" href="/css/explore-learning-music-lessons.css">
+<script defer src="/js/vendor/tone-15.5.66.js"></script>
+<script defer src="/js/explore-learning-music-shared.js"></script>
+<script defer src="/js/explore-learning-music-audio.js"></script>
+<script defer src="/js/explore-learning-music-lessons.js"></script>
+</head>
+<body data-lesson="chords" data-lang="id" data-ready="false" data-step="1">
+<svg hidden aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg">
+<symbol id="i-back" viewBox="0 0 24 24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 4 7 12l8 8"/><path d="M7 12h13"/></symbol>
+<symbol id="i-try" viewBox="0 0 24 24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11V5.5a1.5 1.5 0 0 1 3 0V11"/><path d="M12 11V4.5a1.5 1.5 0 0 1 3 0V11"/><path d="M15 11V6.5a1.5 1.5 0 0 1 3 0V14a7 7 0 0 1-7 7h-1a6 6 0 0 1-5-2.7L3 14"/></symbol>
+<symbol id="i-check" viewBox="0 0 24 24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 12.5 9.5 17.5 19.5 6.5"/></symbol>
+<symbol id="i-star" viewBox="0 0 24 24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l2.7 5.9 6.3.6-4.8 4.2 1.4 6.3L12 16.8 6.4 20l1.4-6.3L3 9.5l6.3-.6z"/></symbol>
+<symbol id="i-play" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M7 4l13 8-13 8z"/></symbol>
+<symbol id="i-stop" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect x="5" y="5" width="14" height="14"/></symbol>
+</svg>
+<header class="lm-head">
+<a class="lm-crumb" href="/explore/learning-music/"><svg aria-hidden="true" focusable="false"><use href="#i-back"/></svg><span data-i18n="lesson.chords.crumb">Akord</span></a>
+<div class="lm-lang" role="group" aria-label="Bahasa / Language">
+<button type="button" data-lang="id" aria-pressed="true">ID</button>
+<button type="button" data-lang="en" aria-pressed="false">EN</button>
+</div>
+<h1 data-i18n="lesson.chords.title">Akord</h1>
+<p class="lm-indicator" aria-hidden="true">1 / 4</p>
+</header>
+<main>
+<section class="lm-step" data-step="1" aria-labelledby="chords-s1-h2">
+<h2 id="chords-s1-h2" tabindex="-1" data-i18n="lesson.chords.step1.heading">Langkah 1 — Empat akord</h2>
+<div class="lm-bubble">
+<img src="/img/learning-music/bird.svg" alt="" width="64" height="64">
+<span data-i18n="lesson.chords.step1.say">Setiap bar punya satu akord: Am, F, C, dan G. Urutan ini mengalir dan kembali ke awal.</span>
+</div>
+<div class="lm-toy">
+<ol class="lm-chords"><li>Am</li><li>F</li><li>C</li><li>G</li></ol>
+<div class="lm-transport">
+<button type="button" data-transport="toggle" data-i18n="ui.play" aria-pressed="false">Putar</button>
+</div>
+</div>
+<p class="lm-try" id="chords-try-1"><svg aria-hidden="true" focusable="false"><use href="#i-try"/></svg><span data-i18n="lesson.chords.step1.try">Tekan Putar dan ikuti akord yang berganti tiap bar.</span></p>
+<div class="lm-nav">
+<button type="button" data-nav="back" data-i18n="ui.back" disabled>Kembali</button>
+<button type="button" data-nav="next" data-i18n="ui.next">Lanjut</button>
+</div>
+</section>
+<section class="lm-step" data-step="2" aria-labelledby="chords-s2-h2">
+<h2 id="chords-s2-h2" tabindex="-1" data-i18n="lesson.chords.step2.heading">Langkah 2 — Dua akord</h2>
+<div class="lm-bubble">
+<img src="/img/learning-music/bird.svg" alt="" width="64" height="64">
+<span data-i18n="lesson.chords.step2.say">Dua akord cukup untuk satu putaran. Am dan C bergantian dengan tenang.</span>
+</div>
+<div class="lm-toy">
+<input type="radio" name="ch2" id="ch2-0" value="Am" checked>
+<label for="ch2-0">Am</label>
+<input type="radio" name="ch2" id="ch2-1" value="Am">
+<label for="ch2-1">Am</label>
+<input type="radio" name="ch2" id="ch2-2" value="C">
+<label for="ch2-2">C</label>
+<input type="radio" name="ch2" id="ch2-3" value="C">
+<label for="ch2-3">C</label>
+<div class="lm-transport">
+<button type="button" data-transport="toggle" data-i18n="ui.play" aria-pressed="false">Putar</button>
+</div>
+</div>
+<p class="lm-try" id="chords-try-2"><svg aria-hidden="true" focusable="false"><use href="#i-try"/></svg><span data-i18n="lesson.chords.step2.try">Ketuk pad di bar kedua untuk memutar akordnya.</span></p>
+<div class="lm-nav">
+<button type="button" data-nav="back" data-i18n="ui.back">Kembali</button>
+<button type="button" data-nav="next" data-i18n="ui.next">Lanjut</button>
+</div>
+</section>
+<section class="lm-step" data-step="3" aria-labelledby="chords-s3-h2">
+<h2 id="chords-s3-h2" tabindex="-1" data-i18n="lesson.chords.step3.heading">Langkah 3 — Tiga akord</h2>
+<div class="lm-bubble">
+<img src="/img/learning-music/bird.svg" alt="" width="64" height="64">
+<span data-i18n="lesson.chords.step3.say">Am, F, dan C memberi gerak yang lebih jauh tanpa kehilangan arah.</span>
+</div>
+<div class="lm-toy">
+<input type="radio" name="ch3" id="ch3-0" value="Am" checked>
+<label for="ch3-0">Am</label>
+<input type="radio" name="ch3" id="ch3-1" value="F">
+<label for="ch3-1">F</label>
+<input type="radio" name="ch3" id="ch3-2" value="C">
+<label for="ch3-2">C</label>
+<input type="radio" name="ch3" id="ch3-3" value="C">
+<label for="ch3-3">C</label>
+<div class="lm-transport">
+<button type="button" data-transport="toggle" data-i18n="ui.play" aria-pressed="false">Putar</button>
+</div>
+</div>
+<p class="lm-try" id="chords-try-3"><svg aria-hidden="true" focusable="false"><use href="#i-try"/></svg><span data-i18n="lesson.chords.step3.try">Ketuk pad untuk mengganti akord di setiap bar.</span></p>
+<div class="lm-nav">
+<button type="button" data-nav="back" data-i18n="ui.back">Kembali</button>
+<button type="button" data-nav="next" data-i18n="ui.next">Lanjut</button>
+</div>
+</section>
+<section class="lm-step" data-step="4" aria-labelledby="chords-s4-h2">
+<h2 id="chords-s4-h2" tabindex="-1" data-i18n="lesson.chords.step4.heading">Langkah 4 — Kembali ke G</h2>
+<div class="lm-bubble">
+<img src="/img/learning-music/bird.svg" alt="" width="64" height="64">
+<span data-i18n="lesson.chords.step4.say">Akord G menutup putaran dan menarik kembali ke Am.</span>
+</div>
+<div class="lm-toy">
+<input type="radio" name="ch4" id="ch4-0" value="Am" checked>
+<label for="ch4-0">Am</label>
+<input type="radio" name="ch4" id="ch4-1" value="F">
+<label for="ch4-1">F</label>
+<input type="radio" name="ch4" id="ch4-2" value="C">
+<label for="ch4-2">C</label>
+<input type="radio" name="ch4" id="ch4-3" value="Am">
+<label for="ch4-3">Am</label>
+<div class="lm-transport">
+<button type="button" data-transport="toggle" data-i18n="ui.play" aria-pressed="false">Putar</button>
+</div>
+</div>
+<p class="lm-try" id="chords-try-4"><svg aria-hidden="true" focusable="false"><use href="#i-try"/></svg><span data-i18n="lesson.chords.step4.try">Ubah akord bar keempat menjadi G, lalu mainkan seluruh progresi.</span></p>
+<div class="lm-nav">
+<button type="button" data-nav="back" data-i18n="ui.back">Kembali</button>
+<a data-nav="next" href="/explore/learning-music/" data-i18n="ui.next">Lanjut</a>
+</div>
+</section>
+<section class="lm-complete" hidden>
+<p class="lm-done" data-i18n="ui.done">Selesai</p>
+<span class="lm-star" data-star="0"><svg aria-hidden="true" focusable="false"><use href="#i-star"/></svg><span data-i18n="ui.star">Bintang</span></span>
+<a class="lm-cta" href="/explore/learning-music/" data-i18n="ui.cta.song">Buka lagu penuh</a>
+</section>
+<p class="lm-silent" hidden data-i18n="ui.silent">Tidak ada suara</p>
+</main>
+<footer class="lm-foot">
+<a href="https://tonejs.github.io/" rel="noopener noreferrer" data-i18n="ui.credit.audio">Suara oleh Tone.js</a>
+<a href="https://learningmusic.ableton.com/" rel="noopener noreferrer" data-i18n="ui.credit.bird">Ilustrasi burung: domain publik</a>
+</footer>
+<div id="live" role="status" aria-live="polite" aria-atomic="true"></div>
+</body>
+</html>

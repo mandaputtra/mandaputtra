@@ -1,0 +1,195 @@
+---
+layout: false
+permalink: /explore/learning-music/melodies/
+eleventyExcludeFromCollections: true
+---
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title data-i18n-title="lesson.melodies.title">Melodi</title>
+<link rel="stylesheet" href="/css/reset.css">
+<link rel="stylesheet" href="/css/explore-learning-music-lessons.css">
+<script defer src="/js/vendor/tone-15.5.66.js"></script>
+<script defer src="/js/explore-learning-music-shared.js"></script>
+<script defer src="/js/explore-learning-music-audio.js"></script>
+<script defer src="/js/explore-learning-music-lessons.js"></script>
+</head>
+<body data-lesson="melodies" data-lang="id" data-ready="false" data-step="1">
+<svg hidden aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg">
+<symbol id="i-back" viewBox="0 0 24 24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 4 7 12l8 8"/><path d="M7 12h13"/></symbol>
+<symbol id="i-try" viewBox="0 0 24 24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11V5.5a1.5 1.5 0 0 1 3 0V11"/><path d="M12 11V4.5a1.5 1.5 0 0 1 3 0V11"/><path d="M15 11V6.5a1.5 1.5 0 0 1 3 0V14a7 7 0 0 1-7 7h-1a6 6 0 0 1-5-2.7L3 14"/></symbol>
+<symbol id="i-check" viewBox="0 0 24 24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 12.5 9.5 17.5 19.5 6.5"/></symbol>
+<symbol id="i-star" viewBox="0 0 24 24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l2.7 5.9 6.3.6-4.8 4.2 1.4 6.3L12 16.8 6.4 20l1.4-6.3L3 9.5l6.3-.6z"/></symbol>
+<symbol id="i-play" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M7 4l13 8-13 8z"/></symbol>
+<symbol id="i-stop" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect x="5" y="5" width="14" height="14"/></symbol>
+</svg>
+<header class="lm-head">
+<a class="lm-crumb" href="/explore/learning-music/"><svg aria-hidden="true" focusable="false"><use href="#i-back"/></svg><span data-i18n="lesson.melodies.crumb">Melodi</span></a>
+<div class="lm-lang" role="group" aria-label="Bahasa / Language">
+<button type="button" data-lang="id" aria-pressed="true">ID</button>
+<button type="button" data-lang="en" aria-pressed="false">EN</button>
+</div>
+<h1 data-i18n="lesson.melodies.title">Melodi</h1>
+<p class="lm-indicator" aria-hidden="true">1 / 4</p>
+</header>
+<main>
+<section class="lm-step" data-step="1" aria-labelledby="melodies-s1-h2">
+<h2 id="melodies-s1-h2" tabindex="-1" data-i18n="lesson.melodies.step1.heading">Langkah 1 — Frase pendek</h2>
+<div class="lm-bubble">
+<img src="/img/learning-music/bird.svg" alt="" width="64" height="64">
+<span data-i18n="lesson.melodies.step1.say">Lima nada bergerak dan berhenti di ujung bar. Slot terakhir menunggu diisi.</span>
+</div>
+<div class="lm-toy">
+<input type="radio" name="p1" id="p1-0" value="C5" checked>
+<label for="p1-0">C5</label>
+<input type="radio" name="p1" id="p1-1" value="B4">
+<label for="p1-1">B4</label>
+<input type="radio" name="p1" id="p1-2" value="A4">
+<label for="p1-2">A4</label>
+<input type="radio" name="p1" id="p1-3" value="G4">
+<label for="p1-3">G4</label>
+<input type="radio" name="p1" id="p1-4" value="F4">
+<label for="p1-4">F4</label>
+<input type="radio" name="p1" id="p1-5" value="E4">
+<label for="p1-5">E4</label>
+<input type="radio" name="p1" id="p1-6" value="D4">
+<label for="p1-6">D4</label>
+<input type="radio" name="p1" id="p1-7" value="C4">
+<label for="p1-7">C4</label>
+<ol class="lm-slots"><li>E4</li><li>D4</li><li>C4</li><li>D4</li><li>E4</li><li></li><li></li><li>C4</li></ol>
+<div class="lm-transport">
+<button type="button" data-transport="play" data-i18n="ui.play">Putar</button>
+<button type="button" data-transport="stop" data-i18n="ui.stop" disabled>Berhenti</button>
+<button type="button" data-transport="mute" data-i18n="ui.mute" aria-pressed="false">Bisukan</button>
+</div>
+</div>
+<p class="lm-try" id="melodies-try-1"><svg aria-hidden="true" focusable="false"><use href="#i-try"/></svg><span data-i18n="lesson.melodies.step1.try">Ketuk tuts untuk menambah nada, lalu tekan Putar.</span></p>
+<div class="lm-nav">
+<button type="button" data-nav="back" data-i18n="ui.back" disabled>Kembali</button>
+<button type="button" data-nav="next" data-i18n="ui.next">Lanjut</button>
+</div>
+</section>
+<section class="lm-step" data-step="2" aria-labelledby="melodies-s2-h2">
+<h2 id="melodies-s2-h2" tabindex="-1" data-i18n="lesson.melodies.step2.heading">Langkah 2 — Ulang dan ubah</h2>
+<div class="lm-bubble">
+<img src="/img/learning-music/bird.svg" alt="" width="64" height="64">
+<span data-i18n="lesson.melodies.step2.say">Frase yang sama kembali dengan satu nada berbeda. Pengulangan membuat melodi mudah diingat.</span>
+</div>
+<div class="lm-toy">
+<input type="radio" name="p2" id="p2-0" value="C5" checked>
+<label for="p2-0">C5</label>
+<input type="radio" name="p2" id="p2-1" value="B4">
+<label for="p2-1">B4</label>
+<input type="radio" name="p2" id="p2-2" value="A4">
+<label for="p2-2">A4</label>
+<input type="radio" name="p2" id="p2-3" value="G4">
+<label for="p2-3">G4</label>
+<input type="radio" name="p2" id="p2-4" value="F4">
+<label for="p2-4">F4</label>
+<input type="radio" name="p2" id="p2-5" value="E4">
+<label for="p2-5">E4</label>
+<input type="radio" name="p2" id="p2-6" value="D4">
+<label for="p2-6">D4</label>
+<input type="radio" name="p2" id="p2-7" value="C4">
+<label for="p2-7">C4</label>
+<ol class="lm-slots"><li>E4</li><li>D4</li><li>C4</li><li>D4</li><li></li><li></li><li>C4</li><li>C4</li></ol>
+<div class="lm-transport">
+<button type="button" data-transport="play" data-i18n="ui.play">Putar</button>
+<button type="button" data-transport="stop" data-i18n="ui.stop" disabled>Berhenti</button>
+<button type="button" data-transport="mute" data-i18n="ui.mute" aria-pressed="false">Bisukan</button>
+</div>
+</div>
+<p class="lm-try" id="melodies-try-2"><svg aria-hidden="true" focusable="false"><use href="#i-try"/></svg><span data-i18n="lesson.melodies.step2.try">Isi slot kosong di tengah dan bandingkan dengan bar sebelumnya.</span></p>
+<div class="lm-nav">
+<button type="button" data-nav="back" data-i18n="ui.back">Kembali</button>
+<button type="button" data-nav="next" data-i18n="ui.next">Lanjut</button>
+</div>
+</section>
+<section class="lm-step" data-step="3" aria-labelledby="melodies-s3-h2">
+<h2 id="melodies-s3-h2" tabindex="-1" data-i18n="lesson.melodies.step3.heading">Langkah 3 — Turun bertahap</h2>
+<div class="lm-bubble">
+<img src="/img/learning-music/bird.svg" alt="" width="64" height="64">
+<span data-i18n="lesson.melodies.step3.say">Melodi turun dari G ke C. Arah menurun memberi rasa tenang.</span>
+</div>
+<div class="lm-toy">
+<input type="radio" name="p3" id="p3-0" value="C5" checked>
+<label for="p3-0">C5</label>
+<input type="radio" name="p3" id="p3-1" value="B4">
+<label for="p3-1">B4</label>
+<input type="radio" name="p3" id="p3-2" value="A4">
+<label for="p3-2">A4</label>
+<input type="radio" name="p3" id="p3-3" value="G4">
+<label for="p3-3">G4</label>
+<input type="radio" name="p3" id="p3-4" value="F4">
+<label for="p3-4">F4</label>
+<input type="radio" name="p3" id="p3-5" value="E4">
+<label for="p3-5">E4</label>
+<input type="radio" name="p3" id="p3-6" value="D4">
+<label for="p3-6">D4</label>
+<input type="radio" name="p3" id="p3-7" value="C4">
+<label for="p3-7">C4</label>
+<ol class="lm-slots"><li>G4</li><li>E4</li><li>C4</li><li>D4</li><li>E4</li><li>D4</li><li>C4</li><li></li></ol>
+<div class="lm-transport">
+<button type="button" data-transport="play" data-i18n="ui.play">Putar</button>
+<button type="button" data-transport="stop" data-i18n="ui.stop" disabled>Berhenti</button>
+<button type="button" data-transport="mute" data-i18n="ui.mute" aria-pressed="false">Bisukan</button>
+</div>
+</div>
+<p class="lm-try" id="melodies-try-3"><svg aria-hidden="true" focusable="false"><use href="#i-try"/></svg><span data-i18n="lesson.melodies.step3.try">Mainkan seluruh frase dan perhatikan arah nadanya.</span></p>
+<div class="lm-nav">
+<button type="button" data-nav="back" data-i18n="ui.back">Kembali</button>
+<button type="button" data-nav="next" data-i18n="ui.next">Lanjut</button>
+</div>
+</section>
+<section class="lm-step" data-step="4" aria-labelledby="melodies-s4-h2">
+<h2 id="melodies-s4-h2" tabindex="-1" data-i18n="lesson.melodies.step4.heading">Langkah 4 — Lengkapi frase</h2>
+<div class="lm-bubble">
+<img src="/img/learning-music/bird.svg" alt="" width="64" height="64">
+<span data-i18n="lesson.melodies.step4.say">Satu slot kosong menahan frase. Mengisinya membuat melodi utuh.</span>
+</div>
+<div class="lm-toy">
+<input type="radio" name="p4" id="p4-0" value="C5" checked>
+<label for="p4-0">C5</label>
+<input type="radio" name="p4" id="p4-1" value="B4">
+<label for="p4-1">B4</label>
+<input type="radio" name="p4" id="p4-2" value="A4">
+<label for="p4-2">A4</label>
+<input type="radio" name="p4" id="p4-3" value="G4">
+<label for="p4-3">G4</label>
+<input type="radio" name="p4" id="p4-4" value="F4">
+<label for="p4-4">F4</label>
+<input type="radio" name="p4" id="p4-5" value="E4">
+<label for="p4-5">E4</label>
+<input type="radio" name="p4" id="p4-6" value="D4">
+<label for="p4-6">D4</label>
+<input type="radio" name="p4" id="p4-7" value="C4">
+<label for="p4-7">C4</label>
+<ol class="lm-slots"><li>G4</li><li>E4</li><li>C4</li><li>D4</li><li>E4</li><li>D4</li><li></li><li>C4</li></ol>
+<div class="lm-transport">
+<button type="button" data-transport="play" data-i18n="ui.play">Putar</button>
+<button type="button" data-transport="stop" data-i18n="ui.stop" disabled>Berhenti</button>
+<button type="button" data-transport="mute" data-i18n="ui.mute" aria-pressed="false">Bisukan</button>
+</div>
+</div>
+<p class="lm-try" id="melodies-try-4"><svg aria-hidden="true" focusable="false"><use href="#i-try"/></svg><span data-i18n="lesson.melodies.step4.try">Isi slot kosong, lalu dengarkan frase dari awal sampai akhir.</span></p>
+<div class="lm-nav">
+<button type="button" data-nav="back" data-i18n="ui.back">Kembali</button>
+<a data-nav="next" href="/explore/learning-music/" data-i18n="ui.next">Lanjut</a>
+</div>
+</section>
+<section class="lm-complete" hidden>
+<p class="lm-done" data-i18n="ui.done">Selesai</p>
+<span class="lm-star" data-star="0"><svg aria-hidden="true" focusable="false"><use href="#i-star"/></svg><span data-i18n="ui.star">Bintang</span></span>
+<a class="lm-cta" href="/explore/learning-music/" data-i18n="ui.cta.song">Buka lagu penuh</a>
+</section>
+<p class="lm-silent" hidden data-i18n="ui.silent">Tidak ada suara</p>
+</main>
+<footer class="lm-foot">
+<a href="https://tonejs.github.io/" rel="noopener noreferrer" data-i18n="ui.credit.audio">Suara oleh Tone.js</a>
+<a href="https://learningmusic.ableton.com/" rel="noopener noreferrer" data-i18n="ui.credit.bird">Ilustrasi burung: domain publik</a>
+</footer>
+<div id="live" role="status" aria-live="polite" aria-atomic="true"></div>
+</body>
+</html>

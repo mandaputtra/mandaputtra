@@ -1,0 +1,175 @@
+---
+layout: false
+permalink: /explore/learning-music/beats/
+eleventyExcludeFromCollections: true
+---
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title data-i18n-title="lesson.beats.title">Ketukan</title>
+<link rel="stylesheet" href="/css/reset.css">
+<link rel="stylesheet" href="/css/explore-learning-music-lessons.css">
+<script defer src="/js/vendor/tone-15.5.66.js"></script>
+<script defer src="/js/explore-learning-music-shared.js"></script>
+<script defer src="/js/explore-learning-music-audio.js"></script>
+<script defer src="/js/explore-learning-music-lessons.js"></script>
+</head>
+<body data-lesson="beats" data-lang="id" data-ready="false" data-step="1">
+<svg hidden aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg">
+<symbol id="i-back" viewBox="0 0 24 24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 4 7 12l8 8"/><path d="M7 12h13"/></symbol>
+<symbol id="i-try" viewBox="0 0 24 24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11V5.5a1.5 1.5 0 0 1 3 0V11"/><path d="M12 11V4.5a1.5 1.5 0 0 1 3 0V11"/><path d="M15 11V6.5a1.5 1.5 0 0 1 3 0V14a7 7 0 0 1-7 7h-1a6 6 0 0 1-5-2.7L3 14"/></symbol>
+<symbol id="i-check" viewBox="0 0 24 24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 12.5 9.5 17.5 19.5 6.5"/></symbol>
+<symbol id="i-star" viewBox="0 0 24 24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l2.7 5.9 6.3.6-4.8 4.2 1.4 6.3L12 16.8 6.4 20l1.4-6.3L3 9.5l6.3-.6z"/></symbol>
+<symbol id="i-play" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M7 4l13 8-13 8z"/></symbol>
+<symbol id="i-stop" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect x="5" y="5" width="14" height="14"/></symbol>
+</svg>
+<header class="lm-head">
+<a class="lm-crumb" href="/explore/learning-music/"><svg aria-hidden="true" focusable="false"><use href="#i-back"/></svg><span data-i18n="lesson.beats.crumb">Ketukan</span></a>
+<div class="lm-lang" role="group" aria-label="Bahasa / Language">
+<button type="button" data-lang="id" aria-pressed="true">ID</button>
+<button type="button" data-lang="en" aria-pressed="false">EN</button>
+</div>
+<h1 data-i18n="lesson.beats.title">Ketukan</h1>
+<p class="lm-indicator" aria-hidden="true">1 / 4</p>
+</header>
+<main>
+<section class="lm-step" data-step="1" aria-labelledby="beats-s1-h2">
+<h2 id="beats-s1-h2" tabindex="-1" data-i18n="lesson.beats.step1.heading">Langkah 1 — Satu ketukan</h2>
+<div class="lm-bubble">
+<img src="/img/learning-music/bird.svg" alt="" width="64" height="64">
+<span data-i18n="lesson.beats.step1.say">Bar dimulai dari hitungan pertama. Kick di ketukan satu sudah cukup untuk merasakan denyutnya.</span>
+</div>
+<div class="lm-toy">
+<button type="button" class="lm-cell" data-lane="kick" data-col="0" data-group="X..." aria-pressed="true" aria-label="Kick Ketukan 1"></button>
+<button type="button" class="lm-cell" data-lane="kick" data-col="1" data-group="...." aria-pressed="false" aria-label="Kick Ketukan 2"></button>
+<button type="button" class="lm-cell" data-lane="kick" data-col="2" data-group="...." aria-pressed="false" aria-label="Kick Ketukan 3"></button>
+<button type="button" class="lm-cell" data-lane="kick" data-col="3" data-group="...." aria-pressed="false" aria-label="Kick Ketukan 4"></button>
+<button type="button" class="lm-cell" data-lane="snare" data-col="0" data-group="...." aria-pressed="false" aria-label="Snare Ketukan 1"></button>
+<button type="button" class="lm-cell" data-lane="snare" data-col="1" data-group="...." aria-pressed="false" aria-label="Snare Ketukan 2"></button>
+<button type="button" class="lm-cell" data-lane="snare" data-col="2" data-group="...." aria-pressed="false" aria-label="Snare Ketukan 3"></button>
+<button type="button" class="lm-cell" data-lane="snare" data-col="3" data-group="...." aria-pressed="false" aria-label="Snare Ketukan 4"></button>
+<button type="button" class="lm-cell" data-lane="hat" data-col="0" data-group="...." aria-pressed="false" aria-label="Hi-hat Ketukan 1"></button>
+<button type="button" class="lm-cell" data-lane="hat" data-col="1" data-group="...." aria-pressed="false" aria-label="Hi-hat Ketukan 2"></button>
+<button type="button" class="lm-cell" data-lane="hat" data-col="2" data-group="...." aria-pressed="false" aria-label="Hi-hat Ketukan 3"></button>
+<button type="button" class="lm-cell" data-lane="hat" data-col="3" data-group="...." aria-pressed="false" aria-label="Hi-hat Ketukan 4"></button>
+<div class="lm-transport">
+<button type="button" data-transport="play" data-i18n="ui.play">Putar</button>
+<button type="button" data-transport="stop" data-i18n="ui.stop" disabled>Berhenti</button>
+<button type="button" data-transport="mute" data-i18n="ui.mute" aria-pressed="false">Bisukan</button>
+</div>
+</div>
+<p class="lm-try" id="beats-try-1"><svg aria-hidden="true" focusable="false"><use href="#i-try"/></svg><span data-i18n="lesson.beats.step1.try">Ketuk sel kick di kolom pertama, lalu tekan Putar.</span></p>
+<div class="lm-nav">
+<button type="button" data-nav="back" data-i18n="ui.back" disabled>Kembali</button>
+<button type="button" data-nav="next" data-i18n="ui.next">Lanjut</button>
+</div>
+</section>
+<section class="lm-step" data-step="2" aria-labelledby="beats-s2-h2">
+<h2 id="beats-s2-h2" tabindex="-1" data-i18n="lesson.beats.step2.heading">Langkah 2 — Ketukan dua dan empat</h2>
+<div class="lm-bubble">
+<img src="/img/learning-music/bird.svg" alt="" width="64" height="64">
+<span data-i18n="lesson.beats.step2.say">Snare di ketukan dua dan empat menjawab kick. Ketukan ganjil terasa ringan, ketukan genap terasa mantap.</span>
+</div>
+<div class="lm-toy">
+<button type="button" class="lm-cell" data-lane="kick" data-col="0" data-group="X..." aria-pressed="true" aria-label="Kick Ketukan 1"></button>
+<button type="button" class="lm-cell" data-lane="kick" data-col="1" data-group="X..." aria-pressed="true" aria-label="Kick Ketukan 2"></button>
+<button type="button" class="lm-cell" data-lane="kick" data-col="2" data-group="X..." aria-pressed="true" aria-label="Kick Ketukan 3"></button>
+<button type="button" class="lm-cell" data-lane="kick" data-col="3" data-group="X..." aria-pressed="true" aria-label="Kick Ketukan 4"></button>
+<button type="button" class="lm-cell" data-lane="snare" data-col="0" data-group="...." aria-pressed="false" aria-label="Snare Ketukan 1"></button>
+<button type="button" class="lm-cell" data-lane="snare" data-col="1" data-group="X..." aria-pressed="true" aria-label="Snare Ketukan 2"></button>
+<button type="button" class="lm-cell" data-lane="snare" data-col="2" data-group="...." aria-pressed="false" aria-label="Snare Ketukan 3"></button>
+<button type="button" class="lm-cell" data-lane="snare" data-col="3" data-group="X..." aria-pressed="true" aria-label="Snare Ketukan 4"></button>
+<button type="button" class="lm-cell" data-lane="hat" data-col="0" data-group="...." aria-pressed="false" aria-label="Hi-hat Ketukan 1"></button>
+<button type="button" class="lm-cell" data-lane="hat" data-col="1" data-group="...." aria-pressed="false" aria-label="Hi-hat Ketukan 2"></button>
+<button type="button" class="lm-cell" data-lane="hat" data-col="2" data-group="...." aria-pressed="false" aria-label="Hi-hat Ketukan 3"></button>
+<button type="button" class="lm-cell" data-lane="hat" data-col="3" data-group="...." aria-pressed="false" aria-label="Hi-hat Ketukan 4"></button>
+<div class="lm-transport">
+<button type="button" data-transport="play" data-i18n="ui.play">Putar</button>
+<button type="button" data-transport="stop" data-i18n="ui.stop" disabled>Berhenti</button>
+<button type="button" data-transport="mute" data-i18n="ui.mute" aria-pressed="false">Bisukan</button>
+</div>
+</div>
+<p class="lm-try" id="beats-try-2"><svg aria-hidden="true" focusable="false"><use href="#i-try"/></svg><span data-i18n="lesson.beats.step2.try">Ketuk sel snare di kolom kedua dan keempat, lalu bandingkan dengan kick.</span></p>
+<div class="lm-nav">
+<button type="button" data-nav="back" data-i18n="ui.back">Kembali</button>
+<button type="button" data-nav="next" data-i18n="ui.next">Lanjut</button>
+</div>
+</section>
+<section class="lm-step" data-step="3" aria-labelledby="beats-s3-h2">
+<h2 id="beats-s3-h2" tabindex="-1" data-i18n="lesson.beats.step3.heading">Langkah 3 — Hitungan per delapan</h2>
+<div class="lm-bubble">
+<img src="/img/learning-music/bird.svg" alt="" width="64" height="64">
+<span data-i18n="lesson.beats.step3.say">Hi-hat membagi setiap ketukan menjadi dua. Pola jadi lebih rapat tanpa menambah ketukan baru.</span>
+</div>
+<div class="lm-toy">
+<button type="button" class="lm-cell" data-lane="kick" data-col="0" data-group="X..." aria-pressed="true" aria-label="Kick Ketukan 1"></button>
+<button type="button" class="lm-cell" data-lane="kick" data-col="1" data-group="X..." aria-pressed="true" aria-label="Kick Ketukan 2"></button>
+<button type="button" class="lm-cell" data-lane="kick" data-col="2" data-group="X..." aria-pressed="true" aria-label="Kick Ketukan 3"></button>
+<button type="button" class="lm-cell" data-lane="kick" data-col="3" data-group="X..." aria-pressed="true" aria-label="Kick Ketukan 4"></button>
+<button type="button" class="lm-cell" data-lane="snare" data-col="0" data-group="...." aria-pressed="false" aria-label="Snare Ketukan 1"></button>
+<button type="button" class="lm-cell" data-lane="snare" data-col="1" data-group="X..." aria-pressed="true" aria-label="Snare Ketukan 2"></button>
+<button type="button" class="lm-cell" data-lane="snare" data-col="2" data-group="...." aria-pressed="false" aria-label="Snare Ketukan 3"></button>
+<button type="button" class="lm-cell" data-lane="snare" data-col="3" data-group="X..." aria-pressed="true" aria-label="Snare Ketukan 4"></button>
+<button type="button" class="lm-cell" data-lane="hat" data-col="0" data-group="x.x." aria-pressed="true" aria-label="Hi-hat Ketukan 1"></button>
+<button type="button" class="lm-cell" data-lane="hat" data-col="1" data-group="x.x." aria-pressed="true" aria-label="Hi-hat Ketukan 2"></button>
+<button type="button" class="lm-cell" data-lane="hat" data-col="2" data-group="x.x." aria-pressed="true" aria-label="Hi-hat Ketukan 3"></button>
+<button type="button" class="lm-cell" data-lane="hat" data-col="3" data-group="x.x." aria-pressed="true" aria-label="Hi-hat Ketukan 4"></button>
+<div class="lm-transport">
+<button type="button" data-transport="play" data-i18n="ui.play">Putar</button>
+<button type="button" data-transport="stop" data-i18n="ui.stop" disabled>Berhenti</button>
+<button type="button" data-transport="mute" data-i18n="ui.mute" aria-pressed="false">Bisukan</button>
+</div>
+</div>
+<p class="lm-try" id="beats-try-3"><svg aria-hidden="true" focusable="false"><use href="#i-try"/></svg><span data-i18n="lesson.beats.step3.try">Nyalakan hi-hat di semua kolom, lalu dengarkan alurnya.</span></p>
+<div class="lm-nav">
+<button type="button" data-nav="back" data-i18n="ui.back">Kembali</button>
+<button type="button" data-nav="next" data-i18n="ui.next">Lanjut</button>
+</div>
+</section>
+<section class="lm-step" data-step="4" aria-labelledby="beats-s4-h2">
+<h2 id="beats-s4-h2" tabindex="-1" data-i18n="lesson.beats.step4.heading">Langkah 4 — Ketukan hantu</h2>
+<div class="lm-bubble">
+<img src="/img/learning-music/bird.svg" alt="" width="64" height="64">
+<span data-i18n="lesson.beats.step4.say">Ketukan hantu mengisi sela dengan pelan. Pola terasa hidup tanpa menutup ketukan utama.</span>
+</div>
+<div class="lm-toy">
+<button type="button" class="lm-cell" data-lane="kick" data-col="0" data-group="X..." aria-pressed="true" aria-label="Kick Ketukan 1"></button>
+<button type="button" class="lm-cell" data-lane="kick" data-col="1" data-group="X..." aria-pressed="true" aria-label="Kick Ketukan 2"></button>
+<button type="button" class="lm-cell" data-lane="kick" data-col="2" data-group="X..." aria-pressed="true" aria-label="Kick Ketukan 3"></button>
+<button type="button" class="lm-cell" data-lane="kick" data-col="3" data-group="X..." aria-pressed="true" aria-label="Kick Ketukan 4"></button>
+<button type="button" class="lm-cell" data-lane="snare" data-col="0" data-group="...." aria-pressed="false" aria-label="Snare Ketukan 1"></button>
+<button type="button" class="lm-cell" data-lane="snare" data-col="1" data-group="X..." aria-pressed="true" aria-label="Snare Ketukan 2"></button>
+<button type="button" class="lm-cell" data-lane="snare" data-col="2" data-group="...." aria-pressed="false" aria-label="Snare Ketukan 3"></button>
+<button type="button" class="lm-cell" data-lane="snare" data-col="3" data-group="X..." aria-pressed="true" aria-label="Snare Ketukan 4"></button>
+<button type="button" class="lm-cell" data-lane="hat" data-col="0" data-group="x.o." aria-pressed="true" aria-label="Hi-hat Ketukan 1"></button>
+<button type="button" class="lm-cell" data-lane="hat" data-col="1" data-group="x.o." aria-pressed="true" aria-label="Hi-hat Ketukan 2"></button>
+<button type="button" class="lm-cell" data-lane="hat" data-col="2" data-group="x.o." aria-pressed="true" aria-label="Hi-hat Ketukan 3"></button>
+<button type="button" class="lm-cell" data-lane="hat" data-col="3" data-group="x.o." aria-pressed="true" aria-label="Hi-hat Ketukan 4"></button>
+<div class="lm-transport">
+<button type="button" data-transport="play" data-i18n="ui.play">Putar</button>
+<button type="button" data-transport="stop" data-i18n="ui.stop" disabled>Berhenti</button>
+<button type="button" data-transport="mute" data-i18n="ui.mute" aria-pressed="false">Bisukan</button>
+</div>
+</div>
+<p class="lm-try" id="beats-try-4"><svg aria-hidden="true" focusable="false"><use href="#i-try"/></svg><span data-i18n="lesson.beats.step4.try">Matikan satu sel hi-hat di kolom keempat supaya muncul sela.</span></p>
+<div class="lm-nav">
+<button type="button" data-nav="back" data-i18n="ui.back">Kembali</button>
+<a data-nav="next" href="/explore/learning-music/" data-i18n="ui.next">Lanjut</a>
+</div>
+</section>
+<section class="lm-complete" hidden>
+<p class="lm-done" data-i18n="ui.done">Selesai</p>
+<span class="lm-star" data-star="0"><svg aria-hidden="true" focusable="false"><use href="#i-star"/></svg><span data-i18n="ui.star">Bintang</span></span>
+<a class="lm-cta" href="/explore/learning-music/" data-i18n="ui.cta.song">Buka lagu penuh</a>
+</section>
+<p class="lm-silent" hidden data-i18n="ui.silent">Tidak ada suara</p>
+</main>
+<footer class="lm-foot">
+<a href="https://tonejs.github.io/" rel="noopener noreferrer" data-i18n="ui.credit.audio">Suara oleh Tone.js</a>
+<a href="https://learningmusic.ableton.com/" rel="noopener noreferrer" data-i18n="ui.credit.bird">Ilustrasi burung: domain publik</a>
+</footer>
+<div id="live" role="status" aria-live="polite" aria-atomic="true"></div>
+</body>
+</html>

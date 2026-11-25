@@ -1,0 +1,143 @@
+---
+layout: false
+permalink: /explore/learning-music/basslines/
+eleventyExcludeFromCollections: true
+---
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title data-i18n-title="lesson.basslines.title">Garis Bass</title>
+<link rel="stylesheet" href="/css/reset.css">
+<link rel="stylesheet" href="/css/explore-learning-music-lessons.css">
+<script defer src="/js/vendor/tone-15.5.66.js"></script>
+<script defer src="/js/explore-learning-music-shared.js"></script>
+<script defer src="/js/explore-learning-music-audio.js"></script>
+<script defer src="/js/explore-learning-music-lessons.js"></script>
+</head>
+<body data-lesson="basslines" data-lang="id" data-ready="false" data-step="1">
+<svg hidden aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg">
+<symbol id="i-back" viewBox="0 0 24 24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 4 7 12l8 8"/><path d="M7 12h13"/></symbol>
+<symbol id="i-try" viewBox="0 0 24 24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11V5.5a1.5 1.5 0 0 1 3 0V11"/><path d="M12 11V4.5a1.5 1.5 0 0 1 3 0V11"/><path d="M15 11V6.5a1.5 1.5 0 0 1 3 0V14a7 7 0 0 1-7 7h-1a6 6 0 0 1-5-2.7L3 14"/></symbol>
+<symbol id="i-check" viewBox="0 0 24 24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 12.5 9.5 17.5 19.5 6.5"/></symbol>
+<symbol id="i-star" viewBox="0 0 24 24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l2.7 5.9 6.3.6-4.8 4.2 1.4 6.3L12 16.8 6.4 20l1.4-6.3L3 9.5l6.3-.6z"/></symbol>
+<symbol id="i-play" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M7 4l13 8-13 8z"/></symbol>
+<symbol id="i-stop" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect x="5" y="5" width="14" height="14"/></symbol>
+</svg>
+<header class="lm-head">
+<a class="lm-crumb" href="/explore/learning-music/"><svg aria-hidden="true" focusable="false"><use href="#i-back"/></svg><span data-i18n="lesson.basslines.crumb">Bass</span></a>
+<div class="lm-lang" role="group" aria-label="Bahasa / Language">
+<button type="button" data-lang="id" aria-pressed="true">ID</button>
+<button type="button" data-lang="en" aria-pressed="false">EN</button>
+</div>
+<h1 data-i18n="lesson.basslines.title">Garis Bass</h1>
+<p class="lm-indicator" aria-hidden="true">1 / 4</p>
+</header>
+<main>
+<section class="lm-step" data-step="1" aria-labelledby="basslines-s1-h2">
+<h2 id="basslines-s1-h2" tabindex="-1" data-i18n="lesson.basslines.step1.heading">Langkah 1 — Nada dasar</h2>
+<div class="lm-bubble">
+<img src="/img/learning-music/bird.svg" alt="" width="64" height="64">
+<span data-i18n="lesson.basslines.step1.say">Bass memulai dari nada dasar akord. Satu nada panjang sudah menopang seluruh bar.</span>
+</div>
+<div class="lm-toy">
+<button type="button" class="lm-cell" data-value="Dasar" aria-pressed="true" aria-label="Ketukan 1, Dasar">Dasar</button>
+<button type="button" class="lm-cell" data-value="Mati" aria-pressed="false" aria-label="Ketukan 2, Mati">Mati</button>
+<button type="button" class="lm-cell" data-value="Mati" aria-pressed="false" aria-label="Ketukan 3, Mati">Mati</button>
+<button type="button" class="lm-cell" data-value="Mati" aria-pressed="false" aria-label="Ketukan 4, Mati">Mati</button>
+<div class="lm-transport">
+<button type="button" data-transport="play" data-i18n="ui.play">Putar</button>
+<button type="button" data-transport="stop" data-i18n="ui.stop" disabled>Berhenti</button>
+<button type="button" data-transport="mute" data-i18n="ui.mute" aria-pressed="false">Bisukan</button>
+</div>
+</div>
+<p class="lm-try" id="basslines-try-1"><svg aria-hidden="true" focusable="false"><use href="#i-try"/></svg><span data-i18n="lesson.basslines.step1.try">Ketuk sel pertama sampai bertuliskan Dasar, lalu tekan Putar.</span></p>
+<div class="lm-nav">
+<button type="button" data-nav="back" data-i18n="ui.back" disabled>Kembali</button>
+<button type="button" data-nav="next" data-i18n="ui.next">Lanjut</button>
+</div>
+</section>
+<section class="lm-step" data-step="2" aria-labelledby="basslines-s2-h2">
+<h2 id="basslines-s2-h2" tabindex="-1" data-i18n="lesson.basslines.step2.heading">Langkah 2 — Dua ketukan</h2>
+<div class="lm-bubble">
+<img src="/img/learning-music/bird.svg" alt="" width="64" height="64">
+<span data-i18n="lesson.basslines.step2.say">Nada dasar di ketukan satu dan tiga membuat langkah terasa mantap.</span>
+</div>
+<div class="lm-toy">
+<button type="button" class="lm-cell" data-value="Dasar" aria-pressed="true" aria-label="Ketukan 1, Dasar">Dasar</button>
+<button type="button" class="lm-cell" data-value="Mati" aria-pressed="false" aria-label="Ketukan 2, Mati">Mati</button>
+<button type="button" class="lm-cell" data-value="Dasar" aria-pressed="true" aria-label="Ketukan 3, Dasar">Dasar</button>
+<button type="button" class="lm-cell" data-value="Mati" aria-pressed="false" aria-label="Ketukan 4, Mati">Mati</button>
+<div class="lm-transport">
+<button type="button" data-transport="play" data-i18n="ui.play">Putar</button>
+<button type="button" data-transport="stop" data-i18n="ui.stop" disabled>Berhenti</button>
+<button type="button" data-transport="mute" data-i18n="ui.mute" aria-pressed="false">Bisukan</button>
+</div>
+</div>
+<p class="lm-try" id="basslines-try-2"><svg aria-hidden="true" focusable="false"><use href="#i-try"/></svg><span data-i18n="lesson.basslines.step2.try">Nyalakan dua sel bergantian dan rasakan ayunannya.</span></p>
+<div class="lm-nav">
+<button type="button" data-nav="back" data-i18n="ui.back">Kembali</button>
+<button type="button" data-nav="next" data-i18n="ui.next">Lanjut</button>
+</div>
+</section>
+<section class="lm-step" data-step="3" aria-labelledby="basslines-s3-h2">
+<h2 id="basslines-s3-h2" tabindex="-1" data-i18n="lesson.basslines.step3.heading">Langkah 3 — Tambah nada kelima</h2>
+<div class="lm-bubble">
+<img src="/img/learning-music/bird.svg" alt="" width="64" height="64">
+<span data-i18n="lesson.basslines.step3.say">Nada kelima membuka ruang di antara nada dasar. Garis bass jadi bercabang.</span>
+</div>
+<div class="lm-toy">
+<button type="button" class="lm-cell" data-value="Dasar" aria-pressed="true" aria-label="Ketukan 1, Dasar">Dasar</button>
+<button type="button" class="lm-cell" data-value="Mati" aria-pressed="false" aria-label="Ketukan 2, Mati">Mati</button>
+<button type="button" class="lm-cell" data-value="Kelima" aria-pressed="true" aria-label="Ketukan 3, Kelima">Kelima</button>
+<button type="button" class="lm-cell" data-value="Mati" aria-pressed="false" aria-label="Ketukan 4, Mati">Mati</button>
+<div class="lm-transport">
+<button type="button" data-transport="play" data-i18n="ui.play">Putar</button>
+<button type="button" data-transport="stop" data-i18n="ui.stop" disabled>Berhenti</button>
+<button type="button" data-transport="mute" data-i18n="ui.mute" aria-pressed="false">Bisukan</button>
+</div>
+</div>
+<p class="lm-try" id="basslines-try-3"><svg aria-hidden="true" focusable="false"><use href="#i-try"/></svg><span data-i18n="lesson.basslines.step3.try">Ubah sel ketiga menjadi Kelima dan dengarkan geraknya.</span></p>
+<div class="lm-nav">
+<button type="button" data-nav="back" data-i18n="ui.back">Kembali</button>
+<button type="button" data-nav="next" data-i18n="ui.next">Lanjut</button>
+</div>
+</section>
+<section class="lm-step" data-step="4" aria-labelledby="basslines-s4-h2">
+<h2 id="basslines-s4-h2" tabindex="-1" data-i18n="lesson.basslines.step4.heading">Langkah 4 — Naik satu oktaf</h2>
+<div class="lm-bubble">
+<img src="/img/learning-music/bird.svg" alt="" width="64" height="64">
+<span data-i18n="lesson.basslines.step4.say">Nada oktaf memberi puncak kecil sebelum kembali ke nada dasar.</span>
+</div>
+<div class="lm-toy">
+<button type="button" class="lm-cell" data-value="Dasar" aria-pressed="true" aria-label="Ketukan 1, Dasar">Dasar</button>
+<button type="button" class="lm-cell" data-value="Kelima" aria-pressed="true" aria-label="Ketukan 2, Kelima">Kelima</button>
+<button type="button" class="lm-cell" data-value="Mati" aria-pressed="false" aria-label="Ketukan 3, Mati">Mati</button>
+<button type="button" class="lm-cell" data-value="Dasar" aria-pressed="true" aria-label="Ketukan 4, Dasar">Dasar</button>
+<div class="lm-transport">
+<button type="button" data-transport="play" data-i18n="ui.play">Putar</button>
+<button type="button" data-transport="stop" data-i18n="ui.stop" disabled>Berhenti</button>
+<button type="button" data-transport="mute" data-i18n="ui.mute" aria-pressed="false">Bisukan</button>
+</div>
+</div>
+<p class="lm-try" id="basslines-try-4"><svg aria-hidden="true" focusable="false"><use href="#i-try"/></svg><span data-i18n="lesson.basslines.step4.try">Susun pola sampai sel ketiga berisi Oktaf, lalu mainkan.</span></p>
+<div class="lm-nav">
+<button type="button" data-nav="back" data-i18n="ui.back">Kembali</button>
+<a data-nav="next" href="/explore/learning-music/" data-i18n="ui.next">Lanjut</a>
+</div>
+</section>
+<section class="lm-complete" hidden>
+<p class="lm-done" data-i18n="ui.done">Selesai</p>
+<span class="lm-star" data-star="0"><svg aria-hidden="true" focusable="false"><use href="#i-star"/></svg><span data-i18n="ui.star">Bintang</span></span>
+<a class="lm-cta" href="/explore/learning-music/" data-i18n="ui.cta.song">Buka lagu penuh</a>
+</section>
+<p class="lm-silent" hidden data-i18n="ui.silent">Tidak ada suara</p>
+</main>
+<footer class="lm-foot">
+<a href="https://tonejs.github.io/" rel="noopener noreferrer" data-i18n="ui.credit.audio">Suara oleh Tone.js</a>
+<a href="https://learningmusic.ableton.com/" rel="noopener noreferrer" data-i18n="ui.credit.bird">Ilustrasi burung: domain publik</a>
+</footer>
+<div id="live" role="status" aria-live="polite" aria-atomic="true"></div>
+</body>
+</html>
