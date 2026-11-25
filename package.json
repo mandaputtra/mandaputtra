@@ -4,6 +4,9 @@
   "description": "A starter repository for a blog web site using the Eleventy static site generator.",
   "scripts": {
     "build": "npx gulp build-sass && npx eleventy",
+    "check": "node scripts/check-lessons.mjs",
+    "check:site": "npx gulp build-sass && npx eleventy && node scripts/check-lessons.mjs --site _site",
+    "test": "node --test scripts/*.test.mjs",
     "start": "concurrently \"npx eleventy --serve\" \"npx gulp watch-sass\" ",
     "debug": "DEBUG=* npx eleventy",
     "lint": "eslint .",

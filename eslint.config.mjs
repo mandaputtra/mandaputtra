@@ -28,4 +28,23 @@ export default [
       globals: globals.node,
     },
   },
+  {
+    files: ["scripts/**/*.mjs", "sw.js"],
+    languageOptions: {
+      ecmaVersion: 2022,
+      sourceType: "module",
+      globals: {
+        process: "readonly",
+        URL: "readonly",
+        console: "readonly",
+        Buffer: "readonly",
+        self: "readonly",
+        caches: "readonly",
+        clients: "readonly",
+        fetch: "readonly",
+        Response: "readonly",
+        Request: "readonly",
+      },
+    },
+  },
 ];

@@ -52,6 +52,7 @@ module.exports = function (eleventyConfig) {
   eleventyConfig.addPassthroughCopy("css");
   eleventyConfig.addPassthroughCopy("js");
   eleventyConfig.addPassthroughCopy("CNAME");
+  eleventyConfig.addPassthroughCopy("sw.js");
   eleventyConfig.addPassthroughCopy("stuff/skills");
   eleventyConfig.ignores.add("./stuff/skills/**/*.md");
   /* Markdown Plugins */

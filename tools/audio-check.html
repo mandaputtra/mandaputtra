@@ -1,0 +1,832 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex" />
+    <title>Audio check</title>
+    <style>
+      body {
+        margin: 2rem auto;
+        max-width: 52rem;
+        padding: 0 1rem;
+        background: #fff;
+        color: #000;
+        font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+        font-size: 14px;
+        line-height: 1.5;
+      }
+      h1,
+      h2 {
+        font-size: 1rem;
+        font-weight: 700;
+        margin: 1.5rem 0 0.5rem;
+      }
+      p,
+      ul {
+        margin: 0.25rem 0;
+      }
+      ul {
+        padding-left: 1.25rem;
+      }
+      pre {
+        margin: 0.5rem 0;
+        padding: 0.75rem;
+        border: 1px solid #000;
+        white-space: pre-wrap;
+        word-break: break-word;
+      }
+      button {
+        margin-right: 0.5rem;
+        padding: 0.25rem 0.75rem;
+        border: 1px solid #000;
+        background: #fff;
+        color: #000;
+        font: inherit;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Audio check</h1>
+    <p id="scope">scope: idle</p>
+    <p id="provenance">provenance: pending</p>
+    <section>
+      <h2>Baseline</h2>
+      <div id="baseline">
+        <p data-profile="home">home: pending</p>
+        <p data-profile="lesson">lesson: pending</p>
+      </div>
+    </section>
+    <section>
+      <h2>Run</h2>
+      <button id="run" type="button">Run both profiles</button>
+      <button id="copy" type="button" disabled>Copy report</button>
+      <p id="verdict">verdict: idle</p>
+      <p id="peak">peak: idle</p>
+      <p id="parity">parity: idle</p>
+      <ul id="diffs"></ul>
+      <pre id="report">report: idle</pre>
+      <p id="trace">trace: idle</p>
+    </section>
+    <script src="../js/vendor/tone-15.5.66.js"></script>
+    <script src="../js/explore-learning-music-audio.js"></script>
+    <script>
+      (function () {
+        'use strict';
+
+        var SCHEMA = 1;
+        var SAMPLE_RATE = 48000;
+        var FIXTURE_ID = 'parity-v1';
+        var FAIL_CEILING = 1;
+        var ALARM_LEVEL = { home: 0.8, lesson: 0.55 };
+        var CAPTURED_FROM = {
+          home: 'pre-extraction-homepage-engine',
+          lesson: 'lesson-data-expected',
+        };
+        var PROFILES = ['home', 'lesson'];
+        var TOLERANCE = 1e-6;
+        var VERDICTS = ['PASS', 'ALARM', 'VOID', 'FAIL'];
+
+        var AUDIO_BASELINE = {
+          home: {
+            schema: 1,
+            profile: 'home',
+            capturedFrom: 'pre-extraction-homepage-engine',
+            sourceSha256: 'unavailable',
+            fixtureId: 'parity-v1',
+            sampleRate: 48000,
+            notes: [
+              [0, 1, 'kick', [], 0.3, 1],
+              [0, 1, 'bass', ['A1'], 0.48214285714285715, 0.7],
+              [0, 1, 'lead', ['C4'], 0.26785714285714285, 0.75],
+              [0, 1, 'chord', ['A3', 'C4', 'E4'], 1.6, 0.85],
+              [0, 5, 'kick', [], 0.3, 1],
+              [0, 5, 'snare', [], 0.15, 1],
+              [0, 5, 'lead', ['E4'], 0.26785714285714285, 0.75],
+              [0, 9, 'kick', [], 0.3, 1],
+              [0, 9, 'bass', ['E2'], 0.48214285714285715, 0.7],
+              [0, 9, 'lead', ['G4'], 0.26785714285714285, 0.75],
+              [0, 13, 'kick', [], 0.3, 1],
+              [0, 13, 'snare', [], 0.15, 1],
+              [0, 13, 'lead', ['C5'], 0.26785714285714285, 0.75],
+              [1, 1, 'kick', [], 0.3, 1],
+              [1, 1, 'hat', [], 0.03, 0.75],
+              [1, 1, 'bass', ['F1'], 0.48214285714285715, 0.7],
+              [1, 1, 'lead', ['A4'], 0.26785714285714285, 0.75],
+              [1, 1, 'chord', ['A3', 'C4', 'F4'], 1.6, 0.85],
+              [1, 3, 'hat', [], 0.03, 0.75],
+              [1, 5, 'kick', [], 0.3, 1],
+              [1, 5, 'snare', [], 0.15, 1],
+              [1, 5, 'hat', [], 0.03, 0.75],
+              [1, 5, 'bass', ['C2'], 0.48214285714285715, 0.7],
+              [1, 7, 'hat', [], 0.03, 0.75],
+              [1, 7, 'openhat', [], 0.2, 0.75],
+              [1, 7, 'lead', ['C5'], 0.26785714285714285, 0.75],
+              [1, 9, 'kick', [], 0.3, 1],
+              [1, 9, 'hat', [], 0.03, 0.75],
+              [1, 11, 'hat', [], 0.03, 0.75],
+              [1, 11, 'lead', ['F4'], 0.26785714285714285, 0.75],
+              [1, 13, 'kick', [], 0.3, 1],
+              [1, 13, 'snare', [], 0.15, 1],
+              [1, 13, 'hat', [], 0.03, 0.75],
+              [1, 13, 'bass', ['F2'], 0.48214285714285715, 0.7],
+              [1, 15, 'hat', [], 0.03, 0.75],
+              [1, 15, 'lead', ['E4'], 0.26785714285714285, 0.75],
+              [2, 1, 'kick', [], 0.3, 1],
+              [2, 1, 'hat', [], 0.03, 0.75],
+              [2, 1, 'bass', ['C2'], 0.48214285714285715, 0.7],
+              [2, 1, 'lead', ['G4'], 0.26785714285714285, 0.75],
+              [2, 1, 'chord', ['G3', 'C4', 'E4'], 1.6, 0.85],
+              [2, 3, 'hat', [], 0.03, 0.35],
+              [2, 3, 'lead', ['E4'], 0.26785714285714285, 0.75],
+              [2, 5, 'kick', [], 0.3, 1],
+              [2, 5, 'snare', [], 0.15, 1],
+              [2, 5, 'hat', [], 0.03, 0.75],
+              [2, 5, 'lead', ['C4'], 0.26785714285714285, 0.75],
+              [2, 7, 'hat', [], 0.03, 0.35],
+              [2, 9, 'kick', [], 0.3, 1],
+              [2, 9, 'hat', [], 0.03, 0.75],
+              [2, 9, 'bass', ['G2'], 0.48214285714285715, 0.7],
+              [2, 9, 'lead', ['E4'], 0.26785714285714285, 0.75],
+              [2, 11, 'hat', [], 0.03, 0.35],
+              [2, 13, 'kick', [], 0.3, 1],
+              [2, 13, 'snare', [], 0.15, 1],
+              [2, 13, 'hat', [], 0.03, 0.75],
+              [2, 13, 'lead', ['G4'], 0.26785714285714285, 0.75],
+              [2, 15, 'hat', [], 0.03, 0.35],
+              [3, 1, 'kick', [], 0.3, 1],
+              [3, 1, 'bass', ['G1'], 0.48214285714285715, 0.7],
+              [3, 1, 'lead', ['D4'], 0.26785714285714285, 0.75],
+              [3, 1, 'chord', ['G3', 'B3', 'D4'], 1.6, 0.85],
+              [3, 5, 'kick', [], 0.3, 1],
+              [3, 5, 'snare', [], 0.15, 1],
+              [3, 5, 'bass', ['D2'], 0.48214285714285715, 0.7],
+              [3, 5, 'lead', ['B4'], 0.26785714285714285, 0.75],
+              [3, 9, 'kick', [], 0.3, 1],
+              [3, 9, 'lead', ['G4'], 0.26785714285714285, 0.75],
+              [3, 13, 'kick', [], 0.3, 1],
+              [3, 13, 'snare', [], 0.15, 1],
+              [3, 13, 'bass', ['G1'], 0.48214285714285715, 0.7],
+              [3, 13, 'lead', ['D4'], 0.26785714285714285, 0.75],
+            ],
+          },
+          lesson: {
+            schema: 1,
+            profile: 'lesson',
+            capturedFrom: 'lesson-data-expected',
+            sourceSha256: 'unavailable',
+            fixtureId: 'parity-v1',
+            sampleRate: 48000,
+            notes: [
+              [0, 1, 'kick', [], 0.3, 1],
+              [0, 1, 'bass', ['A1'], 0.48214285714285715, 0.7],
+              [0, 1, 'lead', ['C4'], 0.26785714285714285, 0.75],
+              [0, 1, 'chord', ['A3', 'C4', 'E4'], 1.6, 0.85],
+              [0, 5, 'kick', [], 0.3, 1],
+              [0, 5, 'snare', [], 0.15, 1],
+              [0, 5, 'lead', ['E4'], 0.26785714285714285, 0.75],
+              [0, 9, 'kick', [], 0.3, 1],
+              [0, 9, 'bass', ['E2'], 0.48214285714285715, 0.7],
+              [0, 9, 'lead', ['G4'], 0.26785714285714285, 0.75],
+              [0, 13, 'kick', [], 0.3, 1],
+              [0, 13, 'snare', [], 0.15, 1],
+              [0, 13, 'lead', ['C5'], 0.26785714285714285, 0.75],
+              [1, 1, 'kick', [], 0.3, 1],
+              [1, 1, 'hat', [], 0.03, 0.75],
+              [1, 1, 'bass', ['F1'], 0.48214285714285715, 0.7],
+              [1, 1, 'lead', ['A4'], 0.26785714285714285, 0.75],
+              [1, 1, 'chord', ['A3', 'C4', 'F4'], 1.6, 0.85],
+              [1, 3, 'hat', [], 0.03, 0.75],
+              [1, 5, 'kick', [], 0.3, 1],
+              [1, 5, 'snare', [], 0.15, 1],
+              [1, 5, 'hat', [], 0.03, 0.75],
+              [1, 5, 'bass', ['C2'], 0.48214285714285715, 0.7],
+              [1, 7, 'hat', [], 0.03, 0.75],
+              [1, 7, 'openhat', [], 0.2, 0.75],
+              [1, 7, 'lead', ['C5'], 0.26785714285714285, 0.75],
+              [1, 9, 'kick', [], 0.3, 1],
+              [1, 9, 'hat', [], 0.03, 0.75],
+              [1, 11, 'hat', [], 0.03, 0.75],
+              [1, 11, 'lead', ['F4'], 0.26785714285714285, 0.75],
+              [1, 13, 'kick', [], 0.3, 1],
+              [1, 13, 'snare', [], 0.15, 1],
+              [1, 13, 'hat', [], 0.03, 0.75],
+              [1, 13, 'bass', ['F2'], 0.48214285714285715, 0.7],
+              [1, 15, 'hat', [], 0.03, 0.75],
+              [1, 15, 'lead', ['E4'], 0.26785714285714285, 0.75],
+              [2, 1, 'kick', [], 0.3, 1],
+              [2, 1, 'hat', [], 0.03, 0.75],
+              [2, 1, 'bass', ['C2'], 0.48214285714285715, 0.7],
+              [2, 1, 'lead', ['G4'], 0.26785714285714285, 0.75],
+              [2, 1, 'chord', ['G3', 'C4', 'E4'], 1.6, 0.85],
+              [2, 3, 'hat', [], 0.03, 0.35],
+              [2, 3, 'lead', ['E4'], 0.26785714285714285, 0.75],
+              [2, 5, 'kick', [], 0.3, 1],
+              [2, 5, 'snare', [], 0.15, 1],
+              [2, 5, 'hat', [], 0.03, 0.75],
+              [2, 5, 'lead', ['C4'], 0.26785714285714285, 0.75],
+              [2, 7, 'hat', [], 0.03, 0.35],
+              [2, 9, 'kick', [], 0.3, 1],
+              [2, 9, 'hat', [], 0.03, 0.75],
+              [2, 9, 'bass', ['G2'], 0.48214285714285715, 0.7],
+              [2, 9, 'lead', ['E4'], 0.26785714285714285, 0.75],
+              [2, 11, 'hat', [], 0.03, 0.35],
+              [2, 13, 'kick', [], 0.3, 1],
+              [2, 13, 'snare', [], 0.15, 1],
+              [2, 13, 'hat', [], 0.03, 0.75],
+              [2, 13, 'lead', ['G4'], 0.26785714285714285, 0.75],
+              [2, 15, 'hat', [], 0.03, 0.35],
+              [3, 1, 'kick', [], 0.3, 1],
+              [3, 1, 'bass', ['G1'], 0.48214285714285715, 0.7],
+              [3, 1, 'lead', ['D4'], 0.26785714285714285, 0.75],
+              [3, 1, 'chord', ['G3', 'B3', 'D4'], 1.6, 0.85],
+              [3, 5, 'kick', [], 0.3, 1],
+              [3, 5, 'snare', [], 0.15, 1],
+              [3, 5, 'bass', ['D2'], 0.48214285714285715, 0.7],
+              [3, 5, 'lead', ['B4'], 0.26785714285714285, 0.75],
+              [3, 9, 'kick', [], 0.3, 1],
+              [3, 9, 'lead', ['G4'], 0.26785714285714285, 0.75],
+              [3, 13, 'kick', [], 0.3, 1],
+              [3, 13, 'snare', [], 0.15, 1],
+              [3, 13, 'bass', ['G1'], 0.48214285714285715, 0.7],
+              [3, 13, 'lead', ['D4'], 0.26785714285714285, 0.75],
+            ],
+          },
+        };
+
+        var ui = {
+          scope: document.getElementById('scope'),
+          provenance: document.getElementById('provenance'),
+          baseline: document.getElementById('baseline'),
+          run: document.getElementById('run'),
+          copy: document.getElementById('copy'),
+          verdict: document.getElementById('verdict'),
+          peak: document.getElementById('peak'),
+          parity: document.getElementById('parity'),
+          diffs: document.getElementById('diffs'),
+          report: document.getElementById('report'),
+          trace: document.getElementById('trace'),
+        };
+
+        var state = {
+          voidCode: null,
+          running: false,
+          superseded: false,
+          stamped: false,
+        };
+
+        function engineTone() {
+          return typeof Tone !== 'undefined' ? Tone : null;
+        }
+
+        function engineRender() {
+          var lm = window.LM;
+          if (!lm || !lm.audio) return null;
+          return typeof lm.audio.renderOffline === 'function' ? lm.audio.renderOffline : null;
+        }
+
+        function rankOf(code) {
+          if (code.indexOf('FAIL') === 0) return 3;
+          if (code.indexOf('VOID') === 0) return 2;
+          if (code.indexOf('ALARM') === 0) return 1;
+          return 0;
+        }
+
+        function composeVerdict(codes) {
+          var best = 0;
+          for (var i = 0; i < codes.length; i++) {
+            var rank = rankOf(codes[i]);
+            if (rank > best) best = rank;
+          }
+          return VERDICTS[best];
+        }
+
+        function isFiniteNumber(value) {
+          return typeof value === 'number' && Number.isFinite(value);
+        }
+
+        function validTuple(tuple) {
+          if (!Array.isArray(tuple) || tuple.length !== 6) return false;
+          if (!Number.isInteger(tuple[0]) || !Number.isInteger(tuple[1])) return false;
+          if (typeof tuple[2] !== 'string') return false;
+          if (!Array.isArray(tuple[3])) return false;
+          for (var i = 0; i < tuple[3].length; i++) {
+            if (typeof tuple[3][i] !== 'string') return false;
+          }
+          return isFiniteNumber(tuple[4]) && isFiniteNumber(tuple[5]);
+        }
+
+        function validateEntry(profile) {
+          var entry = AUDIO_BASELINE[profile];
+          if (!entry || typeof entry !== 'object') return 'VOID_NO_BASELINE';
+          if (
+            entry.schema !== SCHEMA ||
+            entry.profile !== profile ||
+            entry.capturedFrom !== CAPTURED_FROM[profile] ||
+            entry.fixtureId !== FIXTURE_ID ||
+            entry.sampleRate !== SAMPLE_RATE ||
+            typeof entry.sourceSha256 !== 'string' ||
+            !Array.isArray(entry.notes)
+          ) {
+            return 'VOID_BASELINE_CORRUPT';
+          }
+          if (entry.notes.length === 0) return 'VOID_BASELINE_EMPTY';
+          for (var i = 0; i < entry.notes.length; i++) {
+            if (!validTuple(entry.notes[i])) return 'VOID_BASELINE_CORRUPT';
+          }
+          return null;
+        }
+
+        function setText(node, message) {
+          node.textContent = message;
+        }
+
+        function renderBaseline(codes) {
+          var rows = ui.baseline.querySelectorAll('[data-profile]');
+          for (var i = 0; i < rows.length; i++) {
+            var profile = rows[i].getAttribute('data-profile');
+            var entry = AUDIO_BASELINE[profile];
+            var code = codes[profile];
+            if (code) {
+              setText(rows[i], profile + ': ' + code);
+              continue;
+            }
+            setText(
+              rows[i],
+              profile +
+                ': schema ' +
+                entry.schema +
+                ', ' +
+                entry.notes.length +
+                ' note keys, ' +
+                entry.sampleRate +
+                ' Hz, fixture ' +
+                entry.fixtureId +
+                ', source ' +
+                entry.sourceSha256 +
+                ', captured from ' +
+                entry.capturedFrom
+            );
+          }
+        }
+
+        function toHex(buffer) {
+          var bytes = new Uint8Array(buffer);
+          var out = '';
+          for (var i = 0; i < bytes.length; i++) {
+            var part = bytes[i].toString(16);
+            out += part.length === 1 ? '0' + part : part;
+          }
+          return out;
+        }
+
+        function readEngineDigest() {
+          if (typeof fetch !== 'function' || !window.crypto || !window.crypto.subtle) {
+            return Promise.resolve('unavailable');
+          }
+          return fetch('../js/explore-learning-music-audio.js', { cache: 'no-store' })
+            .then(function (response) {
+              if (!response.ok) throw new Error('status ' + response.status);
+              return response.arrayBuffer();
+            })
+            .then(function (bytes) {
+              return window.crypto.subtle.digest('SHA-256', bytes);
+            })
+            .then(toHex)
+            .catch(function () {
+              return 'unavailable';
+            });
+        }
+
+        function stampProvenance() {
+          if (state.stamped) return;
+          state.stamped = true;
+          readEngineDigest().then(function (digest) {
+            setText(
+              ui.provenance,
+              'provenance: engine sha256 ' +
+                digest +
+                '; fixture ' +
+                FIXTURE_ID +
+                '; reference sample rate ' +
+                SAMPLE_RATE +
+                ' Hz'
+            );
+          });
+        }
+
+        function formatPeak(peak) {
+          return isFiniteNumber(peak) ? peak.toFixed(4) : 'n/a';
+        }
+
+        function formatDbfs(peak) {
+          if (!isFiniteNumber(peak) || peak <= 0) return '-inf';
+          return (20 * Math.log10(peak)).toFixed(2);
+        }
+
+        function formatSeconds(reading) {
+          if (!reading || !isFiniteNumber(reading.frames) || !isFiniteNumber(reading.sampleRate)) {
+            return 'n/a';
+          }
+          if (reading.sampleRate <= 0) return 'n/a';
+          return 'PT' + (reading.frames / reading.sampleRate).toFixed(6) + 'S';
+        }
+
+        function peakText(reading) {
+          if (!reading) return 'n/a';
+          return formatPeak(reading.peak) + ' (dBFS ' + formatDbfs(reading.peak) + ')';
+        }
+
+        function parityText(comparison) {
+          if (!comparison) return 'n/a';
+          var label = comparison.ok ? 'ok' : 'drift';
+          return label + ' (' + comparison.matched + '/' + comparison.total + ' keys)';
+        }
+
+        function identityText(identity) {
+          if (!identity) return 'n/a';
+          return identity.ok
+            ? 'identical (' + identity.total + ' keys)'
+            : 'diverged at key ' + identity.index + ' (' + identity.total + ' keys)';
+        }
+
+        function formatReport(model) {
+          var lines = [
+            'verdict: ' +
+              model.verdict +
+              (model.codes.length > 0 ? ' (' + model.codes.join(', ') + ')' : ''),
+            'home peak: ' + peakText(model.home),
+            'home parity: ' + parityText(model.homeParity),
+            'home render: ' + formatSeconds(model.home),
+            'lesson peak: ' + peakText(model.lesson),
+            'lesson parity: ' + parityText(model.lessonParity),
+            'lesson render: ' + formatSeconds(model.lesson),
+            'trace identity: ' + identityText(model.identity),
+            'scope: offline render only; stop latency not measured',
+          ];
+          if (model.note) lines.push('note: ' + model.note);
+          return lines.join('\n');
+        }
+
+        function renderEmptyRows() {
+          while (ui.diffs.firstChild) ui.diffs.removeChild(ui.diffs.firstChild);
+        }
+
+        function renderDiffRows(comparisons) {
+          renderEmptyRows();
+          var limit = 12;
+          var shown = 0;
+          for (var i = 0; i < comparisons.length; i++) {
+            var comparison = comparisons[i];
+            for (var j = 0; j < comparison.diffs.length && shown < limit; j++) {
+              var row = document.createElement('li');
+              row.textContent = comparison.profile + ' key ' + comparison.diffs[j];
+              ui.diffs.appendChild(row);
+              shown++;
+            }
+          }
+          if (shown === limit) {
+            var more = document.createElement('li');
+            more.textContent = 'further differences omitted';
+            ui.diffs.appendChild(more);
+          }
+        }
+
+        function renderVoid(code, detail) {
+          var model = {
+            verdict: 'VOID',
+            codes: [code],
+            home: null,
+            homeParity: null,
+            lesson: null,
+            lessonParity: null,
+            identity: null,
+            note: detail ? code + ': ' + detail : code,
+          };
+          setText(ui.verdict, 'verdict: VOID (' + code + ')');
+          setText(ui.peak, 'peak: none');
+          setText(ui.parity, 'parity: none');
+          setText(ui.trace, 'trace: none');
+          setText(ui.report, formatReport(model));
+          renderEmptyRows();
+          ui.copy.disabled = false;
+        }
+
+        function capturePeak(result) {
+          var trace = Array.isArray(result.trace) ? result.trace : [];
+          return {
+            peak: isFiniteNumber(result.peak) ? result.peak : 0,
+            nonFinite: isFiniteNumber(result.nonFinite) ? result.nonFinite : 0,
+            frames: isFiniteNumber(result.frames) ? result.frames : 0,
+            channels: isFiniteNumber(result.channels) ? result.channels : 0,
+            sampleRate: isFiniteNumber(result.sampleRate) ? result.sampleRate : 0,
+            total: trace.length,
+            trace: trace,
+          };
+        }
+
+        function near(left, right) {
+          return (
+            isFiniteNumber(left) && isFiniteNumber(right) && Math.abs(left - right) <= TOLERANCE
+          );
+        }
+
+        function sameNotes(left, right) {
+          if (!Array.isArray(left) || !Array.isArray(right)) return false;
+          if (left.length !== right.length) return false;
+          for (var i = 0; i < left.length; i++) {
+            if (left[i] !== right[i]) return false;
+          }
+          return true;
+        }
+
+        function tupleOf(entry) {
+          return [entry.bar, entry.step, entry.voice, entry.notes, entry.dur, entry.vel];
+        }
+
+        function describe(tuple) {
+          return (
+            tuple[0] +
+            ':' +
+            tuple[1] +
+            ':' +
+            tuple[2] +
+            ':' +
+            tuple[3].join('+') +
+            ':' +
+            tuple[4] +
+            ':' +
+            tuple[5]
+          );
+        }
+
+        function sameTuple(expected, actual) {
+          if (!Array.isArray(actual) || actual.length !== 6) return false;
+          if (expected[0] !== actual[0]) return false;
+          if (expected[1] !== actual[1]) return false;
+          if (expected[2] !== actual[2]) return false;
+          if (!sameNotes(expected[3], actual[3])) return false;
+          return near(expected[4], actual[4]) && near(expected[5], actual[5]);
+        }
+
+        function compareNotes(profile, expected, trace) {
+          var total = Math.max(expected.length, trace.length);
+          var matched = 0;
+          var diffs = [];
+          for (var i = 0; i < total; i++) {
+            var want = expected[i];
+            var got = trace[i] === undefined ? null : tupleOf(trace[i]);
+            if (want !== undefined && got !== null && sameTuple(want, got)) {
+              matched++;
+              continue;
+            }
+            var wantText = want === undefined ? 'absent' : describe(want);
+            var gotText = got === null ? 'absent' : describe(got);
+            diffs.push(i + ': expected ' + wantText + ', got ' + gotText);
+          }
+          return {
+            profile: profile,
+            ok: diffs.length === 0,
+            total: total,
+            matched: matched,
+            diffs: diffs,
+          };
+        }
+
+        function assertTraceIdentity(homeTrace, lessonTrace) {
+          var total = Math.max(homeTrace.length, lessonTrace.length);
+          for (var i = 0; i < total; i++) {
+            var left = homeTrace[i] === undefined ? null : tupleOf(homeTrace[i]);
+            var right = lessonTrace[i] === undefined ? null : tupleOf(lessonTrace[i]);
+            if (left === null || right === null || !sameTuple(left, right)) {
+              return { ok: false, total: total, index: i };
+            }
+          }
+          return { ok: true, total: total, index: -1 };
+        }
+
+        function gradePeak(reading, profile) {
+          if (reading.nonFinite > 0) return ['FAIL_NONFINITE'];
+          if (reading.peak === 0 && reading.total > 0) return ['FAIL_SILENT'];
+          if (reading.peak >= FAIL_CEILING) return ['FAIL_PEAK'];
+          if (reading.peak >= ALARM_LEVEL[profile]) return ['ALARM_PEAK'];
+          return [];
+        }
+
+        function gradeParity(comparison) {
+          return comparison.ok ? [] : ['FAIL_TRACE_DRIFT'];
+        }
+
+        function gradeIdentity(identity) {
+          return identity.ok ? [] : ['FAIL_NONDETERMINISTIC_TRACE'];
+        }
+
+        function gradeRate(reading, baseline) {
+          return reading.sampleRate === baseline.sampleRate ? [] : ['ALARM_ENV_SRATE'];
+        }
+
+        function messageOf(error) {
+          if (error && typeof error.message === 'string') return error.message;
+          return String(error);
+        }
+
+        function traceText(reading) {
+          if (!reading || reading.trace.length === 0) return 'trace: empty';
+          var first = describe(tupleOf(reading.trace[0]));
+          var last = describe(tupleOf(reading.trace[reading.trace.length - 1]));
+          return 'trace: ' + reading.trace.length + ' keys; first ' + first + '; last ' + last;
+        }
+
+        async function runSuite() {
+          if (state.running) {
+            state.superseded = true;
+            return;
+          }
+          if (state.voidCode !== null) {
+            renderVoid(state.voidCode, 'preflight');
+            return;
+          }
+          var render = engineRender();
+          if (render === null) {
+            renderVoid('VOID_NO_OFFLINE_CONTEXT', 'renderOffline missing');
+            return;
+          }
+
+          state.running = true;
+          state.superseded = false;
+          setText(ui.report, 'report: running home');
+          setText(ui.verdict, 'verdict: running');
+          setText(ui.peak, 'peak: running');
+          setText(ui.parity, 'parity: running');
+          setText(ui.trace, 'trace: running');
+          renderEmptyRows();
+
+          var home = null;
+          var lesson = null;
+          try {
+            try {
+              home = capturePeak(await render('home'));
+            } catch (error) {
+              renderVoid('VOID_RENDER_THREW', 'home: ' + messageOf(error));
+              return;
+            }
+            if (state.superseded) {
+              renderVoid('VOID_SUPERSEDED', 'a newer run replaced this one');
+              return;
+            }
+            setText(ui.report, 'report: running lesson');
+            try {
+              lesson = capturePeak(await render('lesson'));
+            } catch (error) {
+              renderVoid('VOID_RENDER_THREW', 'lesson: ' + messageOf(error));
+              return;
+            }
+            if (state.superseded) {
+              renderVoid('VOID_SUPERSEDED', 'a newer run replaced this one');
+              return;
+            }
+          } finally {
+            state.running = false;
+            state.superseded = false;
+          }
+
+          var homeBaseline = AUDIO_BASELINE.home;
+          var lessonBaseline = AUDIO_BASELINE.lesson;
+          var homeParity = compareNotes('home', homeBaseline.notes, home.trace);
+          var lessonParity = compareNotes('lesson', lessonBaseline.notes, lesson.trace);
+          var identity = assertTraceIdentity(home.trace, lesson.trace);
+
+          var codes = [];
+          codes = codes.concat(gradePeak(home, 'home'));
+          codes = codes.concat(gradePeak(lesson, 'lesson'));
+          codes = codes.concat(gradeParity(homeParity));
+          codes = codes.concat(gradeParity(lessonParity));
+          codes = codes.concat(gradeIdentity(identity));
+          codes = codes.concat(gradeRate(home, homeBaseline));
+          codes = codes.concat(gradeRate(lesson, lessonBaseline));
+          codes = codes.filter(function (code, index) {
+            return codes.indexOf(code) === index;
+          });
+
+          var verdict = composeVerdict(codes);
+          var model = {
+            verdict: verdict,
+            codes: codes,
+            home: home,
+            homeParity: homeParity,
+            lesson: lesson,
+            lessonParity: lessonParity,
+            identity: identity,
+            note: codes.length === 0 ? '' : 'review ' + codes.join(', '),
+          };
+
+          setText(
+            ui.verdict,
+            'verdict: ' + verdict + (codes.length > 0 ? ' (' + codes.join(', ') + ')' : '')
+          );
+          setText(ui.peak, 'peak: home ' + peakText(home) + '; lesson ' + peakText(lesson));
+          setText(
+            ui.parity,
+            'parity: home ' + parityText(homeParity) + '; lesson ' + parityText(lessonParity)
+          );
+          setText(ui.trace, traceText(home) + ' | ' + traceText(lesson));
+          renderDiffRows([homeParity, lessonParity]);
+          setText(ui.report, formatReport(model));
+          ui.copy.disabled = false;
+        }
+
+        function selectReport() {
+          if (!window.getSelection || typeof document.createRange !== 'function') return false;
+          var selection = window.getSelection();
+          if (!selection || typeof selection.addRange !== 'function') return false;
+          var range = document.createRange();
+          if (!range || typeof range.selectNodeContents !== 'function') return false;
+          range.selectNodeContents(ui.report);
+          selection.removeAllRanges();
+          selection.addRange(range);
+          return true;
+        }
+
+        function copyFallback() {
+          if (!selectReport()) {
+            setText(ui.verdict, 'verdict: copy unavailable');
+            return;
+          }
+          var copied = false;
+          try {
+            copied = document.execCommand('copy');
+          } catch (error) {
+            copied = false;
+          }
+          ui.copy.textContent = copied ? 'Copied' : 'Select and copy manually';
+        }
+
+        function copyReport() {
+          var text = ui.report.textContent;
+          if (navigator.clipboard && typeof navigator.clipboard.writeText === 'function') {
+            navigator.clipboard.writeText(text).then(
+              function () {
+                ui.copy.textContent = 'Copied';
+              },
+              function () {
+                copyFallback();
+              }
+            );
+            return;
+          }
+          copyFallback();
+        }
+
+        function preflight() {
+          setText(
+            ui.scope,
+            'scope: developer-only offline render of the home and lesson profiles in order; ' +
+              'no stop latency is measured and no device behaviour is claimed.'
+          );
+          stampProvenance();
+          var codes = {};
+          for (var i = 0; i < PROFILES.length; i++) {
+            var code = validateEntry(PROFILES[i]);
+            if (code !== null) codes[PROFILES[i]] = code;
+          }
+          renderBaseline(codes);
+          var tone = engineTone();
+          var missing = [];
+          if (tone === null || typeof tone.Offline !== 'function') missing.push('Tone.Offline');
+          if (engineRender() === null) missing.push('LM.audio.renderOffline');
+          if (missing.length > 0) {
+            state.voidCode = 'VOID_NO_OFFLINE_CONTEXT';
+            renderVoid(state.voidCode, 'missing ' + missing.join(', '));
+            return;
+          }
+          for (var j = 0; j < PROFILES.length; j++) {
+            if (codes[PROFILES[j]] !== undefined) {
+              state.voidCode = codes[PROFILES[j]];
+              renderVoid(state.voidCode, PROFILES[j] + ' baseline rejected');
+              return;
+            }
+          }
+          setText(ui.verdict, 'verdict: idle');
+          setText(ui.peak, 'peak: idle');
+          setText(ui.parity, 'parity: idle');
+          setText(ui.trace, 'trace: idle');
+          setText(ui.report, 'report: idle');
+          renderEmptyRows();
+        }
+
+        ui.run.addEventListener('click', function () {
+          runSuite().catch(function (error) {
+            state.running = false;
+            state.superseded = false;
+            renderVoid('VOID_RENDER_THREW', messageOf(error));
+          });
+        });
+        ui.copy.addEventListener('click', function () {
+          copyReport();
+        });
+
+        preflight();
+      })();
+    </script>
+  </body>
+</html>
