@@ -3,62 +3,8 @@ const BPM = 112;
 const BAR_STEPS = 16;
 const PHRASE_BARS = 4;
 const STEP = 60 / BPM / 4;
-const SWING = 0.16;
 const STRUM = 0.012;
-const TICK_MS = 25;
-const LOOKAHEAD = 0.2;
-const CATCHUP_SLACK = 0.05;
-const MASTER_CAP = 0.8;
-const STOP_FADE = 0.03;
-const STOP_RESTORE = 0.25;
-const RESTORE_RAMP = 0.01;
-const UNLOCK_SETTLE_MS = 1500;
-const HIDE_RAMP = 0.3;
-const SHOW_RAMP = 0.4;
-const TEXT = {
-  id: {
-    back: "Explore",
-    title: "Buat Lagu",
-    intro: "Pilih satu kotak di setiap kolom.",
-    tap: "Ketuk kotak untuk memulai. Ketuk lagi untuk berhenti.",
-    noAudio: "Browser ini tidak bisa memutar suara.",
-    song: "Lagu kamu",
-    stop: "Berhenti",
-    resume: "Ketuk untuk lanjut bermain",
-    silent: "Tidak ada suara? Minta orang dewasa memeriksa suaranya.",
-    grownUps: "Untuk orang dewasa: pelankan volume, terutama saat memakai headphone.",
-    unofficial: "Tidak resmi. Tidak dibuat oleh atau berafiliasi dengan Ableton.",
-    inspired: "Terinspirasi dari Ableton Learning Music",
-    noscript: "Halaman ini butuh JavaScript untuk memutar suara.",
-    track0: "Drum",
-    track1: "Bass",
-    track2: "Akord",
-    track3: "Melodi",
-    starting: ", akan mulai",
-    stopping: ", akan berhenti",
-  },
-  en: {
-    back: "Explore",
-    title: "Make a Song",
-    intro: "Pick a box in each column.",
-    tap: "Tap a box to start it. Tap again to stop.",
-    noAudio: "This browser cannot play the sounds.",
-    song: "Your song",
-    stop: "Stop",
-    resume: "Tap to keep playing",
-    silent: "No sound? Ask a grown-up to check the sound.",
-    grownUps: "Grown-ups: keep the volume low, especially with headphones.",
-    unofficial: "Unofficial. Not made by or affiliated with Ableton.",
-    inspired: "Inspired by Ableton Learning Music",
-    noscript: "This page needs JavaScript to play sounds.",
-    track0: "Drums",
-    track1: "Bass",
-    track2: "Chords",
-    track3: "Melody",
-    starting: ", starting",
-    stopping: ", stopping",
-  },
-};
+const HOME_LANE = { kick: "kick", snare: "snare", closed: "hat", open: "openhat" };
 
 // Every clip follows one 4-bar progression (Am7 | Fmaj7 | C | Gadd9),
 // so any mix of clips stays in key.
@@ -169,21 +115,20 @@ const CLIPS = [
 
 let env = null;
 let els = null;
+let engine = null;
 let state = initialState();
-let view = initialView(false, false);
-let rt = initialRuntime();
+let view = initialView(false, false, "id");
+let rt = { rafId: null };
 
 function initialState() {
   return {
     active: [-1, -1, -1, -1],
     queued: [null, null, null, null],
     bar: -1,
-    step: 0,
-    nextBar: 0,
   };
 }
 
-function initialView(reducedMotion, noAudio) {
+function initialView(reducedMotion, noAudio, lang) {
   return {
     shownActive: [-1, -1, -1, -1],
     shownBar: 0,
@@ -192,19 +137,7 @@ function initialView(reducedMotion, noAudio) {
     audio: "none",
     noAudio,
     reducedMotion,
-    lang: "id",
-  };
-}
-
-function initialRuntime() {
-  return {
-    ctx: null,
-    master: null,
-    instruments: null,
-    timer: null,
-    rafId: null,
-    muteUntil: 0,
-    settleTimer: null,
+    lang,
   };
 }
 
@@ -243,25 +176,14 @@ function audioBlocked(v, s) {
 }
 
 function stateText(d, lang) {
-  if (d === "pending-on") return TEXT[lang].starting;
-  if (d === "pending-off") return TEXT[lang].stopping;
+  if (d === "pending-on") return window.LM.t(lang, "starting") || "";
+  if (d === "pending-off") return window.LM.t(lang, "stopping") || "";
   return "";
 }
 
 function commitBoundary(s) {
   const active = s.active.map((a, t) => (s.queued[t] === null ? a : s.queued[t]));
   return { ...s, active, queued: [null, null, null, null], bar: s.bar + 1 };
-}
-
-function notesForStep(s, step, time) {
-  const b = s.bar % PHRASE_BARS;
-  const at = time + (step % 2 ? SWING * STEP : 0);
-  const notes = [];
-  for (let t = 0; t < 4; t++) {
-    if (s.active[t] < 0) continue;
-    for (const ev of CLIPS[t][s.active[t]][b][step]) notes.push({ ...ev, track: t, time: at });
-  }
-  return notes;
 }
 
 function drainEvents(v, now) {
@@ -284,138 +206,54 @@ function progress(v, now) {
   return ((v.shownBar % PHRASE_BARS) * BAR_STEPS + stepNow) / (PHRASE_BARS * BAR_STEPS);
 }
 
-function clampGain(x) {
-  return Math.min(Math.max(x, 0), MASTER_CAP);
+function playEvent(track, ev, time) {
+  const vel = ev.vel * (0.9 + Math.random() * 0.1);
+  if (track === 0) {
+    engine.drum(HOME_LANE[ev.lane], time, vel);
+    return;
+  }
+  const dur = ev.len * STEP;
+  if (track === 2) {
+    ev.notes.forEach((note, i) => engine.note("keys", note, dur, time + i * STRUM, vel));
+    return;
+  }
+  engine.note(track === 1 ? "bass" : "lead", ev.notes[0], dur - 0.01, time, vel);
 }
 
-const bus = {
-  anchor(p, t0) {
-    if (p.cancelAndHoldAtTime) {
-      p.cancelAndHoldAtTime(t0);
-    } else {
-      p.cancelScheduledValues(t0);
-      p.setValueAtTime(clampGain(p.value), t0);
-    }
-  },
-  rampTo(target, dur) {
-    const p = rt.master.gain;
-    const t0 = rt.ctx.currentTime;
-    bus.anchor(p, t0);
-    p.linearRampToValueAtTime(clampGain(target), t0 + dur);
-  },
-  fadeOutIn(t0, target) {
-    const p = rt.master.gain;
-    bus.anchor(p, t0);
-    p.linearRampToValueAtTime(0, t0 + STOP_FADE);
-    p.setValueAtTime(0, t0 + STOP_RESTORE);
-    p.linearRampToValueAtTime(clampGain(target), t0 + STOP_RESTORE + RESTORE_RAMP);
-  },
-};
-
-function createInstruments(out) {
-  const glue = new Tone.Compressor({ threshold: -18, ratio: 3, attack: 0.01, release: 0.2 }).connect(out);
-  const reverb = new Tone.Reverb({ decay: 3, preDelay: 0.02, wet: 1 }).connect(glue);
-  const echo = new Tone.FeedbackDelay({ delayTime: STEP * 3, feedback: 0.35, wet: 1 });
-  echo.chain(new Tone.Filter(2500, "lowpass"), glue);
-  const wire = (node, verb = 0, delay = 0) => {
-    node.connect(glue);
-    if (verb) node.connect(new Tone.Gain(verb).connect(reverb));
-    if (delay) node.connect(new Tone.Gain(delay).connect(echo));
-    return node;
-  };
-
-  const kick = wire(new Tone.MembraneSynth({
-    pitchDecay: 0.04,
-    octaves: 5,
-    envelope: { attack: 0.001, decay: 0.45, sustain: 0, release: 0.1 },
-    volume: -2,
-  }));
-  const snare = new Tone.NoiseSynth({
-    noise: { type: "white" },
-    envelope: { attack: 0.001, decay: 0.18, sustain: 0 },
-    volume: -8,
-  });
-  snare.connect(wire(new Tone.Filter({ type: "bandpass", frequency: 2000, Q: 0.8 }), 0.2));
-  const snareBody = wire(new Tone.MembraneSynth({
-    pitchDecay: 0.02,
-    octaves: 2,
-    envelope: { attack: 0.001, decay: 0.12, sustain: 0, release: 0.05 },
-    volume: -10,
-  }));
-  const hatFilter = wire(new Tone.Filter(7500, "highpass"), 0.1);
-  const closed = new Tone.NoiseSynth({ envelope: { attack: 0.001, decay: 0.035, sustain: 0 }, volume: -14 }).connect(hatFilter);
-  const open = new Tone.NoiseSynth({ envelope: { attack: 0.001, decay: 0.28, sustain: 0 }, volume: -17 }).connect(hatFilter);
-
-  const bass = wire(new Tone.MonoSynth({
-    oscillator: { type: "sawtooth" },
-    filter: { type: "lowpass", rolloff: -24, Q: 2 },
-    envelope: { attack: 0.005, decay: 0.3, sustain: 0.6, release: 0.08 },
-    filterEnvelope: { attack: 0.005, decay: 0.25, sustain: 0.25, release: 0.1, baseFrequency: 90, octaves: 3.2 },
-    volume: -6,
-  }));
-  const keys = new Tone.PolySynth(Tone.FMSynth, {
-    harmonicity: 3,
-    modulationIndex: 8,
-    oscillator: { type: "sine" },
-    modulation: { type: "sine" },
-    envelope: { attack: 0.004, decay: 1.6, sustain: 0.15, release: 1.2 },
-    modulationEnvelope: { attack: 0.002, decay: 0.4, sustain: 0.05, release: 0.4 },
-    volume: -14,
-  });
-  keys.connect(wire(new Tone.Chorus(3, 2.5, 0.4).start(), 0.3, 0.12));
-  const lead = wire(new Tone.MonoSynth({
-    oscillator: { type: "square" },
-    filter: { type: "lowpass", rolloff: -12, Q: 1 },
-    envelope: { attack: 0.01, decay: 0.2, sustain: 0.4, release: 0.3 },
-    filterEnvelope: { attack: 0.01, decay: 0.2, sustain: 0.3, release: 0.3, baseFrequency: 700, octaves: 2 },
-    volume: -12,
-  }), 0.25, 0.3);
-
-  return {
-    drums: {
-      kick: (time, vel) => kick.triggerAttackRelease("A1", 0.3, time, vel),
-      snare: (time, vel) => {
-        snare.triggerAttackRelease(0.15, time, vel);
-        snareBody.triggerAttackRelease("G3", 0.08, time, vel * 0.6);
-      },
-      closed: (time, vel) => closed.triggerAttackRelease(0.03, time, vel),
-      open: (time, vel) => open.triggerAttackRelease(0.2, time, vel),
-    },
-    bass,
-    keys,
-    lead,
-    mono: [kick, snare, snareBody, closed, open, bass, lead],
-  };
+function playStep(s, bar, stepNumber, gridTime) {
+  const b = bar % PHRASE_BARS;
+  for (let t = 0; t < 4; t++) {
+    if (s.active[t] < 0) continue;
+    for (const ev of CLIPS[t][s.active[t]][b][stepNumber - 1]) playEvent(t, ev, gridTime);
+  }
 }
 
-const voices = {
-  play(inst, n) {
-    const vel = n.vel * (0.9 + Math.random() * 0.1);
-    if (n.track === 0) {
-      inst.drums[n.lane](n.time, vel);
-      return;
-    }
-    const dur = n.len * STEP;
-    if (n.track === 2) {
-      n.notes.forEach((note, i) => inst.keys.triggerAttackRelease(note, dur, n.time + i * STRUM, vel));
-    } else {
-      (n.track === 1 ? inst.bass : inst.lead).triggerAttackRelease(n.notes[0], dur - 0.01, n.time, vel);
-    }
-  },
-  releaseAll(inst, t) {
-    for (const synth of inst.mono) synth.triggerRelease(t);
-    inst.keys.releaseAll(t);
-  },
-};
+function stopIfIdle() {
+  if (anyActive(state)) return false;
+  engine.stop();
+  return true;
+}
 
-function start() {
-  const now = rt.ctx.currentTime;
-  const lastEvent = view.events.length ? view.events[view.events.length - 1].time : 0;
-  state.nextBar = Math.max(now + CATCHUP_SLACK, rt.muteUntil, lastEvent);
-  state.step = 0;
-  state.bar = -1;
-  rt.timer = env.setInterval(tick, TICK_MS);
+function onStep(info) {
+  if (info.step === 1) {
+    state = { ...commitBoundary(state), bar: info.bar };
+    view.events.push({ time: info.audibleTime, active: state.active.slice(), bar: state.bar });
+    if (stopIfIdle()) return;
+  }
+  playStep(state, state.bar, info.step, info.gridTime);
+}
+
+function startIfIdle() {
+  if (!anyActive(state)) return;
+  if (engine.state !== "running" && engine.state !== "stopped") return;
+  if (!engine.start()) return;
   ensureFrame();
+}
+
+function ensureAudio() {
+  return engine.unlock().then((ok) => {
+    if (ok) startIfIdle();
+  });
 }
 
 function ensureFrame() {
@@ -423,53 +261,19 @@ function ensureFrame() {
   rt.rafId = env.raf(frame);
 }
 
-function startIfIdle() {
-  if (rt.ctx === null || rt.ctx.state !== "running") return;
-  if (rt.timer !== null) return;
-  if (!anyActive(state)) return;
-  start();
-}
-
-function stopIfIdle() {
-  if (state.active.some((a) => a >= 0) || state.queued.some((q) => q !== null)) return false;
-  env.clearInterval(rt.timer);
-  rt.timer = null;
-  return true;
-}
-
-function tick() {
-  const now = rt.ctx.currentTime;
-  if (state.nextBar < now) state.nextBar = now + CATCHUP_SLACK;
-  while (state.nextBar < now + LOOKAHEAD) {
-    if (state.step === 0) {
-      state = commitBoundary(state);
-      view.events.push({ time: state.nextBar, active: state.active.slice(), bar: state.bar });
-      if (stopIfIdle()) return;
-    }
-    for (const note of notesForStep(state, state.step, state.nextBar)) {
-      voices.play(rt.instruments, note);
-    }
-    state.nextBar += STEP;
-    state.step = (state.step + 1) % BAR_STEPS;
-  }
-}
-
-function audibleNow() {
-  if (rt.ctx === null) return 0;
-  return rt.ctx.currentTime - ((rt.ctx.baseLatency || 0) + (rt.ctx.outputLatency || 0));
+function cancelFrame() {
+  if (rt.rafId === null) return;
+  env.caf(rt.rafId);
+  rt.rafId = null;
 }
 
 function frame() {
   rt.rafId = null;
-  if (rt.ctx === null || rt.ctx.state !== "running") {
-    render(view, state, 0);
-    return;
-  }
-  const now = audibleNow();
-  view = drainEvents(view, now);
+  const live = engine.state === "running" || engine.state === "stopped";
+  const now = live ? engine.immediate() : 0;
+  if (live) view = drainEvents(view, now);
   render(view, state, now);
-  if (rt.timer === null && view.events.length === 0) return;
-  rt.rafId = env.raf(frame);
+  if (view.events.length > 0 || engine.state === "running") rt.rafId = env.raf(frame);
 }
 
 function render(v, s, now) {
@@ -492,124 +296,82 @@ function render(v, s, now) {
   els.hintNoAudio.hidden = !v.noAudio;
 }
 
-function known(value) {
-  return value === "running" || value === "interrupted" || value === "suspended" ? value : "suspended";
-}
-
-function ensureAudio() {
-  if (rt.ctx === null) {
-    try {
-      rt.ctx = new env.AudioContext();
-      Tone.setContext(rt.ctx);
-    } catch {
-      view = { ...view, noAudio: true };
-      state = initialState();
-      render(view, state, 0);
-      return Promise.resolve();
-    }
-    const session = env.audioSession();
-    if (session) session.type = "playback";
-    rt.master = new Tone.Gain(MASTER_CAP).toDestination();
-    rt.instruments = createInstruments(rt.master);
-    rt.ctx.onstatechange = onStateChange;
+function renderStarList(progressView) {
+  if (els === null || els.lessonsRoot === null) return;
+  const held = progressView && progressView.record ? progressView.record : progressView;
+  const lessons = held && held.lessons ? held.lessons : {};
+  const done = window.LM.t(view.lang, "ui.done");
+  const star = window.LM.t(view.lang, "ui.star");
+  const rows = els.lessonsRoot.querySelectorAll("li[data-lesson]");
+  for (let i = 0; i < rows.length; i++) {
+    const row = rows[i];
+    const slug = row.dataset.lesson;
+    if (!slug) continue;
+    const entry = lessons[slug];
+    const finished = entry !== undefined && entry.finished === true;
+    const starred = entry !== undefined && entry.starred === true;
+    if (finished) row.dataset.done = "1";
+    if (starred) row.dataset.star = "1";
+    const mark = row.querySelector(".lm-lesson-state-text");
+    const favor = row.querySelector(".lm-lesson-star-text");
+    if (mark !== null) mark.textContent = finished && done !== undefined ? done : "";
+    if (favor !== null) favor.textContent = starred && star !== undefined ? star : "";
   }
-  if (rt.ctx.state === "running") return Promise.resolve();
-  if (rt.settleTimer === null) rt.settleTimer = env.setTimeout(onSettleTimeout, UNLOCK_SETTLE_MS);
-  return rt.ctx
-    .resume()
-    .catch(() => {})
-    .then(() => {
-      if (rt.settleTimer !== null) {
-        env.clearTimeout(rt.settleTimer);
-        rt.settleTimer = null;
-      }
-      view = { ...view, audio: known(rt.ctx.state) };
-      render(view, state, audibleNow());
-    });
 }
 
-function onSettleTimeout() {
-  rt.settleTimer = null;
-  if (rt.ctx.state === "running") return;
-  view = { ...view, audio: known(rt.ctx.state) };
-  render(view, state, audibleNow());
+function onEngineState(next) {
+  view = { ...view, audio: next === "idle" ? "none" : next };
+  if (next === "noAudio") view = { ...view, noAudio: true };
+  if (next === "running" || next === "stopped") startIfIdle();
+  else if (next === "disposed") cancelFrame();
+  render(view, state, engine.immediate());
 }
 
 function onSessionTap(p) {
-  if (view.noAudio) return Promise.resolve();
-  const running = rt.ctx !== null && rt.ctx.state === "running";
-  state = tapGate(state, p, running);
-  render(view, state, audibleNow());
-  return ensureAudio().then(startIfIdle);
+  if (view.noAudio) return;
+  state = tapGate(state, p, engine.state === "running");
+  render(view, state, engine.immediate());
+  ensureAudio();
 }
 
 function stopAll() {
   state = { ...state, active: [-1, -1, -1, -1], queued: [null, null, null, null], bar: -1 };
   view = { ...view, shownActive: [-1, -1, -1, -1], events: [] };
-  if (rt.timer !== null) {
-    env.clearInterval(rt.timer);
-    rt.timer = null;
-  }
-  if (rt.rafId !== null) {
-    env.caf(rt.rafId);
-    rt.rafId = null;
-  }
-  try {
-    if (rt.ctx !== null) {
-      const t0 = rt.ctx.currentTime;
-      rt.muteUntil = t0 + STOP_RESTORE + RESTORE_RAMP;
-      voices.releaseAll(rt.instruments, t0 + STOP_FADE);
-      bus.fadeOutIn(t0, env.hidden() ? 0 : MASTER_CAP);
-    }
-  } finally {
-    render(view, state, 0);
-  }
-}
-
-function onStateChange() {
-  view = { ...view, audio: known(rt.ctx.state) };
-  if (rt.ctx.state === "running") {
-    startIfIdle();
-    ensureFrame();
-  }
-  render(view, state, audibleNow());
-}
-
-function onVisibility() {
-  if (rt.ctx === null) return;
-  const hidden = env.hidden();
-  bus.rampTo(hidden ? 0 : MASTER_CAP, hidden ? HIDE_RAMP : SHOW_RAMP);
-  if (!hidden && rt.ctx.state !== "running" && anyActive(state)) {
-    rt.ctx.resume().catch(() => {});
-  }
+  cancelFrame();
+  engine.stop();
+  render(view, state, 0);
 }
 
 function onPageShow(event) {
+  renderStarList(window.LM.progress.get());
   if (!event.persisted) return;
-  view = { ...view, audio: rt.ctx ? known(rt.ctx.state) : "none" };
-  if (view.audio === "running") {
-    startIfIdle();
-    ensureFrame();
-  }
-  render(view, state, audibleNow());
+  if (anyActive(state) && engine.state !== "running") ensureAudio();
 }
 
 function onMotionChange(mediaQuery) {
   view = { ...view, reducedMotion: mediaQuery.matches };
-  render(view, state, audibleNow());
+  render(view, state, engine.immediate());
+}
+
+function applyLang(lang) {
+  view = { ...view, lang };
+  applyLabels(lang);
+  renderStarList(window.LM.progress.get());
+  render(view, state, engine.immediate());
+}
+
+function applyLabels(lang) {
+  for (let t = 0; t < 4; t++) {
+    const name = window.LM.t(lang, "track" + t);
+    if (name === undefined) continue;
+    for (let c = 0; c < 4; c++) els.padLabel[t][c].textContent = name + " " + (c + 1);
+  }
 }
 
 function browserEnv() {
   return {
-    AudioContext: window.AudioContext || window.webkitAudioContext,
     raf: (callback) => window.requestAnimationFrame(callback),
     caf: (id) => window.cancelAnimationFrame(id),
-    setInterval: (fn, ms) => window.setInterval(fn, ms),
-    clearInterval: (id) => window.clearInterval(id),
-    setTimeout: (fn, ms) => window.setTimeout(fn, ms),
-    clearTimeout: (id) => window.clearTimeout(id),
-    hidden: () => document.hidden,
-    audioSession: () => (typeof navigator !== "undefined" && navigator.audioSession) || null,
     reducedMotion: () =>
       typeof matchMedia === "function" && matchMedia("(prefers-reduced-motion: reduce)").matches,
   };
@@ -623,26 +385,32 @@ function queryDom(doc) {
   };
   const pads = [];
   const padState = [];
+  const padLabel = [];
   const progressBars = [];
   for (let t = 0; t < 4; t++) {
     pads.push([]);
     padState.push([]);
+    padLabel.push([]);
     progressBars.push([]);
     for (let c = 0; c < 4; c++) {
       const pad = doc.querySelector(`.clip[data-t="${t}"][data-c="${c}"]`);
-      const label = pad ? pad.querySelector(".pad-state") : null;
+      const stateNode = pad ? pad.querySelector(".pad-state") : null;
+      const labelNode = pad ? pad.querySelector(".pad-label") : null;
       const bar = pad ? pad.querySelector(".progress") : null;
-      if (!pad || !label || !bar) throw new Error(`alm: missing pad ${t},${c}`);
+      if (!pad || !stateNode || !labelNode || !bar) throw new Error(`alm: missing pad ${t},${c}`);
       pads[t].push(pad);
-      padState[t].push(label);
+      padState[t].push(stateNode);
+      padLabel[t].push(labelNode);
       progressBars[t].push(bar);
     }
   }
   return {
+    lessonsRoot: doc.getElementById("lm-lessons"),
     langButtons: Array.from(doc.querySelectorAll(".lang button")),
     session: required("session"),
     pads,
     padState,
+    padLabel,
     progress: progressBars,
     stop: required("stop"),
     resume: required("resume"),
@@ -659,41 +427,16 @@ function readPad(target) {
   return { t: Number(t), c: Number(c) };
 }
 
-function applyText(dom, lang) {
-  const text = TEXT[lang];
-  document.documentElement.lang = lang;
-  document.title = text.title;
-  for (const node of document.querySelectorAll("[data-i18n]")) {
-    node.textContent = text[node.dataset.i18n];
-  }
-  dom.session.setAttribute("aria-label", text.song);
-  for (let t = 0; t < 4; t++) {
-    for (let c = 0; c < 4; c++) {
-      dom.pads[t][c].querySelector(".pad-label").textContent = text["track" + t] + " " + (c + 1);
-    }
-  }
-  for (const button of dom.langButtons) {
-    button.setAttribute("aria-pressed", String(button.dataset.lang === lang));
-  }
-}
-
-function setLang(lang) {
-  view = { ...view, lang };
-  applyText(els, lang);
-  render(view, state, 0);
-}
-
 function bindListeners(dom) {
   dom.session.addEventListener("click", (event) => {
     const p = readPad(event.target);
     if (p !== null) onSessionTap(p);
   });
   dom.stop.addEventListener("click", stopAll);
-  dom.resume.addEventListener("click", () => ensureAudio().then(startIfIdle));
+  dom.resume.addEventListener("click", ensureAudio);
   for (const button of dom.langButtons) {
-    button.addEventListener("click", () => setLang(button.dataset.lang));
+    button.addEventListener("click", () => window.LM.lang.set(button.dataset.lang));
   }
-  document.addEventListener("visibilitychange", onVisibility);
   window.addEventListener("pageshow", onPageShow);
   if (typeof matchMedia === "function") {
     const query = matchMedia("(prefers-reduced-motion: reduce)");
@@ -704,9 +447,15 @@ function bindListeners(dom) {
 function init() {
   env = browserEnv();
   els = queryDom(document);
-  view = initialView(env.reducedMotion(), typeof env.AudioContext !== "function");
+  engine = window.LM.audio.create({ profile: "home", onStep, onStateChange: onEngineState });
+  const noAudio = typeof (window.AudioContext || window.webkitAudioContext) !== "function";
+  view = initialView(env.reducedMotion(), noAudio, window.LM.lang.current());
+  window.LM.i18n.apply(document, view.lang);
+  applyLabels(view.lang);
+  window.LM.lang.onChange(applyLang);
+  window.LM.progress.onChange(renderStarList);
+  renderStarList(window.LM.progress.get());
   bindListeners(els);
-  applyText(els, view.lang);
   render(view, state, 0);
 }
 

@@ -7,10 +7,12 @@ title: Make a Song
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Buat Lagu / Make a Song</title>
+<title data-i18n-title="title">Buat Lagu / Make a Song</title>
 <link rel="stylesheet" href="/css/reset.css">
 <link rel="stylesheet" href="/css/explore-learning-music.css">
 <script defer src="/js/vendor/tone-15.5.66.js"></script>
+<script defer src="/js/explore-learning-music-shared.js"></script>
+<script defer src="/js/explore-learning-music-audio.js"></script>
 <script defer src="/js/explore-learning-music.js"></script>
 </head>
 <body>
@@ -26,7 +28,78 @@ title: Make a Song
 <p class="alm-intro" data-i18n="intro">Pilih satu kotak di setiap kolom.</p>
 <p id="hint-tap" data-i18n="tap">Ketuk kotak untuk memulai. Ketuk lagi untuk berhenti.</p>
 <p id="hint-noaudio" data-i18n="noAudio" hidden>Browser ini tidak bisa memutar suara.</p>
-<section id="session" role="group" aria-label="Lagu kamu">
+<section id="lm-lessons" aria-labelledby="lm-lessons-title">
+<h2 id="lm-lessons-title" data-i18n="home.lessons.title">Enam pelajaran</h2>
+<ul class="lm-lesson-list">
+<li class="lm-lesson" data-lesson="beats" data-done="0" data-star="0">
+<a class="lm-lesson-link" href="/explore/learning-music/beats/">
+<span class="lm-lesson-title" data-i18n="lesson.beats.listName">Ketukan dan Pola Drum</span>
+<span class="lm-lesson-state">
+<svg class="lm-lesson-check" aria-hidden="true" focusable="false"><use href="#i-check"/></svg>
+<svg class="lm-lesson-star" aria-hidden="true" focusable="false"><use href="#i-star"/></svg>
+<span class="lm-vh lm-lesson-state-text"></span>
+<span class="lm-vh lm-lesson-star-text"></span>
+</span>
+</a>
+</li>
+<li class="lm-lesson" data-lesson="notes-scales" data-done="0" data-star="0">
+<a class="lm-lesson-link" href="/explore/learning-music/notes-scales/">
+<span class="lm-lesson-title" data-i18n="lesson.notes-scales.listName">Nada dan Tangga Nada</span>
+<span class="lm-lesson-state">
+<svg class="lm-lesson-check" aria-hidden="true" focusable="false"><use href="#i-check"/></svg>
+<svg class="lm-lesson-star" aria-hidden="true" focusable="false"><use href="#i-star"/></svg>
+<span class="lm-vh lm-lesson-state-text"></span>
+<span class="lm-vh lm-lesson-star-text"></span>
+</span>
+</a>
+</li>
+<li class="lm-lesson" data-lesson="chords" data-done="0" data-star="0">
+<a class="lm-lesson-link" href="/explore/learning-music/chords/">
+<span class="lm-lesson-title" data-i18n="lesson.chords.listName">Akord dan Progresi</span>
+<span class="lm-lesson-state">
+<svg class="lm-lesson-check" aria-hidden="true" focusable="false"><use href="#i-check"/></svg>
+<svg class="lm-lesson-star" aria-hidden="true" focusable="false"><use href="#i-star"/></svg>
+<span class="lm-vh lm-lesson-state-text"></span>
+<span class="lm-vh lm-lesson-star-text"></span>
+</span>
+</a>
+</li>
+<li class="lm-lesson" data-lesson="basslines" data-done="0" data-star="0">
+<a class="lm-lesson-link" href="/explore/learning-music/basslines/">
+<span class="lm-lesson-title" data-i18n="lesson.basslines.listName">Garis Bass</span>
+<span class="lm-lesson-state">
+<svg class="lm-lesson-check" aria-hidden="true" focusable="false"><use href="#i-check"/></svg>
+<svg class="lm-lesson-star" aria-hidden="true" focusable="false"><use href="#i-star"/></svg>
+<span class="lm-vh lm-lesson-state-text"></span>
+<span class="lm-vh lm-lesson-star-text"></span>
+</span>
+</a>
+</li>
+<li class="lm-lesson" data-lesson="melodies" data-done="0" data-star="0">
+<a class="lm-lesson-link" href="/explore/learning-music/melodies/">
+<span class="lm-lesson-title" data-i18n="lesson.melodies.listName">Melodi</span>
+<span class="lm-lesson-state">
+<svg class="lm-lesson-check" aria-hidden="true" focusable="false"><use href="#i-check"/></svg>
+<svg class="lm-lesson-star" aria-hidden="true" focusable="false"><use href="#i-star"/></svg>
+<span class="lm-vh lm-lesson-state-text"></span>
+<span class="lm-vh lm-lesson-star-text"></span>
+</span>
+</a>
+</li>
+<li class="lm-lesson" data-lesson="song-structure" data-done="0" data-star="0">
+<a class="lm-lesson-link" href="/explore/learning-music/song-structure/">
+<span class="lm-lesson-title" data-i18n="lesson.song-structure.listName">Struktur Lagu</span>
+<span class="lm-lesson-state">
+<svg class="lm-lesson-check" aria-hidden="true" focusable="false"><use href="#i-check"/></svg>
+<svg class="lm-lesson-star" aria-hidden="true" focusable="false"><use href="#i-star"/></svg>
+<span class="lm-vh lm-lesson-state-text"></span>
+<span class="lm-vh lm-lesson-star-text"></span>
+</span>
+</a>
+</li>
+</ul>
+</section>
+<section id="session" role="group" aria-label="Lagu kamu" data-i18n-aria-label="song">
 <div class="grid">
 <div class="col-head t-0" aria-hidden="true"><svg class="icon"><use href="#i-circle"/></svg><span data-i18n="track0">Drum</span></div>
 <button type="button" class="clip t-0 is-off" data-t="0" data-c="0" aria-pressed="false"><svg class="icon" aria-hidden="true"><use href="#i-circle"/></svg><span class="vh pad-label"></span><span class="vh pad-state"></span><span class="progress" aria-hidden="true"></span></button>
@@ -70,5 +143,6 @@ title: Make a Song
 <symbol id="i-stop" viewBox="0 0 24 24"><rect x="5" y="5" width="14" height="14"/></symbol>
 </svg>
 <noscript>Halaman ini butuh JavaScript untuk memutar suara. / This page needs JavaScript to play sounds.</noscript>
+<div id="live" class="lm-vh" role="status" aria-live="polite" aria-atomic="true"></div>
 </body>
 </html>
