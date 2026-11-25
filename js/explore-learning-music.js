@@ -6,8 +6,6 @@ const STEP = 60 / BPM / 4;
 const STRUM = 0.012;
 const HOME_LANE = { kick: "kick", snare: "snare", closed: "hat", open: "openhat" };
 
-// Every clip follows one 4-bar progression (Am7 | Fmaj7 | C | Gadd9),
-// so any mix of clips stays in key.
 const PROGRESSION = [
   { bass: { R: "A1", P: "E2", O: "A2" }, keys: ["A3", "C4", "E4", "G4"] },
   { bass: { R: "F1", P: "C2", O: "F2" }, keys: ["A3", "C4", "E4", "F4"] },
@@ -15,7 +13,6 @@ const PROGRESSION = [
   { bass: { R: "G1", P: "D2", O: "G2" }, keys: ["G3", "B3", "D4", "A4"] },
 ];
 
-// A bar is 16 tokens: a note starts a hit, "-" holds it, "." rests.
 function melodicBar(line, pick) {
   const list = line.trim().split(/\s+/);
   if (list.length !== BAR_STEPS) throw new Error("alm: bar needs 16 steps: " + line);
@@ -27,14 +24,11 @@ function melodicBar(line, pick) {
   });
 }
 
-// R = root, P = fifth, O = octave of the current chord.
 const bassClip = (line) => PROGRESSION.map((ch) => melodicBar(line, (tok) => [ch.bass[tok] || tok]));
-// x = whole chord, 1-4 = one chord tone.
 const chordClip = (line) =>
   PROGRESSION.map((ch) => melodicBar(line, (tok) => (tok === "x" ? ch.keys : [ch.keys[Number(tok) - 1]])));
 const melodyClip = (...lines) => lines.map((line) => melodicBar(line, (tok) => [tok]));
 
-// Drum lanes: X accent, x hit, o ghost. A lane is one bar, or four bars for fills.
 const DRUM_VEL = { X: 1, x: 0.75, o: 0.35 };
 function drumClip(lanes) {
   return Array.from({ length: PHRASE_BARS }, (_, b) =>

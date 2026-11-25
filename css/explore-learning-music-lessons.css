@@ -211,23 +211,23 @@ body[data-lesson='song-structure'] .lm-toy {
   background: #1a1a1a;
 }
 
-.lm-toy button[data-value='off'] {
+.lm-toy button:is([data-value='off'], [data-value='Mati'], [data-value='Off']) {
   border-color: #888888;
   border-style: dashed;
   color: #b8b8b8;
 }
 
-.lm-toy button[data-value='root'] {
+.lm-toy button:is([data-value='root'], [data-value='Dasar'], [data-value='Root']) {
   border-color: #ff7a59;
   border-style: solid;
 }
 
-.lm-toy button[data-value='fifth'] {
+.lm-toy button:is([data-value='fifth'], [data-value='Kelima'], [data-value='Fifth']) {
   border-color: #ffd23f;
   border-style: dotted;
 }
 
-.lm-toy button[data-value='octave'] {
+.lm-toy button:is([data-value='octave'], [data-value='Oktaf'], [data-value='Octave']) {
   border-color: #4fd1c5;
   border-style: double;
   border-width: 5px;
@@ -237,6 +237,7 @@ body[data-lesson='song-structure'] .lm-toy {
 .lm-chords,
 .lm-chordmap {
   display: grid;
+  grid-column: 1 / -1;
   grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 8px;
   margin: 0;
