@@ -147,10 +147,10 @@ test("the shipped tree passes with five ok lines and the documented counts", () 
   const lines = result.stdout.split("\n");
   const okLines = lines.filter((line) => /^ok (data|copy|manifest|budget|license) \(/.test(line));
   assert.equal(okLines.length, 5);
-  assert.match(result.stdout, /ok data \(15 rules\): 6 lessons, 24 steps, 24 toy regions, 5 families, 12 drum cells/);
-  assert.match(result.stdout, /ok copy \(8 rules\): 138 leaves per language, 19 flat keys/);
+  assert.match(result.stdout, /ok data \(15 rules\): 6 lessons, 24 steps, 24 toy regions, 5 families, 64 drum cells/);
+  assert.match(result.stdout, /ok copy \(8 rules\): 140 leaves per language, 19 flat keys/);
   assert.match(result.stdout, /ok manifest \(12 rules\): 25 paths, 16 precache URLs, 7 live regions/);
-  assert.match(result.stdout, /ok budget \(3 rules\): 24 toy regions, 12 drum cells/);
+  assert.match(result.stdout, /ok budget \(3 rules\): 24 toy regions, 64 drum cells/);
   assert.match(result.stdout, /ok license \(3 rules\)/);
   assert.match(result.stdout, /ok 41 rules in 5 checks/);
 });
@@ -163,7 +163,7 @@ test("--json reports stable counts and no absolute paths", () => {
     lessons: 6,
     steps: 24,
     toyRegions: 24,
-    leaves: 276,
+    leaves: 280,
     paths: 25,
     liveRegions: 7,
     precacheUrls: 16,

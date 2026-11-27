@@ -2,7 +2,9 @@
   "use strict";
 
   const LESSON_SLUGS = ["beats", "notes-scales", "chords", "basslines", "melodies", "song-structure"];
-  const LANES = ["kick", "snare", "hat"];
+  const LANES = ["openhat", "hat", "clap", "kick"];
+  const STEPS = 16;
+  const DEFAULT_BPM = 98;
   const VELOCITY = { X: 1, x: 0.75, o: 0.35 };
   const BASS_VALUES = ["off", "root", "fifth", "octave"];
   const CHORD_CYCLE = ["Am", "F", "C", "G"];
@@ -11,6 +13,14 @@
     kick: "X...X...X...X...",
     snare: "....X.......X...",
     hat: "................",
+  };
+  const BLOCKS = ["A", "B", "C", "D"];
+  const GRID = {
+    drum: { rows: LANES, multi: true, unit: 1, group: "toy.group.beats" },
+    keys: { rows: KEYBOARD, field: "slots", empty: null, unit: 2, group: "toy.group.piano" },
+    bass: { rows: BASS_VALUES.slice(1).reverse(), field: "cells", empty: "off", unit: 4, group: "toy.layer.bass" },
+    chords: { rows: CHORD_CYCLE, field: "progression", unit: 16, group: "toy.group.chords" },
+    arrange: { rows: BLOCKS, field: "blocks", unit: 16, group: "toy.group.arrange" },
   };
   const ARRANGE_MELODY = ["E4", "D4", "C4", "D4", "E4", "D4", "C4", "C4"];
 
@@ -28,7 +38,7 @@
           family: "drum",
           toy: "drum",
           copy: "lesson.beats.step1",
-          payload: { lanes: { kick: "X...............", snare: "................", hat: "................" } },
+          payload: { lanes: { openhat: "................", hat: "................", clap: "................", kick: "X..............." } },
           goal: null,
           finale: false,
         },
@@ -36,7 +46,7 @@
           family: "drum",
           toy: "drum",
           copy: "lesson.beats.step2",
-          payload: { lanes: { kick: "X...X...X...X...", snare: "....X.......X...", hat: "................" } },
+          payload: { lanes: { openhat: "................", hat: "................", clap: "....X.......X...", kick: "X...X...X...X..." } },
           goal: null,
           finale: false,
         },
@@ -44,7 +54,7 @@
           family: "drum",
           toy: "drum",
           copy: "lesson.beats.step3",
-          payload: { lanes: { kick: "X...X...X...X...", snare: "....X.......X...", hat: "x.x.x.x.x.x.x.x." } },
+          payload: { lanes: { openhat: "................", hat: "X.X.X.X.X.X.X.X.", clap: "....X.......X...", kick: "X...X...X...X..." } },
           goal: null,
           finale: false,
         },
@@ -52,8 +62,8 @@
           family: "drum",
           toy: "drum",
           copy: "lesson.beats.step4",
-          payload: { lanes: { kick: "X...X...X...X...", snare: "....X.......X...", hat: "x.o.x.o.x.o.x.o." } },
-          goal: { type: "cells-equal", cells: [true, true, true, true, false, true, false, true, true, true, true, false] },
+          payload: { lanes: { openhat: "................", hat: "X.X.X.X.X.X.X.X.", clap: "....X.......X...", kick: "X...X...X...X..." } },
+          goal: { type: "cells-equal", cells: ["..............X.", "X.X.X.X.X.X.X...", "....X.......X...", "X...X...X...X..."] },
           finale: true,
         },
       ],
@@ -301,28 +311,12 @@
     return group.indexOf("X") !== -1 || group.indexOf("x") !== -1 || group.indexOf("o") !== -1;
   }
 
-  function velocityOf(group) {
-    for (let i = 0; i < group.length; i++) {
-      const velocity = VELOCITY[group.charAt(i)];
-      if (velocity !== undefined) return velocity;
-    }
-    return 1;
-  }
-
   function arraysEqual(left, right) {
     if (left.length !== right.length) return false;
     for (let i = 0; i < left.length; i++) {
       if (left[i] !== right[i]) return false;
     }
     return true;
-  }
-
-  function drumName(lane, beat) {
-    return text("toy.lane." + lane) + " " + text("toy.beat") + " " + beat;
-  }
-
-  function bassName(beat, value) {
-    return text("toy.beat") + " " + beat + ", " + text("toy.value." + value);
   }
 
   function createAnnouncementQueue(region) {
@@ -396,149 +390,129 @@
     queue.enqueue(queue.generation(), text("ui.star"));
   }
 
-  function labelFor(control, region) {
-    if (control.labels !== undefined && control.labels !== null && control.labels.length > 0) return control.labels[0];
-    const id = control.getAttribute("id");
-    if (id === null || id === "") return null;
-    return region.querySelector('label[for="' + id + '"]');
+  const ICONS = {
+    play: '<path d="M7 4.5v15l12.5-7.5z" fill="currentColor"/>',
+    stop: '<rect x="6" y="6" width="12" height="12" rx="1" fill="currentColor"/>',
+    mute:
+      '<path d="M4 9.5h3.5L12 5v14l-4.5-4.5H4z" fill="currentColor"/>' +
+      '<path class="lm-waves" d="M15.5 9a4 4 0 0 1 0 6M18 6.5a7.5 7.5 0 0 1 0 11"/>' +
+      '<path class="lm-x" d="M15.5 9.5l5 5M20.5 9.5l-5 5"/>',
+    clear: '<path d="M4.5 7h15M9.5 7V4.5h5V7M6.5 7l1 12.5h9l1-12.5M10.5 10.5v6M13.5 10.5v6"/>',
+  };
+
+  function iconButton(name) {
+    const button = document.createElement("button");
+    button.type = "button";
+    button.className = "lm-icon";
+    button.innerHTML =
+      '<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">' +
+      ICONS[name] +
+      "</svg>";
+    return button;
   }
 
-  function createTransport(mode) {
+  function nameButton(button, key) {
+    if (button === null) return;
+    const label = text(key);
+    button.setAttribute("aria-label", label);
+    button.title = label;
+  }
+
+  function createTransport() {
     const wrap = document.createElement("div");
     wrap.className = "lm-transport";
-    if (mode === "toggle") {
-      const toggle = document.createElement("button");
-      toggle.type = "button";
-      toggle.setAttribute("data-transport", "toggle");
-      toggle.setAttribute("aria-pressed", "false");
-      toggle.textContent = text("ui.play");
-      wrap.appendChild(toggle);
-      return wrap;
-    }
     ["play", "stop", "mute"].forEach(function (name) {
-      const button = document.createElement("button");
-      button.type = "button";
+      const button = iconButton(name);
       button.setAttribute("data-transport", name);
       if (name === "mute") button.setAttribute("aria-pressed", "false");
       if (name === "stop") button.disabled = true;
-      button.textContent = text("ui." + name);
+      nameButton(button, "ui." + name);
       wrap.appendChild(button);
     });
     return wrap;
   }
 
-  function buildDrum(region, step) {
-    LANES.forEach(function (lane) {
-      for (let column = 0; column < 4; column++) {
-        const group = step.payload.lanes[lane].slice(column * 4, column * 4 + 4);
+  function columnCount(step) {
+    const spec = GRID[step.family];
+    return spec.multi ? STEPS : step.payload[spec.field].length;
+  }
+
+  function canClear(spec) {
+    return spec.multi === true || spec.empty !== undefined;
+  }
+
+  function buildGrid(region, step) {
+    const spec = GRID[step.family];
+    const columns = columnCount(step);
+    region.classList.add("lm-grid");
+    if (spec.multi) region.classList.add("lm-wide");
+    const bar = document.createElement("div");
+    bar.className = "lm-gridbar";
+    bar.appendChild(createTransport());
+    if (canClear(spec)) {
+      const clear = iconButton("clear");
+      clear.setAttribute("data-clear", "");
+      bar.appendChild(clear);
+    }
+    const tempo = document.createElement("label");
+    tempo.className = "lm-tempo";
+    const readout = document.createElement("span");
+    readout.setAttribute("data-tempo-readout", "");
+    const slider = document.createElement("input");
+    slider.type = "range";
+    slider.min = "60";
+    slider.max = "160";
+    slider.step = "1";
+    slider.value = String(DEFAULT_BPM);
+    slider.setAttribute("data-tempo", "");
+    tempo.append(readout, slider);
+    region.append(bar, tempo);
+    if (step.family === "arrange") {
+      const layers = document.createElement("div");
+      layers.className = "lm-layers";
+      ["drums", "bass", "chords", "melody"].forEach(function (layer) {
+        const button = document.createElement("button");
+        button.type = "button";
+        button.setAttribute("data-layer", layer);
+        button.setAttribute("aria-pressed", "true");
+        layers.appendChild(button);
+      });
+      region.appendChild(layers);
+    }
+    const grid = document.createElement("div");
+    grid.className = "lm-beatgrid";
+    grid.setAttribute("role", "group");
+    spec.rows.forEach(function (row) {
+      const line = document.createElement("div");
+      line.className = "lm-lane";
+      const name = document.createElement("span");
+      name.className = "lm-lane-name";
+      name.setAttribute("aria-hidden", "true");
+      name.setAttribute("data-row-name", row);
+      line.appendChild(name);
+      for (let column = 0; column < columns; column++) {
         const cell = document.createElement("button");
         cell.type = "button";
         cell.className = "lm-cell";
-        cell.setAttribute("data-lane", lane);
+        cell.setAttribute("data-row", row);
         cell.setAttribute("data-col", String(column));
-        cell.setAttribute("data-group", group);
-        cell.setAttribute("aria-pressed", hasHit(group) ? "true" : "false");
-        cell.setAttribute("aria-label", drumName(lane, column + 1));
-        region.appendChild(cell);
+        cell.tabIndex = -1;
+        line.appendChild(cell);
       }
+      grid.appendChild(line);
     });
-    region.appendChild(createTransport("three"));
-  }
-
-  function buildBass(region, step) {
-    for (let beat = 0; beat < 4; beat++) {
-      const value = step.payload.cells[beat];
-      const cell = document.createElement("button");
-      cell.type = "button";
-      cell.className = "lm-cell";
-      cell.setAttribute("data-value", value);
-      cell.setAttribute("aria-pressed", value === "off" ? "false" : "true");
-      cell.setAttribute("aria-label", bassName(beat + 1, value));
-      cell.textContent = text("toy.value." + value);
-      region.appendChild(cell);
+    const numbers = document.createElement("div");
+    numbers.className = "lm-lane lm-steps";
+    if (columns === STEPS) numbers.classList.add("lm-steps-beat");
+    numbers.setAttribute("aria-hidden", "true");
+    numbers.appendChild(document.createElement("span"));
+    for (let column = 0; column < columns; column++) {
+      const number = document.createElement("span");
+      number.textContent = String(column + 1);
+      numbers.appendChild(number);
     }
-    region.appendChild(createTransport("three"));
-  }
-
-  function buildKeys(region, step) {
-    const group = "p" + step.n;
-    for (let slot = 0; slot < 8; slot++) {
-      const radio = document.createElement("input");
-      radio.type = "radio";
-      radio.name = group;
-      radio.id = group + "-" + slot;
-      radio.value = KEYBOARD[slot];
-      const label = document.createElement("label");
-      label.setAttribute("for", radio.id);
-      label.textContent = KEYBOARD[slot];
-      region.appendChild(radio);
-      region.appendChild(label);
-    }
-    const readout = document.createElement("ol");
-    readout.className = "lm-slots";
-    for (let slot = 0; slot < 8; slot++) readout.appendChild(document.createElement("li"));
-    region.appendChild(readout);
-    region.appendChild(createTransport("three"));
-  }
-
-  function buildChords(region, step) {
-    if (step.payload.pads === false) {
-      const readout = document.createElement("ol");
-      readout.className = "lm-chords";
-      for (let bar = 0; bar < 4; bar++) readout.appendChild(document.createElement("li"));
-      region.appendChild(readout);
-      region.appendChild(createTransport("toggle"));
-      return;
-    }
-    const group = "ch" + step.n;
-    for (let bar = 0; bar < 4; bar++) {
-      const radio = document.createElement("input");
-      radio.type = "radio";
-      radio.name = group;
-      radio.id = group + "-" + bar;
-      radio.value = step.payload.progression[bar];
-      const label = document.createElement("label");
-      label.setAttribute("for", radio.id);
-      label.textContent = step.payload.progression[bar];
-      region.appendChild(radio);
-      region.appendChild(label);
-    }
-    region.appendChild(createTransport("toggle"));
-  }
-
-  function buildArrange(region, step) {
-    const group = "ar" + step.n;
-    for (let bar = 0; bar < 4; bar++) {
-      const radio = document.createElement("input");
-      radio.type = "radio";
-      radio.name = group;
-      radio.id = group + "-" + bar;
-      radio.value = step.payload.blocks[bar];
-      const label = document.createElement("label");
-      label.setAttribute("for", radio.id);
-      region.appendChild(radio);
-      region.appendChild(label);
-    }
-    const map = document.createElement("ol");
-    map.className = "lm-chordmap";
-    for (let bar = 0; bar < 4; bar++) map.appendChild(document.createElement("li"));
-    region.appendChild(map);
-    ["drums", "bass", "chords", "melody"].forEach(function (layer) {
-      const button = document.createElement("button");
-      button.type = "button";
-      button.setAttribute("data-layer", layer);
-      button.setAttribute("aria-pressed", "true");
-      button.textContent = text("toy.layer." + layer);
-      region.appendChild(button);
-    });
-    ["earlier", "later"].forEach(function (direction) {
-      const button = document.createElement("button");
-      button.type = "button";
-      button.setAttribute("data-move", direction);
-      button.textContent = text("ui.move." + direction);
-      region.appendChild(button);
-    });
-    region.appendChild(createTransport("three"));
+    grid.appendChild(numbers);
+    region.appendChild(grid);
   }
 
   function clearChildren(region) {
@@ -548,11 +522,7 @@
   function buildInterior(step) {
     clearChildren(step.toy);
     step.toy.className = "lm-toy";
-    if (step.family === "drum") buildDrum(step.toy, step);
-    else if (step.family === "bass") buildBass(step.toy, step);
-    else if (step.family === "keys") buildKeys(step.toy, step);
-    else if (step.family === "chords") buildChords(step.toy, step);
-    else buildArrange(step.toy, step);
+    buildGrid(step.toy, step);
   }
 
   function countIn(region, selector) {
@@ -562,45 +532,28 @@
   function hasInterior(step) {
     const region = step.toy;
     if (region === null) return false;
-    if (step.family === "drum") return countIn(region, "button[data-group]") === 12 && countIn(region, "[data-transport]") === 3;
-    if (step.family === "bass") return countIn(region, "button[data-value]") === 4 && countIn(region, "[data-transport]") === 3;
-    if (step.family === "keys") {
-      return countIn(region, "input[type=radio]") === 8 && countIn(region, "ol.lm-slots li") === 8 && countIn(region, "[data-transport]") === 3;
-    }
-    if (step.family === "chords") {
-      if (step.payload.pads === false) return countIn(region, "ol.lm-chords li") === 4 && countIn(region, "[data-transport]") === 1;
-      return countIn(region, "input[type=radio]") === 4 && countIn(region, "[data-transport]") === 1;
-    }
-    return (
-      countIn(region, "input[type=radio]") === 4 &&
-      countIn(region, "[data-layer]") === 4 &&
-      countIn(region, "[data-move]") === 2 &&
-      countIn(region, "ol.lm-chordmap li") === 4 &&
-      countIn(region, "[data-transport]") === 3
-    );
+    const cells = GRID[step.family].rows.length * columnCount(step);
+    return countIn(region, "button[data-row]") === cells && countIn(region, "[data-transport]") === 3;
   }
 
   function collectControls(region) {
     return {
-      cells: Array.from(region.querySelectorAll("button[data-group]")),
-      bassCells: Array.from(region.querySelectorAll("button[data-value]")),
-      radios: Array.from(region.querySelectorAll("input[type=radio]")),
-      slots: Array.from(region.querySelectorAll("ol.lm-slots li")),
-      chordReadout: Array.from(region.querySelectorAll("ol.lm-chords li")),
-      chordMap: Array.from(region.querySelectorAll("ol.lm-chordmap li")),
+      cells: Array.from(region.querySelectorAll("button[data-row]")),
+      rowNames: Array.from(region.querySelectorAll("[data-row-name]")),
+      grid: region.querySelector(".lm-beatgrid"),
+      clear: region.querySelector("[data-clear]"),
+      tempo: region.querySelector("[data-tempo]"),
+      tempoReadout: region.querySelector("[data-tempo-readout]"),
       layers: Array.from(region.querySelectorAll("[data-layer]")),
-      earlier: region.querySelector('[data-move="earlier"]'),
-      later: region.querySelector('[data-move="later"]'),
       play: region.querySelector('[data-transport="play"]'),
       stop: region.querySelector('[data-transport="stop"]'),
       mute: region.querySelector('[data-transport="mute"]'),
-      toggle: region.querySelector('[data-transport="toggle"]'),
     };
   }
 
   function assertFocusBudget(region) {
     if (region === null) return;
-    const total = countIn(region, "button, input, select, textarea, a[href], [tabindex]");
+    const total = countIn(region, "button, input, select, textarea, a[href], [tabindex]") - countIn(region, '[tabindex="-1"]');
     if (total <= 16) return;
     const development =
       window.location.protocol === "file:" ||
@@ -612,18 +565,15 @@
 
   function createToyState(step) {
     const payload = step.payload;
-    if (step.family === "drum") {
-      return { lanes: { kick: payload.lanes.kick, snare: payload.lanes.snare, hat: payload.lanes.hat } };
-    }
-    if (step.family === "bass") return { cells: payload.cells.slice() };
-    if (step.family === "keys") return { slots: payload.slots.slice(), rewriteSlots: payload.rewriteSlots.slice(), selected: 0 };
-    if (step.family === "chords") return { progression: payload.progression.slice(), pads: payload.pads, selected: 0 };
+    if (step.family === "drum") return { lanes: Object.assign({}, payload.lanes), bpm: DEFAULT_BPM };
+    if (step.family === "bass") return { cells: payload.cells.slice(), bpm: DEFAULT_BPM };
+    if (step.family === "keys") return { slots: payload.slots.slice(), rewriteSlots: payload.rewriteSlots.slice(), bpm: DEFAULT_BPM };
+    if (step.family === "chords") return { progression: payload.progression.slice(), pads: payload.pads, bpm: DEFAULT_BPM };
     return {
       blocks: payload.blocks.slice(),
       chordMap: payload.chordMap.slice(),
       layers: { drums: payload.layers.drums, bass: payload.layers.bass, chords: payload.layers.chords, melody: payload.layers.melody },
-      selected: 0,
-      moved: [false, false, false, false],
+      bpm: DEFAULT_BPM,
     };
   }
 
@@ -637,22 +587,14 @@
     return state.slots[slot];
   }
 
-  function firstEmptySlot(state) {
-    for (let slot = 0; slot < 8; slot++) {
-      if (state.rewriteSlots.indexOf(slot) !== -1) continue;
-      if (state.slots[slot] === null) return slot;
-    }
-    return -1;
+  function blockChord(state, block) {
+    return state.chordMap[BLOCKS.indexOf(block)];
   }
 
   function goalCells(state) {
-    const cells = [];
-    LANES.forEach(function (lane) {
-      for (let column = 0; column < 4; column++) {
-        cells.push(hasHit(state.lanes[lane].slice(column * 4, column * 4 + 4)));
-      }
+    return LANES.map(function (lane) {
+      return state.lanes[lane].replace(/[xo]/g, "X");
     });
-    return cells;
   }
 
   function evaluateGoal(step) {
@@ -660,7 +602,7 @@
     if (goal === null) return false;
     try {
       const state = stateFor(step);
-      if (goal.type === "cells-equal") return goal.cells.length === 12 && arraysEqual(goalCells(state), goal.cells);
+      if (goal.type === "cells-equal") return goal.cells.length === LANES.length && arraysEqual(goalCells(state), goal.cells);
       if (goal.type === "values-equal") return arraysEqual(state.cells, goal.values);
       if (goal.type === "slots-equal") {
         const rendered = [];
@@ -674,82 +616,67 @@
     }
   }
 
-  function renderDrum(step) {
+  function isOn(step, row, column) {
     const state = stateFor(step);
-    step.controls.cells.forEach(function (cell, index) {
-      const lane = LANES[Math.floor(index / 4)];
-      const column = index % 4;
-      const group = state.lanes[lane].slice(column * 4, column * 4 + 4);
-      cell.setAttribute("aria-pressed", hasHit(group) ? "true" : "false");
-      cell.setAttribute("aria-label", drumName(lane, column + 1));
-    });
+    if (step.family === "drum") return hasHit(state.lanes[row].charAt(column));
+    if (step.family === "keys") return effectiveSlot(state, column) === row;
+    return state[GRID[step.family].field][column] === row;
   }
 
-  function renderBass(step) {
+  function isLocked(step, column) {
     const state = stateFor(step);
-    step.controls.bassCells.forEach(function (cell, index) {
-      const value = state.cells[index];
-      const word = text("toy.value." + value);
-      cell.setAttribute("data-value", word);
-      cell.setAttribute("aria-pressed", value === "off" ? "false" : "true");
-      cell.setAttribute("aria-label", bassName(index + 1, value));
-      cell.textContent = word;
-    });
+    if (step.family === "keys") return state.rewriteSlots.indexOf(column) !== -1;
+    if (step.family === "chords") return state.pads === false;
+    return false;
   }
 
-  function renderKeys(step) {
-    const state = stateFor(step);
-    step.controls.slots.forEach(function (slotNode, index) {
-      const value = effectiveSlot(state, index);
-      slotNode.textContent = value === null ? "" : value;
-    });
-    step.controls.radios.forEach(function (radio, index) {
-      radio.checked = index === state.selected;
-    });
+  function rowName(step, row) {
+    if (step.family === "drum") return text("toy.lane." + row);
+    if (step.family === "bass") return text("toy.value." + row);
+    if (step.family === "arrange") return row + ": " + blockChord(stateFor(step), row);
+    return row;
   }
 
-  function renderChords(step) {
+  function renderGrid(step) {
     const state = stateFor(step);
-    if (state.pads === false) {
-      step.controls.chordReadout.forEach(function (node, bar) {
-        node.textContent = state.progression[bar];
-      });
-      return;
-    }
-    step.controls.radios.forEach(function (radio, bar) {
-      const chord = state.progression[bar];
-      radio.value = chord;
-      radio.checked = bar === state.selected;
-      const label = labelFor(radio, step.toy);
-      if (label !== null) label.textContent = chord;
+    const controls = step.controls;
+    let stop = null;
+    controls.cells.forEach(function (cell) {
+      const row = cell.getAttribute("data-row");
+      const column = Number(cell.getAttribute("data-col"));
+      cell.setAttribute("aria-pressed", isOn(step, row, column) ? "true" : "false");
+      cell.setAttribute("aria-label", rowName(step, row) + " " + (column + 1));
+      cell.disabled = isLocked(step, column);
+      if (cell.tabIndex === 0 && !cell.disabled) stop = cell;
     });
-  }
-
-  function arrangeName(state, bar) {
-    const suffix = state.moved[bar] ? ", bar " + (bar + 1) : "";
-    return state.blocks[bar] + " — " + state.chordMap[bar] + suffix;
-  }
-
-  function renderArrange(step) {
-    const state = stateFor(step);
-    step.controls.radios.forEach(function (radio, bar) {
-      const name = arrangeName(state, bar);
-      radio.value = state.blocks[bar];
-      radio.checked = bar === state.selected;
-      radio.setAttribute("aria-label", name);
-      const label = labelFor(radio, step.toy);
-      if (label !== null) label.textContent = name;
+    if (stop === null) stop = controls.cells.find(function (cell) {
+      return !cell.disabled;
+    }) || null;
+    controls.cells.forEach(function (cell) {
+      cell.tabIndex = cell === stop ? 0 : -1;
     });
-    step.controls.chordMap.forEach(function (node, bar) {
-      node.textContent = state.chordMap[bar];
+    controls.rowNames.forEach(function (node) {
+      node.textContent = rowName(step, node.getAttribute("data-row-name"));
     });
-    step.controls.layers.forEach(function (button) {
+    controls.layers.forEach(function (button) {
       const layer = button.getAttribute("data-layer");
       button.setAttribute("aria-pressed", state.layers[layer] ? "true" : "false");
       button.textContent = text("toy.layer." + layer);
     });
-    if (step.controls.earlier !== null) step.controls.earlier.disabled = state.selected === 0;
-    if (step.controls.later !== null) step.controls.later.disabled = state.selected === 3;
+    if (controls.grid !== null) controls.grid.setAttribute("aria-label", text(GRID[step.family].group));
+    nameButton(controls.clear, "ui.clear");
+    if (controls.tempo !== null) controls.tempo.value = String(state.bpm);
+    if (controls.tempoReadout !== null) controls.tempoReadout.textContent = text("ui.tempo") + ": " + state.bpm + " bpm";
+  }
+
+  function markPlayhead(step, column) {
+    if (step.controls === null || step.controls.grid === null || step.controls.grid === undefined) return;
+    const grid = step.controls.grid;
+    const previous = grid.querySelectorAll("[data-now]");
+    for (let i = 0; i < previous.length; i++) previous[i].removeAttribute("data-now");
+    if (column < 0) return;
+    const cells = grid.querySelectorAll('[data-col="' + column + '"]');
+    for (let i = 0; i < cells.length; i++) cells[i].setAttribute("data-now", "");
   }
 
   function renderToy(step) {
@@ -760,11 +687,7 @@
       assertFocusBudget(step.toy);
     }
     step.controls = collectControls(step.toy);
-    if (step.family === "drum") renderDrum(step);
-    else if (step.family === "bass") renderBass(step);
-    else if (step.family === "keys") renderKeys(step);
-    else if (step.family === "chords") renderChords(step);
-    else renderArrange(step);
+    renderGrid(step);
     renderTransport(step);
   }
 
@@ -772,27 +695,15 @@
     const controls = step.controls;
     if (controls.play !== null) controls.play.disabled = false;
     if (controls.stop !== null) controls.stop.disabled = !(state === "running" || state === "unlocking");
-    if (controls.mute !== null) {
-      controls.mute.setAttribute("aria-pressed", muted ? "true" : "false");
-      controls.mute.textContent = text("ui.mute");
-    }
-    if (controls.play !== null) controls.play.textContent = text("ui.play");
-    if (controls.stop !== null) controls.stop.textContent = text("ui.stop");
-  }
-
-  function setToggleTransport(step, state) {
-    const toggle = step.controls.toggle;
-    if (toggle === null) return;
-    const playing = state === "running";
-    toggle.setAttribute("aria-pressed", playing ? "true" : "false");
-    toggle.textContent = playing ? text("ui.stop") : text("ui.play");
+    if (controls.mute !== null) controls.mute.setAttribute("aria-pressed", muted ? "true" : "false");
+    nameButton(controls.play, "ui.play");
+    nameButton(controls.stop, "ui.stop");
+    nameButton(controls.mute, "ui.mute");
   }
 
   function renderTransport(step) {
     if (step.controls === null) return;
-    const state = engine === null ? "idle" : engine.state;
-    if (step.controls.toggle !== null) setToggleTransport(step, state);
-    else setThreeTransport(step, state);
+    setThreeTransport(step, engine === null ? "idle" : engine.state);
   }
 
   function renderEngineState(state) {
@@ -806,8 +717,8 @@
     if (currentIndex < 0) return;
     const step = steps[currentIndex];
     if (step === undefined || step.controls === null) return;
-    if (step.controls.toggle !== null) setToggleTransport(step, state);
-    else setThreeTransport(step, state);
+    if (state !== "running") markPlayhead(step, -1);
+    setThreeTransport(step, state);
   }
 
   function enterNoAudio() {
@@ -857,7 +768,7 @@
 
   function scheduleLanes(lanes, sixteenth, gridTime) {
     const index = sixteenth - 1;
-    LANES.forEach(function (lane) {
+    Object.keys(lanes).forEach(function (lane) {
       const group = lanes[lane];
       if (index < 0 || index >= group.length) return;
       const velocity = VELOCITY[group.charAt(index)];
@@ -893,7 +804,7 @@
 
   function scheduleArrange(state, sixteenth, gridTime, barIndex) {
     if (state.layers.drums) scheduleLanes(ARRANGE_LANES, sixteenth, gridTime);
-    const chord = state.chordMap[barIndex];
+    const chord = blockChord(state, state.blocks[barIndex]);
     const degrees = window.LM.music.bassDegrees[chord];
     if (state.layers.bass && degrees !== undefined) {
       if (sixteenth === 1) engine.note("bass", degrees.root, 0.9 * engine.timing.beatDur, gridTime, 0.7);
@@ -917,6 +828,12 @@
     const state = stateFor(step);
     const barIndex = ((event.bar % 4) + 4) % 4;
     try {
+      const unit = GRID[step.family].unit;
+      const column = unit === 16 ? barIndex : Math.floor((event.step - 1) / unit);
+      const delay = Math.max(0, (event.audibleTime - engine.immediate()) * 1000);
+      window.setTimeout(function () {
+        if (engine !== null && engine.state === "running" && steps[currentIndex] === step) markPlayhead(step, column);
+      }, delay);
       if (step.family === "drum") scheduleLanes(state.lanes, event.step, event.gridTime);
       else if (step.family === "bass") scheduleBass(state, event.step, event.gridTime, barIndex);
       else if (step.family === "keys") scheduleKeys(state, event.step, event.gridTime);
@@ -931,72 +848,99 @@
     lastBar = bar;
   }
 
-  function toggleDrumCell(step, index) {
+  function preview(step, row) {
+    playWhenReady(function (active) {
+      const now = active.immediate();
+      if (step.family === "drum") active.drum(row, now, 1);
+      else if (step.family === "keys") active.note("lead", row, 2 * active.timing.stepDur, now, 0.75);
+      else if (step.family === "bass") {
+        const degrees = window.LM.music.bassDegrees[playingChord()];
+        if (degrees !== undefined) active.note("bass", degrees[row], 0.9 * active.timing.beatDur, now, 0.7);
+      } else {
+        const chord = step.family === "chords" ? row : blockChord(stateFor(step), row);
+        const tones = window.LM.music.chordTones[chord];
+        if (tones === undefined) return;
+        active.releaseAll(now);
+        active.chord(tones, 1.6, now, 0.85, 0.012);
+      }
+    });
+  }
+
+  function tapCell(step, cell) {
     const state = stateFor(step);
-    const lane = LANES[Math.floor(index / 4)];
-    const column = index % 4;
-    const authored = step.payload.lanes[lane].slice(column * 4, column * 4 + 4);
-    const current = state.lanes[lane].slice(column * 4, column * 4 + 4);
-    const wasOn = hasHit(current);
-    const next = wasOn ? "...." : authored;
-    state.lanes[lane] = state.lanes[lane].slice(0, column * 4) + next + state.lanes[lane].slice(column * 4 + 4);
-    renderDrum(step);
-    if (!wasOn) {
-      const velocity = velocityOf(authored);
-      playWhenReady(function (active) {
-        active.drum(lane, active.immediate(), velocity);
+    const spec = GRID[step.family];
+    const row = cell.getAttribute("data-row");
+    const column = Number(cell.getAttribute("data-col"));
+    if (isLocked(step, column)) return;
+    const wasOn = isOn(step, row, column);
+    if (spec.multi) {
+      state.lanes[row] = state.lanes[row].slice(0, column) + (wasOn ? "." : "X") + state.lanes[row].slice(column + 1);
+    } else if (!wasOn) {
+      state[spec.field][column] = row;
+    } else if (spec.empty !== undefined) {
+      state[spec.field][column] = spec.empty;
+    }
+    step.controls.cells.forEach(function (other) {
+      other.tabIndex = other === cell ? 0 : -1;
+    });
+    renderGrid(step);
+    if (!wasOn || !canClear(spec)) preview(step, row);
+    checkGoal(step);
+  }
+
+  function clearGrid(step) {
+    const state = stateFor(step);
+    const spec = GRID[step.family];
+    if (spec.multi) {
+      LANES.forEach(function (lane) {
+        state.lanes[lane] = ".".repeat(STEPS);
+      });
+    } else {
+      state[spec.field] = state[spec.field].map(function () {
+        return spec.empty;
       });
     }
+    renderGrid(step);
     checkGoal(step);
   }
 
-  function cycleBass(step, index) {
+  function setTempo(step, value) {
     const state = stateFor(step);
-    const next = BASS_VALUES[(BASS_VALUES.indexOf(state.cells[index]) + 1) % BASS_VALUES.length];
-    state.cells[index] = next;
-    renderBass(step);
-    if (next !== "off") {
-      const chord = playingChord();
-      playWhenReady(function (active) {
-        const degrees = window.LM.music.bassDegrees[chord];
-        if (degrees === undefined) return;
-        active.note("bass", degrees[next], 0.9 * active.timing.beatDur, active.immediate(), 0.7);
+    state.bpm = Math.min(160, Math.max(60, Math.round(Number(value)) || DEFAULT_BPM));
+    if (engine !== null) engine.setBpm(state.bpm);
+    renderGrid(step);
+  }
+
+  function moveCellFocus(step, event) {
+    const cells = step.controls === null ? [] : step.controls.cells;
+    const index = cells.indexOf(event.target);
+    if (index === -1) return;
+    const columns = columnCount(step);
+    const rows = GRID[step.family].rows.length;
+    const moves = { ArrowRight: [0, 1], ArrowLeft: [0, -1], ArrowDown: [1, 0], ArrowUp: [-1, 0] };
+    let row = Math.floor(index / columns);
+    let column = index % columns;
+    let next = null;
+    if (event.key === "Home" || event.key === "End") {
+      const line = cells.slice(row * columns, row * columns + columns).filter(function (cell) {
+        return !cell.disabled;
       });
+      next = event.key === "Home" ? line[0] : line[line.length - 1];
+    } else {
+      const move = moves[event.key];
+      if (move === undefined) return;
+      do {
+        row += move[0];
+        column += move[1];
+        if (row < 0 || row >= rows || column < 0 || column >= columns) break;
+        if (!cells[row * columns + column].disabled) next = cells[row * columns + column];
+      } while (next === null);
     }
-    checkGoal(step);
-  }
-
-  function pressKey(step, index) {
-    const state = stateFor(step);
-    const target = firstEmptySlot(state);
-    if (target === -1) return;
-    const note = KEYBOARD[index];
-    state.slots[target] = note;
-    state.selected = index;
-    renderKeys(step);
-    playWhenReady(function (active) {
-      active.note("lead", note, 2 * active.timing.stepDur, active.immediate(), 0.75);
-    });
-    checkGoal(step);
-  }
-
-  function cyclePad(step, bar) {
-    const state = stateFor(step);
-    const next = CHORD_CYCLE[(CHORD_CYCLE.indexOf(state.progression[bar]) + 1) % CHORD_CYCLE.length];
-    state.progression[bar] = next;
-    state.selected = bar;
-    renderChords(step);
-    playWhenReady(function (active) {
-      active.releaseAll(active.immediate());
-      active.chord(window.LM.music.chordTones[next], 1.6, active.immediate(), 0.85, 0.012);
-    });
-    checkGoal(step);
-  }
-
-  function selectArrange(step, bar) {
-    const state = stateFor(step);
-    state.selected = bar;
-    renderArrange(step);
+    event.preventDefault();
+    if (next === null || next === undefined) return;
+    cells[index].tabIndex = -1;
+    next.tabIndex = 0;
+    next.focus();
   }
 
   function toggleLayer(step, button) {
@@ -1004,20 +948,7 @@
     const layer = button.getAttribute("data-layer");
     if (state.layers[layer] === undefined) return;
     state.layers[layer] = !state.layers[layer];
-    renderArrange(step);
-  }
-
-  function moveBlock(step, direction) {
-    const state = stateFor(step);
-    const from = state.selected;
-    const to = from + direction;
-    if (to < 0 || to > 3) return;
-    const held = state.blocks[from];
-    state.blocks[from] = state.blocks[to];
-    state.blocks[to] = held;
-    state.moved[to] = true;
-    renderArrange(step);
-    checkGoal(step);
+    renderGrid(step);
   }
 
   function checkGoal(step) {
@@ -1042,6 +973,7 @@
     }
     if (control === controls.stop) {
       if (engine !== null) engine.stop();
+      markPlayhead(step, -1);
       return;
     }
     if (control === controls.mute) {
@@ -1050,15 +982,13 @@
       setThreeTransport(step, engine === null ? "idle" : engine.state);
       return;
     }
-    if (control === controls.toggle) {
-      if (engine !== null && engine.state === "running") engine.stop();
-      else startPlayback();
-    }
   }
 
   function startPlayback() {
     const active = ensureEngine();
     if (active === null) return;
+    const current = steps[currentIndex];
+    if (current !== undefined) active.setBpm(stateFor(current).bpm);
     Promise.resolve(active.unlock())
       .then(function (ok) {
         if (!ok) return;
@@ -1070,44 +1000,19 @@
   function activateControl(step, control) {
     const controls = step.controls;
     if (controls === null) return;
-    if (
-      control === controls.play ||
-      control === controls.stop ||
-      control === controls.mute ||
-      control === controls.toggle
-    ) {
+    if (control === controls.play || control === controls.stop || control === controls.mute) {
       handleTransport(step, control);
       return;
     }
-    const cellIndex = controls.cells.indexOf(control);
-    if (cellIndex !== -1) {
-      toggleDrumCell(step, cellIndex);
+    if (control === controls.clear) {
+      clearGrid(step);
       return;
     }
-    const bassIndex = controls.bassCells.indexOf(control);
-    if (bassIndex !== -1) {
-      cycleBass(step, bassIndex);
+    if (controls.cells.indexOf(control) !== -1) {
+      tapCell(step, control);
       return;
     }
-    const layerIndex = controls.layers.indexOf(control);
-    if (layerIndex !== -1) {
-      toggleLayer(step, control);
-      return;
-    }
-    if (control === controls.earlier) {
-      moveBlock(step, -1);
-      return;
-    }
-    if (control === controls.later) {
-      moveBlock(step, 1);
-      return;
-    }
-    const radioIndex = controls.radios.indexOf(control);
-    if (radioIndex !== -1) {
-      if (step.family === "keys") pressKey(step, radioIndex);
-      else if (step.family === "chords") cyclePad(step, radioIndex);
-      else selectArrange(step, radioIndex);
-    }
+    if (controls.layers.indexOf(control) !== -1) toggleLayer(step, control);
   }
 
   function controlFrom(region, target) {
@@ -1145,6 +1050,12 @@
         void 0;
       }
     }
+    region.addEventListener("input", function (event) {
+      if (event.target.hasAttribute("data-tempo")) setTempo(step, event.target.value);
+    });
+    region.addEventListener("keydown", function (event) {
+      moveCellFocus(step, event);
+    });
     region.addEventListener("pointerup", resolve);
     region.addEventListener("click", resolve);
     region.addEventListener("pointerdown", function (event) {
@@ -1227,6 +1138,7 @@
     if (step.n === 4 && !isFinished()) window.LM.progress.markFinished(slug);
     bindRegionEvents(step);
     renderToy(step);
+    if (engine !== null) engine.setBpm(stateFor(step).bpm);
     renderCompletion();
     renderEngineState(engine === null ? "idle" : engine.state);
     if (userInitiated) announceStep(step);

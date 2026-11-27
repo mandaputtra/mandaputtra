@@ -26,7 +26,7 @@ eleventyExcludeFromCollections: true
 <symbol id="i-stop" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect x="5" y="5" width="14" height="14"/></symbol>
 </svg>
 <header class="lm-head">
-<a class="lm-crumb" href="/explore/learning-music/"><svg aria-hidden="true" focusable="false"><use href="#i-back"/></svg><span data-i18n="lesson.song-structure.crumb">Struktur</span></a>
+<a class="lm-crumb" href="/explore/learning-music/"><svg aria-hidden="true" focusable="false"><use href="#i-back"/></svg><span data-i18n="lesson.song-structure.crumb">Buat Lagu</span></a>
 <div class="lm-lang" role="group" aria-label="Bahasa / Language">
 <button type="button" data-lang="id" aria-pressed="true">ID</button>
 <button type="button" data-lang="en" aria-pressed="false">EN</button>
@@ -36,67 +36,25 @@ eleventyExcludeFromCollections: true
 </header>
 <main>
 <section class="lm-step" data-step="1" aria-labelledby="song-structure-s1-h2">
-<h2 id="song-structure-s1-h2" tabindex="-1" data-i18n="lesson.song-structure.step1.heading">Langkah 1 — Satu blok</h2>
+<h2 id="song-structure-s1-h2" tabindex="-1" data-i18n="lesson.song-structure.step1.heading">Langkah 1: Satu blok</h2>
 <div class="lm-bubble">
 <img src="/img/learning-music/bird.svg" alt="" width="64" height="64">
 <span data-i18n="lesson.song-structure.step1.say">Blok A berisi drum, bass, dan akord. Empat bar yang sama membentuk bagian pertama.</span>
 </div>
-<div class="lm-toy">
-<input type="radio" name="ar1" id="ar1-0" value="A" aria-label="A — Am" checked>
-<label for="ar1-0">A — Am</label>
-<input type="radio" name="ar1" id="ar1-1" value="A" aria-label="A — F">
-<label for="ar1-1">A — F</label>
-<input type="radio" name="ar1" id="ar1-2" value="A" aria-label="A — C">
-<label for="ar1-2">A — C</label>
-<input type="radio" name="ar1" id="ar1-3" value="A" aria-label="A — G">
-<label for="ar1-3">A — G</label>
-<ol class="lm-chordmap"><li>Am</li><li>F</li><li>C</li><li>G</li></ol>
-<button type="button" data-layer="drums" aria-pressed="true" data-i18n="toy.layer.drums">Drum</button>
-<button type="button" data-layer="bass" aria-pressed="true" data-i18n="toy.layer.bass">Bass</button>
-<button type="button" data-layer="chords" aria-pressed="true" data-i18n="toy.layer.chords">Akord</button>
-<button type="button" data-layer="melody" aria-pressed="false" data-i18n="toy.layer.melody">Melodi</button>
-<button type="button" data-move="earlier" data-i18n="ui.move.earlier" disabled>Geser ke kiri</button>
-<button type="button" data-move="later" data-i18n="ui.move.later">Geser ke kanan</button>
-<div class="lm-transport">
-<button type="button" data-transport="play" data-i18n="ui.play">Putar</button>
-<button type="button" data-transport="stop" data-i18n="ui.stop" disabled>Berhenti</button>
-<button type="button" data-transport="mute" data-i18n="ui.mute" aria-pressed="false">Bisukan</button>
-</div>
-</div>
-<p class="lm-try" id="song-structure-try-1"><svg aria-hidden="true" focusable="false"><use href="#i-try"/></svg><span data-i18n="lesson.song-structure.step1.try">Tekan Putar dan dengarkan lapisan yang menyala.</span></p>
+<div class="lm-toy"></div>
+<p class="lm-try" id="song-structure-try-1"><svg aria-hidden="true" focusable="false"><use href="#i-try"/></svg><span data-i18n="lesson.song-structure.step1.try">Tekan tombol putar dan dengarkan lapisan yang menyala.</span></p>
 <div class="lm-nav">
 <button type="button" data-nav="back" data-i18n="ui.back" disabled>Kembali</button>
 <button type="button" data-nav="next" data-i18n="ui.next">Lanjut</button>
 </div>
 </section>
 <section class="lm-step" data-step="2" aria-labelledby="song-structure-s2-h2">
-<h2 id="song-structure-s2-h2" tabindex="-1" data-i18n="lesson.song-structure.step2.heading">Langkah 2 — Blok B</h2>
+<h2 id="song-structure-s2-h2" tabindex="-1" data-i18n="lesson.song-structure.step2.heading">Langkah 2: Blok B</h2>
 <div class="lm-bubble">
 <img src="/img/learning-music/bird.svg" alt="" width="64" height="64">
 <span data-i18n="lesson.song-structure.step2.say">Blok B membawa variasi, dan melodi ikut menyala. Dua blok sudah cukup untuk satu bagian dan jawabannya.</span>
 </div>
-<div class="lm-toy">
-<input type="radio" name="ar2" id="ar2-0" value="A" aria-label="A — Am" checked>
-<label for="ar2-0">A — Am</label>
-<input type="radio" name="ar2" id="ar2-1" value="A" aria-label="A — F">
-<label for="ar2-1">A — F</label>
-<input type="radio" name="ar2" id="ar2-2" value="B" aria-label="B — C">
-<label for="ar2-2">B — C</label>
-<input type="radio" name="ar2" id="ar2-3" value="B" aria-label="B — G">
-<label for="ar2-3">B — G</label>
-<ol class="lm-chordmap"><li>Am</li><li>F</li><li>C</li><li>G</li></ol>
-<button type="button" data-layer="drums" aria-pressed="true" data-i18n="toy.layer.drums">Drum</button>
-<button type="button" data-layer="bass" aria-pressed="true" data-i18n="toy.layer.bass">Bass</button>
-<button type="button" data-layer="chords" aria-pressed="true" data-i18n="toy.layer.chords">Akord</button>
-<button type="button" data-layer="melody" aria-pressed="true" data-i18n="toy.layer.melody">Melodi</button>
-<button type="button" data-move="earlier" data-i18n="ui.move.earlier" disabled>Geser ke kiri</button>
-<button type="button" data-move="later" data-i18n="ui.move.later">Geser ke kanan</button>
-<div class="lm-transport">
-<button type="button" data-transport="play" data-i18n="ui.play">Putar</button>
-<button type="button" data-transport="stop" data-i18n="ui.stop" disabled>Berhenti</button>
-<button type="button" data-transport="mute" data-i18n="ui.mute" aria-pressed="false">Bisukan</button>
-</div>
-</div>
+<div class="lm-toy"></div>
 <p class="lm-try" id="song-structure-try-2"><svg aria-hidden="true" focusable="false"><use href="#i-try"/></svg><span data-i18n="lesson.song-structure.step2.try">Ubah dua blok terakhir menjadi B, lalu mainkan.</span></p>
 <div class="lm-nav">
 <button type="button" data-nav="back" data-i18n="ui.back">Kembali</button>
@@ -104,33 +62,12 @@ eleventyExcludeFromCollections: true
 </div>
 </section>
 <section class="lm-step" data-step="3" aria-labelledby="song-structure-s3-h2">
-<h2 id="song-structure-s3-h2" tabindex="-1" data-i18n="lesson.song-structure.step3.heading">Langkah 3 — Berselang-seling</h2>
+<h2 id="song-structure-s3-h2" tabindex="-1" data-i18n="lesson.song-structure.step3.heading">Langkah 3: Berselang-seling</h2>
 <div class="lm-bubble">
 <img src="/img/learning-music/bird.svg" alt="" width="64" height="64">
 <span data-i18n="lesson.song-structure.step3.say">A dan B bergantian tiap dua bar. Pergantian menjaga lagu tetap segar.</span>
 </div>
-<div class="lm-toy">
-<input type="radio" name="ar3" id="ar3-0" value="A" aria-label="A — Am" checked>
-<label for="ar3-0">A — Am</label>
-<input type="radio" name="ar3" id="ar3-1" value="B" aria-label="B — F">
-<label for="ar3-1">B — F</label>
-<input type="radio" name="ar3" id="ar3-2" value="A" aria-label="A — C">
-<label for="ar3-2">A — C</label>
-<input type="radio" name="ar3" id="ar3-3" value="B" aria-label="B — G">
-<label for="ar3-3">B — G</label>
-<ol class="lm-chordmap"><li>Am</li><li>F</li><li>C</li><li>G</li></ol>
-<button type="button" data-layer="drums" aria-pressed="true" data-i18n="toy.layer.drums">Drum</button>
-<button type="button" data-layer="bass" aria-pressed="true" data-i18n="toy.layer.bass">Bass</button>
-<button type="button" data-layer="chords" aria-pressed="true" data-i18n="toy.layer.chords">Akord</button>
-<button type="button" data-layer="melody" aria-pressed="true" data-i18n="toy.layer.melody">Melodi</button>
-<button type="button" data-move="earlier" data-i18n="ui.move.earlier" disabled>Geser ke kiri</button>
-<button type="button" data-move="later" data-i18n="ui.move.later">Geser ke kanan</button>
-<div class="lm-transport">
-<button type="button" data-transport="play" data-i18n="ui.play">Putar</button>
-<button type="button" data-transport="stop" data-i18n="ui.stop" disabled>Berhenti</button>
-<button type="button" data-transport="mute" data-i18n="ui.mute" aria-pressed="false">Bisukan</button>
-</div>
-</div>
+<div class="lm-toy"></div>
 <p class="lm-try" id="song-structure-try-3"><svg aria-hidden="true" focusable="false"><use href="#i-try"/></svg><span data-i18n="lesson.song-structure.step3.try">Susun urutan A, B, A, B dan dengarkan perpindahannya.</span></p>
 <div class="lm-nav">
 <button type="button" data-nav="back" data-i18n="ui.back">Kembali</button>
@@ -138,34 +75,13 @@ eleventyExcludeFromCollections: true
 </div>
 </section>
 <section class="lm-step" data-step="4" aria-labelledby="song-structure-s4-h2">
-<h2 id="song-structure-s4-h2" tabindex="-1" data-i18n="lesson.song-structure.step4.heading">Langkah 4 — Urutan akhir</h2>
+<h2 id="song-structure-s4-h2" tabindex="-1" data-i18n="lesson.song-structure.step4.heading">Langkah 4: Urutan akhir</h2>
 <div class="lm-bubble">
 <img src="/img/learning-music/bird.svg" alt="" width="64" height="64">
 <span data-i18n="lesson.song-structure.step4.say">Empat blok berbeda menutup lagu. Urutan menentukan arah dari awal sampai akhir.</span>
 </div>
-<div class="lm-toy">
-<input type="radio" name="ar4" id="ar4-0" value="A" aria-label="A — Am" checked>
-<label for="ar4-0">A — Am</label>
-<input type="radio" name="ar4" id="ar4-1" value="B" aria-label="B — F">
-<label for="ar4-1">B — F</label>
-<input type="radio" name="ar4" id="ar4-2" value="C" aria-label="C — C">
-<label for="ar4-2">C — C</label>
-<input type="radio" name="ar4" id="ar4-3" value="D" aria-label="D — G">
-<label for="ar4-3">D — G</label>
-<ol class="lm-chordmap"><li>Am</li><li>F</li><li>C</li><li>G</li></ol>
-<button type="button" data-layer="drums" aria-pressed="true" data-i18n="toy.layer.drums">Drum</button>
-<button type="button" data-layer="bass" aria-pressed="true" data-i18n="toy.layer.bass">Bass</button>
-<button type="button" data-layer="chords" aria-pressed="true" data-i18n="toy.layer.chords">Akord</button>
-<button type="button" data-layer="melody" aria-pressed="true" data-i18n="toy.layer.melody">Melodi</button>
-<button type="button" data-move="earlier" data-i18n="ui.move.earlier" disabled>Geser ke kiri</button>
-<button type="button" data-move="later" data-i18n="ui.move.later">Geser ke kanan</button>
-<div class="lm-transport">
-<button type="button" data-transport="play" data-i18n="ui.play">Putar</button>
-<button type="button" data-transport="stop" data-i18n="ui.stop" disabled>Berhenti</button>
-<button type="button" data-transport="mute" data-i18n="ui.mute" aria-pressed="false">Bisukan</button>
-</div>
-</div>
-<p class="lm-try" id="song-structure-try-4"><svg aria-hidden="true" focusable="false"><use href="#i-try"/></svg><span data-i18n="lesson.song-structure.step4.try">Geser blok sampai urutannya B, A, C, D, lalu mainkan.</span></p>
+<div class="lm-toy"></div>
+<p class="lm-try" id="song-structure-try-4"><svg aria-hidden="true" focusable="false"><use href="#i-try"/></svg><span data-i18n="lesson.song-structure.step4.try">Ketuk kotak sampai urutannya B, A, C, D, lalu mainkan.</span></p>
 <div class="lm-nav">
 <button type="button" data-nav="back" data-i18n="ui.back">Kembali</button>
 <a data-nav="next" href="/explore/learning-music/" data-i18n="ui.next">Lanjut</a>

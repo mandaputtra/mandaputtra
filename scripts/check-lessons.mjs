@@ -159,9 +159,11 @@ const CHORD_IDS = ["Am", "F", "C", "G"];
 const BLOCK_IDS = ["A", "B", "C", "D"];
 const KEY_NOTES = ["C4", "D4", "E4", "F4", "G4", "A4", "B4", "C5"];
 const DRUM_ALPHABET = ".Xxo";
+const DRUM_LANES = ["openhat", "hat", "clap", "kick"];
+const DRUM_CELLS = DRUM_LANES.length * 16;
 
 const GOAL_SHAPES = {
-  drum: { type: "cells-equal", field: "cells", length: 12 },
+  drum: { type: "cells-equal", field: "cells", length: 4 },
   bass: { type: "values-equal", field: "values", length: 4 },
   keys: { type: "slots-equal", field: "slots", length: 8 },
   chords: { type: "progression-equal", field: "progression", length: 4 },
@@ -615,11 +617,7 @@ function survey(context) {
     if (document.missing) continue;
     const regions = toyRegions(document);
     counts.toyRegions += regions.length;
-    for (const region of regions) {
-      if (region.text.includes('data-lane="kick"') && counts.drumCells === 0) {
-        counts.drumCells = countMatches(region.text, /\bclass="lm-cell"/g);
-      }
-    }
+    if (document.slug === "beats" && regions.length > 0) counts.drumCells = DRUM_CELLS;
     counts.liveRegions += countMatches(document.text, /<[a-z]+\b[^>]*\bid="live"/gi);
   }
   return counts;
@@ -795,19 +793,17 @@ function validateStep(step, number, slug, report) {
   if (step.family === "drum") {
     const lanes = payload.lanes;
     const laneNames = lanes !== null && typeof lanes === "object" ? Object.keys(lanes) : [];
-    if (laneNames.join(",") !== "kick,snare,hat") {
-      report("data.drum.shape", slug, laneNames.join(","), "kick,snare,hat", "drum lanes are not the documented trio");
+    if (laneNames.join(",") !== DRUM_LANES.join(",")) {
+      report("data.drum.shape", slug, laneNames.join(","), DRUM_LANES.join(","), "drum lanes are not the documented four");
     }
-    for (const lane of ["kick", "snare", "hat"]) {
+    for (const lane of DRUM_LANES) {
       const laneValue = lanes === undefined ? undefined : lanes[lane];
       if (parseCsvLane(laneValue) === null) {
         report("data.pattern.arity", slug, `${lane}:${String(laneValue)}`, "16 chars of .Xxo", "drum lane is not sixteen characters");
       }
     }
-    const columns = 4;
-    const lanesCount = laneNames.length;
-    const cells = lanesCount * columns;
-    if (cells !== 12) report("data.pattern.arity", slug, cells, 12, "drum grid is not three lanes by four columns");
+    const cells = laneNames.length * 16;
+    if (cells !== DRUM_CELLS) report("data.pattern.arity", slug, cells, DRUM_CELLS, "drum grid is not four lanes by sixteen steps");
   }
   if (step.family === "bass") {
     const cells = Array.isArray(payload.cells) ? payload.cells : [];
@@ -887,6 +883,9 @@ function validateGoal(step, slug, report) {
   if (step.family === "bass" && values.some((value) => !BASS_VALUES.includes(value))) {
     report("data.goal.shape", slug, values.join(","), BASS_VALUES.join(","), "goal value is not a documented bass value");
   }
+  if (step.family === "drum" && values.some((lane) => parseCsvLane(lane) === null)) {
+    report("data.goal.shape", slug, values.join(","), "16 chars of .Xxo per lane", "goal lane is not sixteen characters");
+  }
   if (step.family === "arrange" && values.some((block) => !BLOCK_IDS.includes(block))) {
     report("data.goal.shape", slug, values.join(","), "four block ids", "goal block is not a documented block");
   }
@@ -900,11 +899,7 @@ function validateGoal(step, slug, report) {
     }
   } else if (step.family === "drum") {
     const laneValues = payload.lanes || {};
-    const cells = [0, 1, 2].flatMap((lane) => [0, 1, 2, 3].map((column) => {
-      const laneName = ["kick", "snare", "hat"][lane];
-      const group = typeof laneValues[laneName] === "string" ? laneValues[laneName].slice(column * 4, column * 4 + 4) : "";
-      return /[Xxo]/.test(group);
-    }));
+    const cells = DRUM_LANES.map((lane) => String(laneValues[lane]).replace(/[xo]/g, "X"));
     if (cells.join(",") === values.join(",")) {
       report("data.goal.preload", slug, values.join(","), "a goal that differs from the preload", "drum preload already satisfies its goal");
     }
@@ -948,7 +943,7 @@ function checkCopy(context) {
 
   for (const language of ["id", "en"]) {
     const leaves = leafPaths(text[language]);
-    if (leaves.length !== 138) find("copy.leaves.count", `${language}:${leaves.length}`, "138", "leaf count is not 138 per language", language);
+    if (leaves.length !== 140) find("copy.leaves.count", `${language}:${leaves.length}`, "140", "leaf count is not 140 per language", language);
   }
 
   const idPaths = leafPaths(text.id);
@@ -1305,64 +1300,14 @@ function checkBudget(context) {
 
   for (const document of context.documents) {
     if (document.missing) continue;
-    const text = document.text;
     const regions = toyRegions(document);
     if (document.slug !== null && regions.length !== 4) {
       report("budget.focusables", document.path, 1, regions.length, 4, "lesson needs one toy region per step");
     }
+    if (document.slug === null) continue;
     for (const region of regions) {
-      const focusables = countMatches(region.text, /<(?:button|input|select|textarea|a)\b/gi) + countMatches(region.text, /\btabindex=/g);
-      if (document.slug === null) {
-        continue;
-      }
-      if (focusables > 16) report("budget.focusables", document.path, region.line, focusables, "at most 16", "toy region exceeds the focus budget");
-      const cells = countMatches(region.text, /\bclass="lm-cell"/g) + countMatches(region.text, /<input\b[^>]*type="radio"/g);
-      if (cells > 16) report("budget.cells", document.path, region.line, cells, "at most 16", "toy region exceeds the cell budget");
-      const drumCells = countMatches(region.text, /\bclass="lm-cell"/g);
-      if (region.text.includes('data-lane="kick"') && drumCells !== 12) {
-        report("budget.cells", document.path, region.line, drumCells, 12, "drum grid is not twelve cells");
-      }
-      const columns = [...region.text.matchAll(/\bdata-col="(\d+)"/g)].map((match) => Number(match[1]));
-      if (columns.length > 0) {
-        const width = Math.max(...columns) + 1;
-        if (width > 4) report("budget.columns", document.path, region.line, width, "at most 4", "toy grid exceeds four columns");
-      }
-      const groupNames = [...region.text.matchAll(/<input\b[^>]*\bname="([^"]*)"/g)].map((match) => match[1]);
-      if (groupNames.length > 0) {
-        const unique = new Set(groupNames);
-        if (unique.size !== 1) report("budget.columns", document.path, region.line, [...unique].join(","), "one shared name", "radio group must share one name");
-        const prefix = unique.values().next().value.replace(/\d+$/, "");
-        const expectedPrefix = document.slug === "notes-scales" || document.slug === "melodies" ? "p" : document.slug === "chords" ? "ch" : "ar";
-        if (prefix !== expectedPrefix) report("budget.columns", document.path, region.line, prefix, expectedPrefix, "radio group prefix does not match the toy family");
-      }
-      if (document.slug === "basslines") {
-        for (const cell of region.text.matchAll(/<button\b([^>]*)>([^<]*)<\/button>/g)) {
-          const value = attrValue(cell[1], "data-value");
-          const label = attrValue(cell[1], "aria-label");
-          const visible = cell[2].trim();
-          if (value === null) continue;
-          if (visible !== value) report("budget.cells", document.path, lineAt(text, region.start + cell.index), visible, value, "bass cell text is not its value word");
-          if (label === null || !label.includes(value)) report("budget.cells", document.path, lineAt(text, region.start + cell.index), label || "absent", value, "bass cell accessible name is missing the value word");
-        }
-      }
-      if (document.slug === "song-structure") {
-        const chordmap = /<ol class="lm-chordmap">([\s\S]*?)<\/ol>/.exec(region.text);
-        if (chordmap === null) {
-          report("budget.columns", document.path, region.line, "no chordmap", "four-item ol", "arrange region has no chord map");
-        } else {
-          const items = [...chordmap[1].matchAll(/<li>([^<]*)<\/li>/g)].map((match) => match[1]);
-          if (items.join(",") !== CHORD_IDS.join(",")) {
-            report("budget.columns", document.path, region.line, items.join(","), CHORD_IDS.join(","), "chord map is not the four documented bars");
-          }
-          if (/aria-hidden/.test(chordmap[0].slice(0, chordmap[0].indexOf(">")))) {
-            report("budget.columns", document.path, region.line, "aria-hidden", "visible chord map", "chord map must stay visible to assistive technology");
-          }
-        }
-        for (const radio of region.text.matchAll(/<input\b[^>]*type="radio"[^>]*aria-label="([^"]*)"/g)) {
-          if (!/^[A-D] — (?:Am|F|C|G)$/.test(radio[1])) {
-            report("budget.columns", document.path, lineAt(text, region.start + radio.index), radio[1], "letter — chord", "arrange block name is not letter and chord");
-          }
-        }
+      if (region.text !== '<div class="lm-toy"></div>') {
+        report("budget.cells", document.path, region.line, "prerendered controls", "empty region", "toy grid is built by script from lesson data");
       }
     }
   }

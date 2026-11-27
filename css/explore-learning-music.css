@@ -9,7 +9,7 @@
   --t1: #ffd23f;
   --t2: #4fd1c5;
   --t3: #b794f6;
-  --gap: 16px;
+  --gap: 6px;
   --side: min(100vw - 40px, 520px);
   --pad: max(44px, (var(--side) - 3 * var(--gap)) / 4);
   --radius: 12px;
@@ -45,16 +45,23 @@ main {
 }
 
 h1 {
-  font-size: 1.75rem;
-  margin: 24px 0 16px;
+  font-size: 2rem;
+  line-height: 1.15;
+  letter-spacing: -0.01em;
+  margin: 20px 0 12px;
 }
 
 .alm-intro,
 #hint-tap,
 #hint-noaudio {
   font-size: 1.125rem;
-  line-height: 1.4;
-  margin: 0 0 12px;
+  line-height: 1.45;
+  margin: 0 0 4px;
+}
+
+#hint-tap {
+  color: var(--muted);
+  margin-bottom: 24px;
 }
 
 #hint-silent,
@@ -65,7 +72,8 @@ h1 {
 }
 
 #hint-silent {
-  margin: 24px 0 0;
+  margin: 16px 0 0;
+  line-height: 1.45;
 }
 
 button { font-size: 1.125rem; }
@@ -156,14 +164,19 @@ button { font-size: 1.125rem; }
   justify-content: center;
 }
 
+/* Pads after Ableton Learning Music: flat tiles, tinted when idle, full colour when playing. */
 .col-head {
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
   gap: 4px;
-  padding-bottom: 4px;
+  padding: 8px 4px;
+  border-radius: 4px;
+  background: #2a2a2a;
   color: var(--c);
   font-size: .875rem;
+  font-weight: 600;
 }
 
 .col-head span {
@@ -186,11 +199,12 @@ button { font-size: 1.125rem; }
   height: var(--pad);
   padding: 0;
   overflow: hidden;
-  border: 2px solid var(--c);
-  border-radius: var(--radius);
-  background: var(--off);
+  border: 3px solid transparent;
+  border-radius: 4px;
+  background: color-mix(in srgb, var(--c) 22%, #1f1f1f);
   color: var(--c);
   box-sizing: border-box;
+  cursor: pointer;
 }
 
 .clip .icon {
@@ -220,8 +234,8 @@ button { font-size: 1.125rem; }
 }
 
 .is-pending-on {
-  border-width: 3px;
   border-style: dashed;
+  border-color: var(--fg);
 }
 
 .is-pending-off {
@@ -234,11 +248,12 @@ button { font-size: 1.125rem; }
   position: absolute;
   inset: 3px;
   border: 3px dashed var(--ink);
-  border-radius: 8px;
+  border-radius: 2px;
   pointer-events: none;
 }
 
 .clip[aria-disabled="true"] {
+  border-color: #666;
   border-style: dotted;
   cursor: not-allowed;
 }
@@ -256,8 +271,8 @@ button { font-size: 1.125rem; }
 .controls {
   display: flex;
   flex-wrap: wrap;
-  gap: var(--gap);
-  margin-top: 24px;
+  gap: 10px;
+  margin-top: 20px;
 }
 
 .controls .icon {
@@ -269,17 +284,21 @@ button { font-size: 1.125rem; }
 }
 
 #stop {
-  min-height: 56px;
+  min-height: 48px;
   min-width: 120px;
+  padding: 8px 20px;
   background: #e8e8e8;
   color: #111;
   border: 0;
   border-radius: var(--radius);
   font-weight: 700;
+  cursor: pointer;
 }
 
 #resume {
-  min-height: 56px;
+  min-height: 48px;
+  padding: 8px 20px;
+  cursor: pointer;
   background: var(--bg);
   color: #fff;
   border: 3px solid #fff;
@@ -395,16 +414,64 @@ footer#about p {
   display: inline;
 }
 
+#lm-lessons {
+  margin-top: 48px;
+}
+
+#lm-lessons h2 {
+  margin: 0 0 16px;
+  font-size: 1.25rem;
+}
+
+.lm-lesson-list {
+  display: grid;
+  gap: 10px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+@media (min-width: 480px) {
+  .lm-lesson-list {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
 .lm-lesson-link,
 .lm-lesson-link:link,
 .lm-lesson-link:visited {
   display: flex;
   align-items: center;
   gap: 12px;
-  min-block-size: 44px;
-  padding: 10px 0;
+  block-size: 100%;
+  min-block-size: 56px;
+  padding: 12px 14px;
+  box-sizing: border-box;
+  border: 2px solid #2c2c2c;
+  border-radius: var(--radius);
+  background: var(--off);
   color: var(--fg);
+  font-weight: 600;
   text-decoration: none;
+  touch-action: manipulation;
+}
+
+@media (hover: hover) {
+  .lm-lesson-link:hover {
+    border-color: #555;
+  }
+}
+
+[data-done="1"] .lm-lesson-link {
+  border-color: #3f3f3f;
+}
+
+.lm-lesson-icon {
+  flex: none;
+  inline-size: 24px;
+  block-size: 24px;
+  fill: var(--c);
+  color: var(--c);
 }
 
 .lm-lesson-title {
@@ -417,9 +484,6 @@ footer#about p {
   outline-offset: 2px;
 }
 
-.lm-lesson + .lm-lesson {
-  border-top: 1px solid #333;
-}
 
 .lm-lesson-state {
   display: inline-flex;
@@ -430,7 +494,16 @@ footer#about p {
 }
 
 .lm-lesson-state svg {
-  inline-size: 1em;
-  block-size: 1em;
+  inline-size: 1.25em;
+  block-size: 1.25em;
   flex: none;
+}
+
+.lm-lesson-check {
+  color: var(--t2);
+}
+
+.lm-lesson-star {
+  color: var(--t1);
+  fill: var(--t1);
 }

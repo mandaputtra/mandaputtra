@@ -1,26 +1,41 @@
 body[data-lesson] {
+  --bg: #111111;
+  --fg: #ececec;
+  --muted: #a8a8a8;
+  --off: #1a1a1a;
+  --line: #333333;
+  --ink: #111111;
+  --radius: 12px;
+  --c: #4fd1c5;
   margin: 0;
-  padding: 12px;
-  background: #111111;
-  color: #e8e8e8;
-  font-family:
-    system-ui,
-    -apple-system,
-    'Segoe UI',
-    sans-serif;
+  padding: 0 20px 48px;
+  background: var(--bg);
+  color: var(--fg);
+  font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  font-size: 1.0625rem;
   line-height: 1.5;
   overflow-wrap: anywhere;
 }
 
-body[data-lesson] :focus-visible {
-  outline: 2px solid #ffffff;
-  outline-offset: 2px;
+body[data-lesson='beats'] { --c: #ff7a59; }
+body[data-lesson='basslines'] { --c: #ffd23f; }
+body[data-lesson='chords'],
+body[data-lesson='song-structure'] { --c: #4fd1c5; }
+body[data-lesson='notes-scales'],
+body[data-lesson='melodies'] { --c: #b794f6; }
+
+body[data-lesson] [hidden] {
+  display: none !important;
 }
 
-.lm-step[hidden],
-.lm-complete[hidden],
-.lm-silent[hidden] {
-  display: none;
+body[data-lesson] :focus-visible {
+  outline: 3px solid #ffffff;
+  outline-offset: 3px;
+}
+
+body[data-lesson] button {
+  font: inherit;
+  touch-action: manipulation;
 }
 
 .lm-vh,
@@ -37,253 +52,502 @@ body[data-lesson] :focus-visible {
   border: 0;
 }
 
+.lm-head,
+body[data-lesson] main,
+.lm-foot {
+  max-width: 640px;
+  margin-inline: auto;
+}
+
+/* Header */
+
 .lm-head {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: 8px 16px;
-  margin-block-end: 16px;
-}
-
-.lm-head h1 {
-  flex-basis: 100%;
-  margin: 0;
-  font-size: 1.5rem;
-  line-height: 1.25;
+  gap: 4px 16px;
+  padding-block-start: 16px;
 }
 
 .lm-crumb {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
+  gap: 8px;
   min-block-size: 44px;
-  color: inherit;
+  color: var(--fg);
   text-decoration: none;
 }
 
 .lm-crumb svg {
-  inline-size: 1em;
-  block-size: 1em;
+  inline-size: 1.1em;
+  block-size: 1.1em;
+}
+
+@media (hover: hover) {
+  .lm-crumb:hover { text-decoration: underline; text-underline-offset: 3px; }
 }
 
 .lm-lang {
   display: flex;
-  gap: 4px;
+  gap: 8px;
   margin-inline-start: auto;
 }
 
 .lm-lang button {
   min-inline-size: 44px;
   min-block-size: 44px;
-  border: 2px solid #555;
-  border-radius: 8px;
-  background: #1a1a1a;
-  color: inherit;
-  font: inherit;
+  border: 2px solid #555555;
+  border-radius: var(--radius);
+  background: transparent;
+  color: var(--muted);
+  font-weight: 700;
   cursor: pointer;
 }
 
 .lm-lang [aria-pressed='true'] {
-  border-color: #ffffff;
-  box-shadow: inset 0 0 0 2px #ffffff;
-  font-weight: 600;
+  border-color: var(--fg);
+  background: var(--fg);
+  color: var(--ink);
+}
+
+.lm-head h1 {
+  flex-basis: 100%;
+  margin: 20px 0 0;
+  font-size: 2rem;
+  line-height: 1.15;
+  letter-spacing: -0.01em;
 }
 
 .lm-indicator {
-  margin: 0;
-  color: #b8b8b8;
+  margin: 4px 0 0;
+  padding: 2px 10px;
+  border: 1px solid var(--c);
+  border-radius: 999px;
+  color: var(--c);
+  font-size: 0.9375rem;
+  font-weight: 600;
   font-variant-numeric: tabular-nums;
 }
 
+/* Step */
+
 .lm-step {
-  margin-block: 24px;
+  margin-block: 28px 0;
 }
 
 .lm-step h2 {
-  margin: 0 0 8px;
-  font-size: 1.125rem;
+  margin: 0 0 16px;
+  font-size: 1.25rem;
   line-height: 1.3;
 }
 
-.lm-step img {
-  inline-size: 64px;
-  block-size: 64px;
+.lm-step h2:focus { outline: none; }
+
+.lm-bubble {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.lm-bubble img {
+  flex: none;
+  inline-size: 56px;
+  block-size: 56px;
+}
+
+.lm-bubble span {
+  padding: 12px 16px;
+  border: 1px solid var(--line);
+  border-radius: 4px var(--radius) var(--radius) var(--radius);
+  background: var(--off);
 }
 
 .lm-try {
   display: flex;
   align-items: flex-start;
-  gap: 8px;
-  margin-block: 12px 0;
+  gap: 10px;
+  margin: 16px 0 0;
+  color: var(--muted);
 }
 
 .lm-try svg {
-  inline-size: 1em;
-  block-size: 1em;
   flex: none;
+  inline-size: 1.25em;
+  block-size: 1.25em;
+  margin-block-start: 0.1em;
+  color: var(--c);
+}
+
+/* Toy: every lesson is a grid, after Ableton Learning Music. */
+
+.lm-toy {
+  --on: var(--c);
+  --cell: #3d3d3d;
+  --lane: #2a2a2a;
+  margin-block: 20px 0;
+}
+
+body[data-lesson='beats'] .lm-toy {
+  --on: #f5d35a;
+}
+
+.lm-toy.lm-wide {
+  inline-size: min(960px, 100vw - 40px);
+  margin-inline: calc(50% - min(480px, 50vw - 20px));
+}
+
+.lm-toy button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-inline-size: 0;
+  min-block-size: 48px;
+  padding: 8px 16px;
+  border: 2px solid #3a3a3a;
+  border-radius: var(--radius);
+  background: var(--off);
+  color: var(--fg);
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+}
+
+.lm-toy button:disabled {
+  border-style: dashed;
+  color: var(--muted);
+  cursor: default;
+  opacity: 0.6;
+}
+
+/* Transport: play is the one filled action. */
+.lm-transport button[data-transport='play'] {
+  border-color: var(--c);
+  background: var(--c);
+  color: var(--ink);
+  font-weight: 700;
+}
+
+.lm-transport button[data-transport='mute'][aria-pressed='true'] {
+  border-color: var(--fg);
+  background: var(--fg);
+  color: var(--ink);
+}
+
+.lm-gridbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+}
+
+.lm-transport {
+  display: flex;
+  gap: 10px;
+}
+
+.lm-toy [data-clear] {
+  margin-inline-start: auto;
+}
+
+/* Transport and Clear are square icon buttons; the name lives in aria-label and title. */
+.lm-toy .lm-icon {
+  inline-size: 48px;
+  block-size: 48px;
+  padding: 0;
+}
+
+.lm-icon svg {
+  inline-size: 24px;
+  block-size: 24px;
+}
+
+.lm-icon .lm-x,
+.lm-icon[aria-pressed='true'] .lm-waves {
+  display: none;
+}
+
+.lm-icon[aria-pressed='true'] .lm-x {
+  display: inline;
+}
+
+.lm-tempo {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  min-block-size: 52px;
+  margin-block-start: 12px;
+  padding: 10px 14px;
+  border-radius: var(--radius) var(--radius) 0 0;
+  background: var(--lane);
+  font-size: 0.9375rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.lm-tempo span {
+  flex: none;
+  min-inline-size: 8.5em;
+}
+
+.lm-tempo input {
+  flex: 1;
+  min-inline-size: 0;
+  min-block-size: 32px;
+  accent-color: var(--on);
+}
+
+/* Phones: the player runs edge to edge so every cell gets the full width. */
+@media (max-width: 599px) {
+  .lm-toy.lm-grid {
+    inline-size: 100vw;
+    margin-inline: calc(50% - 50vw);
+  }
+
+  .lm-gridbar {
+    padding-inline: 20px;
+  }
+
+  .lm-tempo {
+    border-radius: 0;
+  }
+}
+
+/* Song structure: layer switches sit above the grid. */
+.lm-layers {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  padding: 0 14px 10px;
+  background: var(--lane);
+}
+
+.lm-layers button {
+  min-block-size: 40px;
+  padding-inline: 12px;
+  border-width: 2px;
+  font-size: 0.9375rem;
+}
+
+.lm-layers button[aria-pressed='true'] {
+  border-color: var(--on);
+  background: var(--on);
+  color: var(--ink);
+  font-weight: 700;
+}
+
+.lm-beatgrid {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  padding-block-start: 1px;
+}
+
+.lm-lane {
+  display: flex;
+  gap: 1px;
+}
+
+.lm-lane > * {
+  flex: 1 1 0;
+  min-inline-size: 0;
+}
+
+.lm-lane > :first-child {
+  flex: 0 0 clamp(48px, 13vw, 104px);
+}
+
+/* 16-step grids: slightly wider line before steps 5, 9, 13. */
+.lm-wide .lm-lane > :nth-child(4n + 2):not(:nth-child(2)) {
+  margin-inline-start: 1px;
+}
+
+.lm-lane-name {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px;
+  background: var(--lane);
+  font-size: clamp(0.6875rem, 2.6vw, 0.9375rem);
+  font-weight: 600;
+  line-height: 1.15;
+  text-align: center;
+  overflow-wrap: normal;
+}
+
+.lm-toy .lm-cell {
+  min-block-size: clamp(34px, 7vw, 52px);
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: var(--cell);
+}
+
+.lm-toy .lm-cell[aria-pressed='true'] {
+  background: var(--on);
+}
+
+/* Locked columns (fixed ending, listen-only steps) stay visible but dimmed. */
+.lm-toy .lm-cell:disabled {
+  opacity: 0.45;
+}
+
+.lm-toy .lm-cell[data-now] {
+  box-shadow: inset 0 0 0 3px var(--fg);
+}
+
+.lm-toy .lm-cell:focus-visible {
+  position: relative;
+  z-index: 1;
+  outline: 3px solid #ffffff;
+  outline-offset: 1px;
+}
+
+@media (hover: hover) {
+  .lm-toy .lm-cell[aria-pressed='false']:not(:disabled):hover { background: #4d4d4d; }
+}
+
+.lm-steps span {
+  padding-block-start: 6px;
+  color: var(--muted);
+  font-size: clamp(0.625rem, 2.4vw, 0.875rem);
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+}
+
+.lm-steps-beat span {
+  color: #666666;
+}
+
+.lm-steps-beat span:nth-child(4n + 2) {
+  color: var(--fg);
+}
+
+/* Step navigation */
+
+.lm-nav {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  margin-block-start: 28px;
+  padding-block-start: 20px;
+  border-top: 1px solid var(--line);
 }
 
 body[data-lesson] [data-nav] {
-  min-inline-size: 60px;
-  min-block-size: 44px;
-  padding: 8px 16px;
-  border: 2px solid #555;
-  border-radius: 8px;
-  background: #1a1a1a;
-  color: inherit;
-  font: inherit;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  line-height: 1.5;
+  text-decoration: none;
+  min-inline-size: 96px;
+  min-block-size: 48px;
+  padding: 8px 20px;
+  border: 2px solid #555555;
+  border-radius: var(--radius);
+  background: transparent;
+  color: var(--fg);
+  font-weight: 600;
   cursor: pointer;
+}
+
+body[data-lesson] [data-nav='next'] {
+  border-color: var(--fg);
+  background: var(--fg);
+  color: var(--ink);
 }
 
 body[data-lesson] [data-nav]:disabled {
   border-style: dashed;
-  color: #b8b8b8;
+  background: transparent;
+  color: var(--muted);
   cursor: default;
+  opacity: 0.6;
 }
 
-.lm-toy {
-  display: grid;
-  grid-template-columns: repeat(4, minmax(60px, 1fr));
-  grid-auto-rows: minmax(60px, auto);
-  gap: 8px;
-  margin-block: 16px;
-}
-
-body[data-lesson='song-structure'] .lm-toy {
-  grid-template-columns: minmax(60px, 1fr);
-}
-
-.lm-toy > :last-child {
-  grid-column: 1 / -1;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-}
-
-.lm-toy button,
-.lm-toy label {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  min-inline-size: 60px;
-  min-block-size: 60px;
-  padding: 8px;
-  border: 2px solid #555;
-  border-radius: 8px;
-  background: #1a1a1a;
-  color: inherit;
-  font: inherit;
-  text-align: center;
-  cursor: pointer;
-}
-
-.lm-toy > :last-child button {
-  min-block-size: 44px;
-}
-
-.lm-toy input[type='radio'] {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  margin: -1px;
-  padding: 0;
-  overflow: hidden;
-  clip: rect(0 0 0 0);
-  clip-path: inset(50%);
-  white-space: nowrap;
-  border: 0;
-}
-
-.lm-toy input[type='radio']:focus-visible + label {
-  outline: 2px solid #ffffff;
-  outline-offset: 2px;
-}
-
-.lm-toy button[aria-pressed='true'],
-.lm-toy input:checked + label {
-  border-color: #ffffff;
-  background: #2f2f2f;
-  box-shadow: inset 0 0 0 2px #ffffff;
-  font-weight: 600;
-}
-
-.lm-toy button[aria-pressed='false'] {
-  background: #1a1a1a;
-}
-
-.lm-toy button:is([data-value='off'], [data-value='Mati'], [data-value='Off']) {
-  border-color: #888888;
-  border-style: dashed;
-  color: #b8b8b8;
-}
-
-.lm-toy button:is([data-value='root'], [data-value='Dasar'], [data-value='Root']) {
-  border-color: #ff7a59;
-  border-style: solid;
-}
-
-.lm-toy button:is([data-value='fifth'], [data-value='Kelima'], [data-value='Fifth']) {
-  border-color: #ffd23f;
-  border-style: dotted;
-}
-
-.lm-toy button:is([data-value='octave'], [data-value='Oktaf'], [data-value='Octave']) {
-  border-color: #4fd1c5;
-  border-style: double;
-  border-width: 5px;
-}
-
-.lm-slots,
-.lm-chords,
-.lm-chordmap {
-  display: grid;
-  grid-column: 1 / -1;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 8px;
-  margin: 0;
-  padding: 0;
-}
-
-.lm-slots li,
-.lm-chords li,
-.lm-chordmap li {
-  padding: 4px 8px;
-  border: 1px solid #555;
-  border-radius: 8px;
-  color: #b8b8b8;
-  text-align: center;
-}
+/* Finish */
 
 .lm-complete {
-  margin-block: 24px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px 20px;
+  margin-block: 28px 0;
+  padding: 20px;
+  border: 2px solid var(--c);
+  border-radius: var(--radius);
+}
+
+.lm-done {
+  margin: 0;
+  font-size: 1.25rem;
+  font-weight: 700;
 }
 
 .lm-star {
   display: inline-flex;
   align-items: center;
   gap: 6px;
+  color: var(--c);
+  font-weight: 600;
 }
 
-.lm-cta {
+.lm-star svg {
+  inline-size: 1.25em;
+  block-size: 1.25em;
+}
+
+.lm-star[data-star='1'] svg {
+  fill: currentColor;
+}
+
+.lm-cta,
+.lm-cta:visited {
   display: inline-flex;
   align-items: center;
-  min-block-size: 44px;
-  color: inherit;
+  min-block-size: 48px;
+  margin-inline-start: auto;
+  padding: 8px 20px;
+  border-radius: var(--radius);
+  background: var(--c);
+  color: var(--ink);
+  font-weight: 700;
+  text-decoration: none;
 }
+
+.lm-silent {
+  margin-block: 16px 0;
+  color: var(--muted);
+}
+
+/* Footer */
 
 .lm-foot {
   display: flex;
   flex-wrap: wrap;
-  gap: 8px 16px;
-  margin-block-start: 24px;
+  gap: 0 20px;
+  margin-block-start: 48px;
   padding-block-start: 12px;
-  border-top: 1px solid #333333;
-  color: #b8b8b8;
+  border-top: 1px solid var(--line);
+  color: var(--muted);
+  font-size: 0.9375rem;
 }
 
 .lm-foot a {
+  display: inline-flex;
+  align-items: center;
   min-block-size: 44px;
   color: inherit;
+  text-underline-offset: 3px;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  body[data-lesson]:not([data-motion='reduce']) :is(.lm-toy button, [data-nav], .lm-cta) {
+    transition: transform 80ms ease-out;
+  }
+
+  body[data-lesson]:not([data-motion='reduce']) :is(.lm-toy button, [data-nav], .lm-cta):active {
+    transform: scale(0.96);
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {

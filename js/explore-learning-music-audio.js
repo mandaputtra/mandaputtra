@@ -28,9 +28,9 @@
   const REVERB_SECONDS = 3;
   const REVERB_PREDELAY = 0.02;
   
-  const DRUM_LANES = ["kick", "snare", "hat", "openhat"];
+  const DRUM_LANES = ["kick", "snare", "clap", "hat", "openhat"];
   const DRUM_VELOCITY = { X: 1, x: 0.75, o: 0.35 };
-  const DRUM_DURATION = { kick: 0.3, snare: 0.15, hat: 0.03, openhat: 0.2 };
+  const DRUM_DURATION = { kick: 0.3, snare: 0.15, clap: 0.12, hat: 0.03, openhat: 0.2 };
   const BASS_VALUES = ["off", "root", "fifth", "octave"];
 
   const BASS_DEGREES = {
@@ -267,6 +267,13 @@
       }),
     );
 
+    const clap = new Tone.NoiseSynth({
+      noise: { type: "white" },
+      envelope: { attack: 0.001, decay: 0.1, sustain: 0 },
+      volume: -6,
+    });
+    clap.connect(wire(new Tone.Filter({ type: "bandpass", frequency: 1200, Q: 1.2 }), 0.25));
+
     const hatFilter = wire(new Tone.Filter(7500, "highpass"), 0.1);
     const hat = new Tone.NoiseSynth({
       envelope: { attack: 0.001, decay: 0.035, sustain: 0 },
@@ -301,7 +308,7 @@
       modulation: { type: "sine" },
       envelope: { attack: 0.004, decay: 1.6, sustain: 0.15, release: 1.2 },
       modulationEnvelope: { attack: 0.002, decay: 0.4, sustain: 0.05, release: 0.4 },
-      volume: -14,
+      volume: -4,
     });
     const chorus = new Tone.Chorus(3, 2.5, 0.4);
     chorus.width = 0.12;
@@ -327,7 +334,7 @@
       0.3,
     );
 
-    const monophonic = [kick, snare, snareBody, hat, openhat, bass, lead];
+    const monophonic = [kick, snare, snareBody, clap, hat, openhat, bass, lead];
 
     function drum(lane, time, vel) {
       if (!Number.isFinite(time) || !Number.isFinite(vel)) return;
@@ -335,6 +342,10 @@
       else if (lane === "snare") {
         snare.triggerAttackRelease(DRUM_DURATION.snare, time, vel);
         snareBody.triggerAttackRelease("G3", 0.08, time, vel * 0.6);
+      } else if (lane === "clap") {
+        clap.triggerAttackRelease(0.008, time, vel * 0.7);
+        clap.triggerAttackRelease(0.008, time + 0.012, vel * 0.8);
+        clap.triggerAttackRelease(DRUM_DURATION.clap, time + 0.024, vel);
       } else if (lane === "hat") hat.triggerAttackRelease(DRUM_DURATION.hat, time, vel);
       else if (lane === "openhat") openhat.triggerAttackRelease(DRUM_DURATION.openhat, time, vel);
     }
@@ -363,7 +374,7 @@
       keys.releaseAll(at);
     }
 
-    return { kick, snare, hat, openhat, bass, keys, lead, reverb, echo, drum, note, chord, releaseAll };
+    return { kick, snare, clap, hat, openhat, bass, keys, lead, reverb, echo, drum, note, chord, releaseAll };
   }
 
   function laneCharacters(line) {
@@ -734,6 +745,7 @@
     let bar = 0;
     let nextTime = 0;
     let barAudibleStart = 0;
+    let stepLen = STEP;
     const pendingBars = [];
 
     const timing = Object.freeze(Object.assign({}, TIMING, { lookAhead }));
@@ -997,12 +1009,12 @@
       const horizon = now + lookAhead;
       while (nextTime < horizon) {
         const stepNumber = step + 1;
-        const gridTime = nextTime + (stepNumber % 2 === 0 ? SWING * STEP : 0);
+        const gridTime = nextTime + (stepNumber % 2 === 0 ? SWING * stepLen : 0);
         const audibleTime = Math.max(0, gridTime - latency());
         if (step === 0) pendingBars.push({ bar, audibleTime });
         if (typeof onStep === "function") {
           try {
-            onStep({ bar, step: stepNumber, gridTime, audibleTime, stepDur: STEP });
+            onStep({ bar, step: stepNumber, gridTime, audibleTime, stepDur: stepLen });
           } catch (error) { void error; }
         }
         step += 1;
@@ -1010,17 +1022,23 @@
           step = 0;
           bar += 1;
         }
-        nextTime += STEP;
+        nextTime += stepLen;
       }
       drainBars(now);
     }
 
     function position() {
       if (ctx === null || timer === null) return 0;
-      const fraction = (immediate() - barAudibleStart) / BAR;
+      const fraction = (immediate() - barAudibleStart) / (stepLen * BAR_STEPS);
       if (!Number.isFinite(fraction) || fraction < 0) return 0;
       const wrapped = fraction >= 1 ? fraction % 1 : fraction;
       return reducedMotion() ? Math.floor(wrapped * BAR_STEPS) / BAR_STEPS : wrapped;
+    }
+
+    function setBpm(value) {
+      const bpm = Math.min(160, Math.max(60, Math.round(Number(value) || BPM)));
+      stepLen = 60 / bpm / 4;
+      return bpm;
     }
 
     function setMuted(value) {
@@ -1131,6 +1149,7 @@
       start,
       stop,
       setMuted,
+      setBpm,
       dispose,
       position,
       immediate,
