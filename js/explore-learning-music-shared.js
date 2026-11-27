@@ -38,7 +38,7 @@
           step1: {
             heading: "Langkah 1: Satu ketukan",
             say: "Satu bar punya 16 kotak. Setiap empat kotak adalah satu ketukan, jadi ketukan jatuh di kotak 1, 5, 9, dan 13.",
-            try: "Ketuk kotak kick di 5, 9, dan 13, lalu tekan tombol putar.",
+            try: "Ketuk kotak kick di 5, 9, dan 13, lalu ketuk tombol putar.",
           },
           step2: {
             heading: "Langkah 2: Ketukan dua dan empat",
@@ -48,7 +48,7 @@
           step3: {
             heading: "Langkah 3: Hitungan per delapan",
             say: "Closed hat membagi setiap ketukan menjadi dua. Pola jadi lebih rapat tanpa menambah ketukan baru.",
-            try: "Ubah tempo dengan penggeser, lalu dengarkan alurnya.",
+            try: "Geser tempo lebih cepat atau lebih lambat, lalu dengarkan polanya.",
           },
           step4: {
             heading: "Langkah 4: Open hat",
@@ -63,22 +63,22 @@
           step1: {
             heading: "Langkah 1: Satu nada",
             say: "Mulai dari satu nada C. Nada ini jadi rumah sebelum kita melangkah. Baris atas berbunyi tinggi, baris bawah berbunyi rendah.",
-            try: "Ketuk kotak C4 di kolom lain, lalu tekan tombol putar.",
+            try: "Ketuk kotak C4 di kolom lain, lalu ketuk tombol putar.",
           },
           step2: {
             heading: "Langkah 2: Empat nada pertama",
-            say: "C, D, E, dan F membentuk awal tangga nada. Jarak antarnada terasa makin akrab.",
+            say: "C, D, E, dan F membentuk awal tangga nada. Setiap nada satu baris lebih tinggi dari nada sebelumnya.",
             try: "Isi kolom 5 sampai 8 dengan nada yang terus naik.",
           },
           step3: {
             heading: "Langkah 3: Tujuh nada",
             say: "Tambahkan G, A, dan B. Tujuh nada kini naik seperti anak tangga.",
-            try: "Isi kolom terakhir dengan C5, lalu mainkan.",
+            try: "Isi kolom terakhir dengan C5, lalu ketuk tombol putar.",
           },
           step4: {
             heading: "Langkah 4: Tangga nada penuh",
-            say: "Satu nada terakhir menutup tangga nada. Delapan nada lengkap dari C ke C.",
-            try: "Isi kolom 7 dengan B4, lalu mainkan dari bawah ke atas.",
+            say: "Satu nada lagi melengkapi tangga nada: delapan nada dari C sampai C.",
+            try: "Isi kolom 7 dengan B4, lalu dengarkan nadanya naik dari C4 sampai C5.",
           },
         },
         chords: {
@@ -87,23 +87,23 @@
           listName: "Akord dan Progresi",
           step1: {
             heading: "Langkah 1: Empat akord",
-            say: "Setiap bar punya satu akord: Am, F, C, dan G. Urutan ini mengalir dan kembali ke awal.",
-            try: "Tekan tombol putar dan ikuti akord yang berganti tiap bar.",
+            say: "Setiap bar punya satu akord: Am, F, C, dan G. Setelah G, putaran kembali ke Am.",
+            try: "Ketuk tombol putar dan perhatikan kotak yang menyala di tiap bar.",
           },
           step2: {
             heading: "Langkah 2: Dua akord",
-            say: "Dua akord cukup untuk satu putaran. Am dan C bergantian dengan tenang.",
+            say: "Dua akord cukup untuk satu putaran. Am main dua bar, lalu C main dua bar.",
             try: "Ketuk kotak di kolom 2 untuk mengganti akordnya.",
           },
           step3: {
             heading: "Langkah 3: Tiga akord",
-            say: "Am, F, dan C memberi gerak yang lebih jauh tanpa kehilangan arah.",
+            say: "F masuk di bar kedua. Tiga akord membuat putaran lebih beragam daripada dua.",
             try: "Ketuk kotak untuk memilih akord di setiap bar.",
           },
           step4: {
-            heading: "Langkah 4: Kembali ke G",
+            heading: "Langkah 4: Tutup dengan G",
             say: "Akord G menutup putaran dan menarik kembali ke Am.",
-            try: "Ubah akord bar keempat menjadi G, lalu mainkan seluruh progresi.",
+            try: "Pilih G di kolom 4, lalu dengarkan keempat akordnya.",
           },
         },
         basslines: {
@@ -112,23 +112,23 @@
           listName: "Garis Bass",
           step1: {
             heading: "Langkah 1: Nada dasar",
-            say: "Bass memulai dari nada dasar akord. Satu nada panjang sudah menopang seluruh bar.",
-            try: "Ketuk kotak Dasar di kolom lain, lalu tekan tombol putar.",
+            say: "Bass dimulai dari nada dasar akord. Satu nada di ketukan pertama sudah menopang seluruh bar.",
+            try: "Ketuk kotak Dasar di kolom lain, lalu ketuk tombol putar.",
           },
           step2: {
             heading: "Langkah 2: Dua ketukan",
             say: "Nada dasar di ketukan satu dan tiga membuat langkah terasa mantap.",
-            try: "Nyalakan kotak di kolom 2 dan 4, lalu rasakan ayunannya.",
+            try: "Nyalakan kotak di kolom 2 dan 4, lalu dengarkan bedanya.",
           },
           step3: {
             heading: "Langkah 3: Tambah nada kelima",
-            say: "Nada kelima membuka ruang di antara nada dasar. Garis bass jadi bercabang.",
+            say: "Kelima lebih tinggi dari nada dasar dan tetap cocok dengan akordnya. Dasar dan kelima bergantian membuat bass bergerak.",
             try: "Pindahkan Kelima ke kolom lain dan dengarkan geraknya.",
           },
           step4: {
             heading: "Langkah 4: Naik satu oktaf",
             say: "Nada oktaf memberi puncak kecil sebelum kembali ke nada dasar.",
-            try: "Ketuk kotak Oktaf di kolom 3, lalu mainkan.",
+            try: "Ketuk kotak Oktaf di kolom 3, lalu ketuk tombol putar.",
           },
         },
         melodies: {
@@ -137,13 +137,13 @@
           listName: "Melodi",
           step1: {
             heading: "Langkah 1: Frase pendek",
-            say: "Lima nada bergerak dan berhenti di ujung bar. Kolom terakhir selalu pulang ke C.",
-            try: "Ketuk kotak di kolom kosong untuk menambah nada, lalu tekan tombol putar.",
+            say: "Lima nada bergerak, lalu kolom terakhir selalu pulang ke C.",
+            try: "Ketuk kotak di kolom kosong untuk menambah nada, lalu ketuk tombol putar.",
           },
           step2: {
             heading: "Langkah 2: Ulang dan ubah",
-            say: "Frase yang sama kembali dengan satu nada berbeda. Pengulangan membuat melodi mudah diingat.",
-            try: "Isi kolom kosong di tengah dan bandingkan dengan bar sebelumnya.",
+            say: "Awal frasenya sama dengan langkah 1, tapi kolom 5 dan 6 kosong. Mengulang dengan sedikit perubahan membuat melodi mudah diingat.",
+            try: "Isi kolom 5 dan 6, lalu bandingkan dengan langkah 1.",
           },
           step3: {
             heading: "Langkah 3: Turun bertahap",
@@ -152,8 +152,8 @@
           },
           step4: {
             heading: "Langkah 4: Lengkapi frase",
-            say: "Satu kolom kosong menahan frase. Mengisinya membuat melodi utuh.",
-            try: "Isi kolom kosong, lalu dengarkan frase dari awal sampai akhir.",
+            say: "Kolom 7 masih kosong, jadi frasenya terputus sebelum pulang ke C.",
+            try: "Isi kolom 7 dengan C4, lalu dengarkan frasenya dari awal sampai akhir.",
           },
         },
         "song-structure": {
@@ -163,22 +163,22 @@
           step1: {
             heading: "Langkah 1: Satu blok",
             say: "Blok A berisi drum, bass, dan akord. Empat bar yang sama membentuk bagian pertama.",
-            try: "Tekan tombol putar dan dengarkan lapisan yang menyala.",
+            try: "Ketuk tombol putar, lalu matikan satu lapisan dan dengarkan apa yang hilang.",
           },
           step2: {
             heading: "Langkah 2: Blok B",
-            say: "Blok B membawa variasi, dan melodi ikut menyala. Dua blok sudah cukup untuk satu bagian dan jawabannya.",
-            try: "Ubah dua blok terakhir menjadi B, lalu mainkan.",
+            say: "Blok B memakai akord F, dan melodi ikut menyala. Dua bar A lalu dua bar B terdengar seperti tanya dan jawab.",
+            try: "Ganti satu B menjadi A, lalu dengarkan bedanya.",
           },
           step3: {
             heading: "Langkah 3: Berselang-seling",
-            say: "A dan B bergantian tiap dua bar. Pergantian menjaga lagu tetap segar.",
-            try: "Susun urutan A, B, A, B dan dengarkan perpindahannya.",
+            say: "A dan B bergantian setiap bar, jadi akord Am dan F terus bertukar.",
+            try: "Matikan Melodi, dengarkan, lalu nyalakan lagi.",
           },
           step4: {
             heading: "Langkah 4: Urutan akhir",
-            say: "Empat blok berbeda menutup lagu. Urutan menentukan arah dari awal sampai akhir.",
-            try: "Ketuk kotak sampai urutannya B, A, C, D, lalu mainkan.",
+            say: "Empat blok memainkan empat akord: Am, F, C, dan G. Mengubah urutan blok mengubah jalannya lagu.",
+            try: "Ketuk kotak sampai urutannya B, A, C, D, lalu ketuk tombol putar.",
           },
         },
       },
@@ -203,9 +203,9 @@
           melody: "Melodi",
         },
         group: {
-          piano: "Piano",
-          chords: "Pad akord",
-          arrange: "Susun blok",
+          piano: "Nada",
+          chords: "Akord",
+          arrange: "Blok lagu",
           beats: "Pola drum",
         },
       },
@@ -220,7 +220,7 @@
         done: "Selesai",
         star: "Bintang",
         cta: {
-          song: "Buka lagu penuh",
+          song: "Buat lagumu sendiri",
         },
         silent: "Tidak ada suara",
         credit: {
@@ -262,7 +262,7 @@
           step1: {
             heading: "Step 1: One beat",
             say: "A bar has 16 boxes. Every four boxes make one beat, so the beats land on boxes 1, 5, 9 and 13.",
-            try: "Tap the kick boxes at 5, 9 and 13, then press the play button.",
+            try: "Tap the kick boxes at 5, 9 and 13, then tap play.",
           },
           step2: {
             heading: "Step 2: Beats two and four",
@@ -272,7 +272,7 @@
           step3: {
             heading: "Step 3: Eighth-note motion",
             say: "The closed hat splits each beat in two. The pattern gets busier without adding new beats.",
-            try: "Change the tempo with the slider, then follow the flow.",
+            try: "Slide the tempo faster or slower and listen to the pattern.",
           },
           step4: {
             heading: "Step 4: Open hat",
@@ -286,23 +286,23 @@
           listName: "Notes and Scales",
           step1: {
             heading: "Step 1: One note",
-            say: "Start on a single C. This note is home before we take a step. Top rows sound high, bottom rows sound low.",
-            try: "Tap the C4 box in another column, then press the play button.",
+            say: "Start on a single C. This note is home before we take a step. Higher rows sound higher.",
+            try: "Tap the C4 box in another column, then tap play.",
           },
           step2: {
             heading: "Step 2: The first four notes",
-            say: "C, D, E, and F open the scale. The gaps between notes start to feel familiar.",
+            say: "C, D, E, and F open the scale. Each note sits one row above the one before.",
             try: "Fill columns 5 to 8 with notes that keep rising.",
           },
           step3: {
             heading: "Step 3: Seven notes",
             say: "Add G, A, and B. Seven notes now climb like stairs.",
-            try: "Fill the last column with C5, then play.",
+            try: "Fill the last column with C5, then tap play.",
           },
           step4: {
             heading: "Step 4: The whole scale",
-            say: "One last note closes the scale. Eight notes from C to C.",
-            try: "Fill column 7 with B4, then play from bottom to top.",
+            say: "One more note completes the scale: eight notes from C up to C.",
+            try: "Fill column 7 with B4, then hear the notes climb from C4 to C5.",
           },
         },
         chords: {
@@ -311,23 +311,23 @@
           listName: "Chords and Progressions",
           step1: {
             heading: "Step 1: Four chords",
-            say: "Each bar holds one chord: Am, F, C, and G. The order flows and returns to the start.",
-            try: "Press the play button and follow the chord that changes each bar.",
+            say: "Each bar holds one chord: Am, F, C, and G. After G, the loop goes back to Am.",
+            try: "Tap play and watch the box light up in each bar.",
           },
           step2: {
             heading: "Step 2: Two chords",
-            say: "Two chords can carry a loop. Am and C take turns calmly.",
+            say: "Two chords can carry a loop. Am plays for two bars, then C plays for two.",
             try: "Tap a box in column 2 to change its chord.",
           },
           step3: {
             heading: "Step 3: Three chords",
-            say: "Am, F, and C travel further without losing the way home.",
+            say: "F comes in on bar two. Three chords give the loop more variety than two.",
             try: "Tap a box to pick the chord for each bar.",
           },
           step4: {
-            heading: "Step 4: Back to G",
+            heading: "Step 4: End on G",
             say: "The G chord closes the loop and pulls back to Am.",
-            try: "Set the fourth bar to G, then play the whole progression.",
+            try: "Pick G in column 4, then listen to all four chords.",
           },
         },
         basslines: {
@@ -336,23 +336,23 @@
           listName: "Basslines",
           step1: {
             heading: "Step 1: The root",
-            say: "The bass starts on the root of the chord. One long note already holds up the bar.",
-            try: "Tap the Root box in another column, then press the play button.",
+            say: "The bass starts on the root of the chord. One note on beat one already holds up the bar.",
+            try: "Tap the Root box in another column, then tap play.",
           },
           step2: {
             heading: "Step 2: Two beats",
             say: "The root on beats one and three gives the line a steady stride.",
-            try: "Turn on boxes in columns 2 and 4, then feel the swing.",
+            try: "Turn on boxes in columns 2 and 4 and hear the difference.",
           },
           step3: {
             heading: "Step 3: Add the fifth",
-            say: "The fifth opens space between the roots. The bass line starts to branch.",
+            say: "The fifth sits above the root and still fits the chord. Switching between them makes the bass move.",
             try: "Move the Fifth to another column and listen to the motion.",
           },
           step4: {
             heading: "Step 4: Up an octave",
             say: "The octave lifts the line before it settles back on the root.",
-            try: "Tap the Octave box in column 3, then play it.",
+            try: "Tap the Octave box in column 3, then tap play.",
           },
         },
         melodies: {
@@ -361,13 +361,13 @@
           listName: "Melodies",
           step1: {
             heading: "Step 1: A short phrase",
-            say: "Five notes move and rest at the end of the bar. The last column always returns to C.",
-            try: "Tap a box in an empty column to add a note, then press the play button.",
+            say: "Five notes move, then the last column always comes home to C.",
+            try: "Tap a box in an empty column to add a note, then tap play.",
           },
           step2: {
             heading: "Step 2: Repeat and change",
-            say: "The same phrase returns with one note changed. Repetition makes a melody easy to remember.",
-            try: "Fill the empty column in the middle and compare it with the bar before.",
+            say: "The phrase starts like step 1, but columns 5 and 6 are empty. Repeating with a small change makes a melody easy to remember.",
+            try: "Fill columns 5 and 6, then compare it with step 1.",
           },
           step3: {
             heading: "Step 3: Stepping down",
@@ -376,8 +376,8 @@
           },
           step4: {
             heading: "Step 4: Complete the phrase",
-            say: "One empty column holds the phrase back. Filling it makes the melody whole.",
-            try: "Fill the empty column, then listen to the phrase from start to end.",
+            say: "Column 7 is still empty, so the phrase breaks off before it gets home to C.",
+            try: "Fill column 7 with C4, then listen to the phrase from start to end.",
           },
         },
         "song-structure": {
@@ -387,22 +387,22 @@
           step1: {
             heading: "Step 1: One block",
             say: "Block A carries drums, bass, and chords. Four identical bars make the first section.",
-            try: "Press the play button and listen to the layers that light up.",
+            try: "Tap play, then switch off one layer and hear what goes missing.",
           },
           step2: {
             heading: "Step 2: Block B",
-            say: "Block B brings a variation, and the melody joins in. Two blocks are enough for a section and its answer.",
-            try: "Change the last two blocks to B, then play.",
+            say: "Block B uses the F chord, and the melody joins in. Two bars of A then two bars of B sound like a question and an answer.",
+            try: "Change one B back to A and hear the difference.",
           },
           step3: {
             heading: "Step 3: Alternating",
-            say: "A and B take turns every two bars. The switch keeps the song fresh.",
-            try: "Arrange the order A, B, A, B and listen for the change.",
+            say: "A and B take turns every bar, so Am and F keep swapping.",
+            try: "Switch Melody off, listen, then switch it back on.",
           },
           step4: {
             heading: "Step 4: The final order",
-            say: "Four different blocks close the song. The order sets the way from start to end.",
-            try: "Tap boxes until the order reads B, A, C, D, then play.",
+            say: "Four blocks play four chords: Am, F, C, and G. Changing their order changes how the song moves.",
+            try: "Tap boxes until the order reads B, A, C, D, then tap play.",
           },
         },
       },
@@ -427,9 +427,9 @@
           melody: "Melody",
         },
         group: {
-          piano: "Piano",
-          chords: "Chord pads",
-          arrange: "Arrange blocks",
+          piano: "Notes",
+          chords: "Chords",
+          arrange: "Song blocks",
           beats: "Drum pattern",
         },
       },
@@ -444,7 +444,7 @@
         done: "Done",
         star: "Star",
         cta: {
-          song: "Open the full song",
+          song: "Make your own song",
         },
         silent: "No sound",
         credit: {
